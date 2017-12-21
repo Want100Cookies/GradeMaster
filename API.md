@@ -14,12 +14,12 @@ No grades for you.
 Get all users
 ### (POST)
 Make new user
-{
-  name,
-  email,
-  reference_id (nullable),
-  password,
-}
+  {
+    name,
+    email,
+    reference_id (nullable),
+    password,
+  }
 
 ## /api/{v1}/users/{id}
 ### (GET)
@@ -36,14 +36,14 @@ Delete a single user
 Get all groups
 ### (POST)
 Make a new student group
-{
-  education,
-  startYear,
-  endYear,
-  period (array, enums),
-  course,
-  groupName
-}
+  {
+    education,
+    startYear,
+    endYear,
+    period (array, enums),
+    course,
+    groupName
+  }
 ### (PATCH)
 Update a specific field from the group
 
