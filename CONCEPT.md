@@ -1,11 +1,13 @@
 # Concept file
 
 ## Backend modules
-- User/group module
-- Grade module
-- Notification module
+- User module (Pascal)
+- Group module (Cas)
+- Grade module (Bas)
+- Notification module (Danny)
 
 ## Frontend modules
+For Danny & Jesper
 (s) for Students / (t) for Teachers
 - Login page
 - Dashboard
