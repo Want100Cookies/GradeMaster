@@ -8,6 +8,7 @@
 
 ## Frontend modules
 For Danny & Jesper
+
 (s) for Students / (t) for Teachers
 - Login page
 - Dashboard
