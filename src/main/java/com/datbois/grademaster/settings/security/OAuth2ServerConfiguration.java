@@ -1,5 +1,6 @@
 package com.datbois.grademaster.settings.security;
 
+import com.datbois.grademaster.service.UserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -57,13 +58,16 @@ public class OAuth2ServerConfiguration {
         @Autowired
         private AuthenticationManager authenticationManager;
 
+        @Autowired
+        private UserDetailService userDetailService;
+
         @Override
         public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
             endpoints
                     .tokenStore(tokenStore)
                     .authenticationManager(authenticationManager)
                     .accessTokenConverter(jwtAccessTokenConverter)
-                    .userDetailsService(null); // Todo: make an userDetailService
+                    .userDetailsService(userDetailService);
         }
 
         @Override

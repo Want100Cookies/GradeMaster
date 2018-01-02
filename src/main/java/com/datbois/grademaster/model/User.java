@@ -1,6 +1,7 @@
 package com.datbois.grademaster.model;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class User {
@@ -13,18 +14,22 @@ public class User {
     private String referenceId;
     private String password;
 
-    @ManyToOne
-    private Role role;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "userId", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "roleId", referencedColumnName = "id")
+    )
+    private Set<Role> roles;
 
     public User() {
     }
 
-    public User(String name, String email, String referenceId, String password, Role role) {
+    public User(String name, String email, String referenceId, String password, Set<Role> roles) {
         this.name = name;
         this.email = email;
         this.referenceId = referenceId;
         this.password = password;
-        this.role = role;
+        this.roles = roles;
     }
 
     public Long getId() {
@@ -39,12 +44,16 @@ public class User {
         return email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
     public String getReferenceId() {
         return referenceId;
     }
 
-    public Role getRole() {
-        return role;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
     @Override
@@ -54,7 +63,8 @@ public class User {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", referenceId='" + referenceId + '\'' +
-                ", role=" + role +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
                 '}';
     }
 }

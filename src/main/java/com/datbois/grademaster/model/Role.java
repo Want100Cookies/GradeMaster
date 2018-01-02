@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Role {
@@ -11,35 +12,41 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String name;
-    private Boolean isAdmin;
+
+    @NotNull
+    private String code;
+
+    @NotNull
+    private String label;
 
     public Role() {
     }
 
-    public Role(String name, Boolean isAdmin) {
-        this.name = name;
-        this.isAdmin = isAdmin;
+    public Role(String code, String label) {
+        this.code = code;
+        this.label = label;
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getCode() {
+        return code;
     }
 
-    public Boolean getAdmin() {
-        return isAdmin;
+    public String getLabel() {
+        return label;
     }
+
+
 
     @Override
     public String toString() {
         return "Role{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", isAdmin=" + isAdmin +
+                ", code='" + code + '\'' +
+                ", label='" + label + '\'' +
                 '}';
     }
 }
