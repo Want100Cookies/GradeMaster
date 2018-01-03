@@ -1,4 +1,4 @@
-package com.datbois.grademaster.settings.configuration;
+package com.datbois.grademaster.configuration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
