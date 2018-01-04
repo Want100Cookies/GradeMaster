@@ -17,7 +17,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     private static final String CLIENT_ID = "grademaster-client";
     private static final String CLIENT_SECRET = "grademaster-secret";
-    private static final String GRANT_TYPE = "password";
+    private static final String GRANT_TYPE_PASSWORD = "password";
+    private static final String GRANT_TYPE_REFRESH = "refresh_token";
     private static final String SCOPE_READ = "read";
     private static final String SCOPE_WRITE = "write";
     private static final int ACCESS_TOKEN_VALIDITY_SECONDS = 1 * 60 * 60;
@@ -30,6 +31,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private UserApprovalHandler userApprovalHandler;
 
     @Autowired
+    @Qualifier("authenticationManagerBean")
     private AuthenticationManager authenticationManager;
 
     @Override
@@ -38,7 +40,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .inMemory()
                 .withClient(CLIENT_ID)
                 .resourceIds(ResourceServerConfig.RESOURCE_ID)
-                .authorizedGrantTypes(GRANT_TYPE)
+                .authorizedGrantTypes(GRANT_TYPE_PASSWORD, GRANT_TYPE_REFRESH)
                 .scopes(SCOPE_READ, SCOPE_WRITE)
                 .secret(CLIENT_SECRET)
                 .accessTokenValiditySeconds(ACCESS_TOKEN_VALIDITY_SECONDS)
