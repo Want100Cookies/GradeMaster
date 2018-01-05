@@ -11,6 +11,8 @@ public interface UserService {
 
     User findByEmail(String email);
 
+    User findById(Long id);
+
     long count();
 
     void delete(Long id);
