@@ -1,21 +1,41 @@
 package com.datbois.grademaster.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "email"),
+                @UniqueConstraint(columnNames = "emailVerifyToken")
+        }
+)
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     private String name;
+
+    @Email
     private String email;
+
     private String referenceId;
-    @JsonIgnore
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+
+    private boolean verified;
+
+    @JsonIgnore
+    private String emailVerifyToken;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
@@ -27,11 +47,13 @@ public class User {
     public User() {
     }
 
-    public User(String name, String email, String referenceId, String password, Set<Role> roles) {
+    public User(String name, String email, String referenceId, String password, boolean verified, String emailVerifyToken, Set<Role> roles) {
         this.name = name;
         this.email = email;
         this.referenceId = referenceId;
         this.password = password;
+        this.verified = verified;
+        this.emailVerifyToken = emailVerifyToken;
         this.roles = roles;
     }
 
@@ -59,6 +81,42 @@ public class User {
         return roles;
     }
 
+    public boolean isVerified() {
+        return verified;
+    }
+
+    public String getEmailVerifyToken() {
+        return emailVerifyToken;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setReferenceId(String referenceId) {
+        this.referenceId = referenceId;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
+    }
+
+    public void setEmailVerifyToken(String emailVerifyToken) {
+        this.emailVerifyToken = emailVerifyToken;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -66,7 +124,8 @@ public class User {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", referenceId='" + referenceId + '\'' +
-                ", password='" + password + '\'' +
+                ", verified=" + verified +
+                ", emailVerifyToken='" + emailVerifyToken + '\'' +
                 ", roles=" + roles +
                 '}';
     }

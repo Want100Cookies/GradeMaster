@@ -1,13 +1,26 @@
 # API documentation
 
-## /api/{v1}/auth
-### (POST)
-Login using email and password
+Login is done using oauth2
 
 ## /api/{v1}/auth/retard
 ### (POST)
 Oh... You forgot your password. What a shame...
 No grades for you.
+```
+{
+  email
+}
+```
+
+### (PATCH)
+Set your new password
+```
+{
+  token,
+  email,
+  password,
+}
+```
 
 ## /api/{v1}/users
 ### (GET)
