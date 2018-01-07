@@ -39,8 +39,6 @@ public class Role {
         return label;
     }
 
-
-
     @Override
     public String toString() {
         return "Role{" +

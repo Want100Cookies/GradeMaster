@@ -11,10 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -88,5 +86,27 @@ public class UserController {
         user = userService.save(user);
 
         return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/users/{userId}", method = RequestMethod.PATCH)
+    @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE') or isCurrentUser(#userId)")
+    @ResponseStatus(HttpStatus.OK)
+    public User updateSingleUser(@PathVariable Long userId, @RequestBody User user) throws Exception {
+        User existing = userService.findById(userId);
+        boolean verified = existing.isVerified();
+
+        user.copyNonNullProperties(existing);
+
+        // Unfortunately because verified is a boolean, the requestbody set's it to false and not null and therefore is copied to the existing model
+        existing.setVerified(verified);
+
+        return userService.update(existing);
+    }
+
+    @RequestMapping(value = "/users/{userId}", method = RequestMethod.DELETE)
+    @PreAuthorize("hasAuthority('ADMIN_ROLE')")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void removeUser(@PathVariable Long userId) {
+        userService.delete(userId);
     }
 }

@@ -16,7 +16,7 @@ import java.util.Set;
         }
 )
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class User {
+public class User extends BaseModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,6 +32,7 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private boolean verified;
 
     @JsonIgnore
@@ -87,6 +88,10 @@ public class User {
 
     public String getEmailVerifyToken() {
         return emailVerifyToken;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setName(String name) {
