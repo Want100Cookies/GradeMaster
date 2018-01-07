@@ -6,3 +6,5 @@ before_script:
   - mysql -u root -e "CREATE DATABASE grademaster;"
   - mysql -u root -e "CREATE USER 'dbuser'@'localhost' IDENTIFIED BY 'dbpassword';"
   - mysql -u root -e "GRANT ALL ON grademaster.* TO 'dbuser'@'localhost';"
+notifications:
+  email: false
