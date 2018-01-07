@@ -13,7 +13,7 @@ import java.io.IOException;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public class CorsFilterRequest implements Filter{
+public class CorsFilterRequest implements Filter {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
