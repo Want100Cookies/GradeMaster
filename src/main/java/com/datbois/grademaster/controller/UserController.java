@@ -15,7 +15,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -93,6 +92,8 @@ public class UserController {
         user.setRoles(roles);
 
         user = userService.save(user);
+
+        // Send e-mail verification e-mail
 
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
