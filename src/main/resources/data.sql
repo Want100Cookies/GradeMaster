@@ -11,6 +11,11 @@ INSERT INTO `role` (`id`, `code`, `label`) VALUES
 INSERT INTO `user_roles` (`user_id`, `role_id`) VALUES
   (1, 1),
   (2, 2),
-  (3, 3)
+  (3, 3);
+
+INSERT INTO `grade` (`grade`) VALUES
+  (8),
+  (7),
+  (5);
 
 # All passwords are bcrypt hash of 'password'

@@ -1,0 +1,25 @@
+package com.datbois.grademaster.controller;
+
+import com.datbois.grademaster.model.Grade;
+import com.datbois.grademaster.service.GradeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/v1")
+public class GradeController{
+
+    @Autowired
+    GradeService gradeService;
+
+    @RequestMapping(value = "/grade/{gradeId}", method = RequestMethod.GET)
+    @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE')")
+    @ResponseStatus(HttpStatus.OK)
+    public Grade grade(@PathVariable Long gradeId){
+        return gradeService.findById(gradeId);
+    }
+}
