@@ -69,7 +69,7 @@ public class UserControllerTests extends OAuthTests {
     }
 
     @Test
-    public void studentCanGetSelf() {
+    public void studentCanGetSelfViaId() {
         String token = this.obtainAccessToken("john.doe@student.stenden.com", "password");
 
         User user = userService.findByEmail("john.doe@student.stenden.com");
@@ -79,6 +79,22 @@ public class UserControllerTests extends OAuthTests {
                 .oauth2(token)
                 .when()
                 .get("/api/v1/users/" + user.getId())
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .body("name", is(user.getName()));
+    }
+
+    @Test
+    public void userCanGetSelf() {
+        String token = this.obtainAccessToken("john.doe@student.stenden.com", "password");
+
+        User user = userService.findByEmail("john.doe@student.stenden.com");
+
+        given()
+                .auth()
+                .oauth2(token)
+                .when()
+                .get("/api/v1/users/self")
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .body("name", is(user.getName()));
