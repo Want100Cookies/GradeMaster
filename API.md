@@ -22,6 +22,16 @@ Set your new password
 }
 ```
 
+## /api/{v1}/auth/verify
+### (PATCH)
+Verify your email address
+```
+{
+  token,
+  email
+}
+```
+
 ## /api/{v1}/users
 ### (GET)
 Get all users
