@@ -11,6 +11,12 @@ INSERT INTO `role` (`id`, `code`, `label`) VALUES
 INSERT INTO `user_roles` (`user_id`, `role_id`) VALUES
   (1, 1),
   (2, 2),
-  (3, 3)
+  (3, 3);
+
+INSERT INTO `notification`(`id`, `message`, `seen`) VALUES
+  (1, "You have multiple pending grades!", 0);
+
+INSERT INTO `notification_users`(`user_id`, `notification_id`) VALUES
+  (1, 1);
 
 # All passwords are bcrypt hash of 'password'
