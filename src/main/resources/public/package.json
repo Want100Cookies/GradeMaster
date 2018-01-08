@@ -1,0 +1,15 @@
+{
+    "name": "GradeMaster",
+    "private": "true",
+    "version": "0.0.0",
+    "description": "Grade Master",
+    "devDependencies": {
+      "http-server": "^0.10.0"
+    },
+    "scripts": {
+      "update-deps": "npm update",
+      "prestart": "npm install",
+      "start": "http-server -a localhost -p 4200 -c-1 ./app/"
+    }
+  }
+  
