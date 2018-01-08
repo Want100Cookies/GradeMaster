@@ -1,6 +1,7 @@
 package com.datbois.grademaster.controller;
 
 import com.datbois.grademaster.configuration.RoleProperties;
+import com.datbois.grademaster.exception.BadRequestException;
 import com.datbois.grademaster.model.Role;
 import com.datbois.grademaster.model.User;
 import com.datbois.grademaster.model.UserDetails;
@@ -10,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -57,7 +57,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
-    public ResponseEntity<?> createUser(@RequestBody User user) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public User createUser(@RequestBody User user) {
         // Set email to unverified and generate random string for the verification email
         user.setVerified(false);
         user.setEmailVerifyToken(UUID.randomUUID().toString());
@@ -86,7 +87,7 @@ public class UserController {
                 roles.add(roleService.findByName("Teacher"));
             }
         } else {
-            return new ResponseEntity<>("Email address not accepted", HttpStatus.BAD_REQUEST);
+            throw new BadRequestException("Email address not accepted");
         }
 
         user.setRoles(roles);
@@ -95,7 +96,7 @@ public class UserController {
 
         // Send e-mail verification e-mail
 
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return user;
     }
 
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.PATCH)
