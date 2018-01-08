@@ -18,7 +18,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsNull.notNullValue;
 
-public class PasswordControllerTests extends OAuthTests {
+public class AuthControllerTests extends OAuthTests {
 
     @Autowired
     private UserService userService;
@@ -70,5 +70,30 @@ public class PasswordControllerTests extends OAuthTests {
 
         assertThat("Password is correct", passwordEncoder.matches(data.get("password"), testUser.getPassword()), is(true));
         assertThat("RetardToken is null", testUser.getRetardToken(), is(nullValue()));
+    }
+
+    @Test
+    public void userCanVerifyEmail() {
+        User user = userService.findByEmail("john.doe@student.stenden.com");
+
+        user.setEmailVerifyToken(UUID.randomUUID().toString());
+        userService.save(user);
+
+        Map<String, String> data = new HashMap<>();
+        data.put("email", user.getEmail());
+        data.put("token", user.getEmailVerifyToken());
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(data)
+                .when()
+                .patch("/api/v1/auth/verify")
+                .then()
+                .statusCode(HttpStatus.ACCEPTED.value());
+
+        User testUser = userService.findById(user.getId());
+
+        assertThat("User is verified", testUser.isVerified(), is(true));
+        assertThat("Email verify token", testUser.getEmailVerifyToken(), is(nullValue()));
     }
 }

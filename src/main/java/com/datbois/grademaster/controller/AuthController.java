@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1")
-public class PasswordController {
+public class AuthController {
 
     @Autowired
     private UserService userService;
@@ -49,5 +49,24 @@ public class PasswordController {
         userService.save(user);
 
         // Send notification of changed password
+    }
+
+    @RequestMapping(value = "/auth/verify", method = RequestMethod.PATCH)
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void verifyEmail(@RequestBody Map<String, String> request) {
+        User user = userService.findByEmail(request.get("email"));
+
+        if (user.getEmailVerifyToken() == null) {
+            throw new ForbiddenException("Email is already verified");
+        }
+
+        if (!user.getEmailVerifyToken().equals(request.get("token"))) {
+            throw new ForbiddenException("Invalid token");
+        }
+
+        user.setVerified(true);
+        user.setEmailVerifyToken(null);
+
+        userService.save(user);
     }
 }
