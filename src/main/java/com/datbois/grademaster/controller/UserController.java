@@ -100,7 +100,7 @@ public class UserController {
         // Unfortunately because verified is a boolean, the requestbody set's it to false and not null and therefore is copied to the existing model
         existing.setVerified(verified);
 
-        return userService.update(existing);
+        return userService.save(existing);
     }
 
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.DELETE)
