@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Service
 public class UserServiceImpl implements UserDetailsService, UserService {
@@ -24,7 +25,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     public User save(User user) {
         if (user.getPassword() != null) {
-            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            if (!Pattern.compile("\\A\\$2a?\\$\\d\\d\\$[./0-9A-Za-z]{53}").matcher(user.getPassword()).matches()) {
+                user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            }
         }
         return userRepository.save(user);
     }
