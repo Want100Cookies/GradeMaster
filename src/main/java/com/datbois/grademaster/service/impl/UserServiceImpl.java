@@ -1,10 +1,10 @@
 package com.datbois.grademaster.service.impl;
 
 import com.datbois.grademaster.model.User;
+import com.datbois.grademaster.model.UserDetails;
 import com.datbois.grademaster.repository.UserRepository;
 import com.datbois.grademaster.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -64,6 +64,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             throw new UsernameNotFoundException("Invalid username or password.");
         }
 
-        return new com.datbois.grademaster.model.UserDetails(user);
+        return new UserDetails(user);
     }
 }
