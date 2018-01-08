@@ -11,12 +11,12 @@ public class Group extends BaseModel {
     private Long id;
 
     private String education;
-    private int startYear;
-    private int endYear;
+    private Integer startYear;
+    private Integer endYear;
 
     @ElementCollection(targetClass = Period.class)
     @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "group_period")
+    @CollectionTable(name = "group_periods")
     @Column(name = "period")
     private Set<Period> period;
 
@@ -69,19 +69,19 @@ public class Group extends BaseModel {
         this.education = education;
     }
 
-    public int getStartYear() {
+    public Integer getStartYear() {
         return startYear;
     }
 
-    public void setStartYear(int startYear) {
+    public void setStartYear(Integer startYear) {
         this.startYear = startYear;
     }
 
-    public int getEndYear() {
+    public Integer getEndYear() {
         return endYear;
     }
 
-    public void setEndYear(int endYear) {
+    public void setEndYear(Integer endYear) {
         this.endYear = endYear;
     }
 
