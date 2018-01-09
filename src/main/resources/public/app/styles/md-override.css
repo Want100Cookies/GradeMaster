@@ -1,0 +1,12 @@
+/* CSS to override material colors/styling */
+#override-toolbar{
+    background: white;
+    color: black;
+}
+#override-sidebar{
+    background: #555C78;
+    color: white;
+}
+.md-sidenav-left{
+    background: #4E546C;
+}
