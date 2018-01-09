@@ -21,9 +21,7 @@ public class Notification {
     )
     private Set<User> users;
 
-    public Notification() {
-
-    }
+    public Notification() { }
 
     public Notification(String message) {
         this.message = message;
