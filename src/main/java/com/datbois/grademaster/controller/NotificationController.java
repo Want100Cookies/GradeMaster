@@ -8,8 +8,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Controller
 @RequestMapping("/api/v1")
 public class NotificationController {
@@ -17,21 +15,11 @@ public class NotificationController {
     @Autowired
     private NotificationService notificationService;
 
-    @RequestMapping(value = "/notifications", method = RequestMethod.GET)
-    public List<Notification> notifications() { return notificationService.findAll(); }
-
-    @RequestMapping(value = "/notifications/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/notifications/{notificationId}", method = RequestMethod.GET)
+    @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE')")
     @ResponseStatus(HttpStatus.OK)
-    public Notification findById(@PathVariable long id){ return notificationService.findById(id); }
-
-    @RequestMapping(value = "/notifications/{id}", method = RequestMethod.PATCH)
-    @ResponseStatus(HttpStatus.OK)
-    public Notification updateNotification(@PathVariable long id, @RequestBody Notification notification){
-        Notification notify = notificationService.findById(id);
-        boolean sean = notify.isSeen();
-
-        notification.setSeen(sean);
-
-        return notificationService.save(notify);
+    public Notification notification(@PathVariable long notificationId){
+        return notificationService.findById(notificationId);
     }
+
 }
