@@ -13,6 +13,8 @@ public class Notification {
     @NotNull
     private String message;
 
+    private boolean seen;
+
     public Notification() { }
 
     public Notification(String message) {
@@ -33,6 +35,14 @@ public class Notification {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public boolean isSeen() {
+        return seen;
+    }
+
+    public void setSeen(boolean seen) {
+        this.seen = seen;
     }
 
     @Override

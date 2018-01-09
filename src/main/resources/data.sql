@@ -13,10 +13,10 @@ INSERT INTO `user_roles` (`user_id`, `role_id`) VALUES
   (2, 2),
   (3, 3);
 
-INSERT INTO `notification`(`id`, `message`) VALUES
-  (1, "You have pending grades."),
-  (2, "Your grade ratings have been sent."),
-  (3, "Your final grade has been determined.");
+INSERT INTO `notification`(`id`, `message`, `seen`) VALUES
+  (1, "You have pending grades.", 0),
+  (2, "Your grade ratings have been sent.", 0),
+  (3, "Your final grade has been determined.", 0);
 
 
 # All passwords are bcrypt hash of 'password'
