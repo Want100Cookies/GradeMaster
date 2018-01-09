@@ -38,6 +38,9 @@ public class User extends BaseModel {
     @JsonIgnore
     private String emailVerifyToken;
 
+    @JsonIgnore
+    private String retardToken;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             joinColumns = @JoinColumn(name = "userId", referencedColumnName = "id"),
@@ -90,6 +93,10 @@ public class User extends BaseModel {
         return emailVerifyToken;
     }
 
+    public String getRetardToken() {
+        return retardToken;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -116,6 +123,10 @@ public class User extends BaseModel {
 
     public void setEmailVerifyToken(String emailVerifyToken) {
         this.emailVerifyToken = emailVerifyToken;
+    }
+
+    public void setRetardToken(String retardToken) {
+        this.retardToken = retardToken;
     }
 
     public void setRoles(Set<Role> roles) {
