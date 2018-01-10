@@ -16,6 +16,12 @@ public class GradeController{
     @Autowired
     GradeService gradeService;
 
+    @RequestMapping(value = "/grade", method = RequestMethod.POST)
+    public ResponseEntity createGrade(@RequestBody Grade grade){
+        grade = gradeService.save(grade);
+        return new ResponseEntity<>(grade, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/grade/{gradeId}", method = RequestMethod.GET)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE')")
     @ResponseStatus(HttpStatus.OK)

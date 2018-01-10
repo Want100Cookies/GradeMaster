@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -44,6 +45,12 @@ public class User extends BaseModel {
             inverseJoinColumns = @JoinColumn(name = "roleId", referencedColumnName = "id")
     )
     private Set<Role> roles;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "fromUser")
+    private List<Grade> gradesReceived;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "toUser")
+    private List<Grade> gradeDistributed;
 
     public User() {
     }

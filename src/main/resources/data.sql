@@ -13,9 +13,9 @@ INSERT INTO `user_roles` (`user_id`, `role_id`) VALUES
   (2, 2),
   (3, 3);
 
-INSERT INTO `grade` (`grade`) VALUES
-  (8),
-  (7),
-  (5);
+INSERT INTO `grade` (`grade`,`from_user_id`,`to_user_id`) VALUES
+  (8, 1, 1),
+  (7, 1, 2),
+  (5, 1, 3);
 
 # All passwords are bcrypt hash of 'password'

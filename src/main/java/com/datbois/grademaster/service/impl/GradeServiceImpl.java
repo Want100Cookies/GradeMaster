@@ -16,6 +16,12 @@ public class GradeServiceImpl implements GradeService {
     private GradeRepository gradeRepository;
 
     @Override
+    public Grade save(Grade grade){
+        grade.setGrade(grade.getGrade());
+        return gradeRepository.save(grade);
+    }
+
+    @Override
     public Grade findById(Long id) {
         return gradeRepository.findById(id);
     }

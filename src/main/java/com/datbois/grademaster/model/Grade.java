@@ -1,9 +1,6 @@
 package com.datbois.grademaster.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -14,13 +11,21 @@ public class Grade{
     private Long id;
 
     @NotNull
-    private String grade;
+    private double grade;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    public User fromUser;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    public User toUser;
 
     public Grade(){
 
     }
 
-    public Grade(String grade){
+    public Grade(double grade){
         this.grade = grade;
     }
 
@@ -32,12 +37,28 @@ public class Grade{
         this.id = id;
     }
 
-    public String getGrade() {
+    public double getGrade() {
         return grade;
     }
 
-    public void setGrade(String grade) {
+    public void setGrade(double grade) {
         this.grade = grade;
+    }
+
+    public User getFromUser() {
+        return fromUser;
+    }
+
+    public void setFromUser(User fromUser) {
+        this.fromUser = fromUser;
+    }
+
+    public User getToUser() {
+        return toUser;
+    }
+
+    public void setToUser(User toUser) {
+        this.toUser = toUser;
     }
 
     @Override
