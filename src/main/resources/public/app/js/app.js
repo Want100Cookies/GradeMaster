@@ -13,32 +13,33 @@ app.controller('LayoutController', function ($scope, $mdSidenav) {
     };
 });
 
-app.config(function ($routeProvider){
+app.config(function ($routeProvider) {
     $routeProvider
-    .when('/', {
-        templateUrl: 'pages/dashboard.html',
-    })
-    .when('/login', {
-        templateUrl: 'pages/login.html',
-    })
-    .when('/groups', {
-        templateUrl: 'pages/groups.html',
-    })
-    .when('/grades', {
-        templateUrl: 'pages/grades.html',
-    });
+        .when('/', {
+            templateUrl: '/app/pages/dashboard.html',
+        })
+        .when('/login', {
+            templateUrl: '/app/pages/login.html',
+            controller: 'LoginCtrl'
+        })
+        .when('/groups', {
+            templateUrl: '/app/pages/groups.html',
+        })
+        .when('/grades', {
+            templateUrl: '/app/pages/grades.html',
+        });
 });
 
 app.directive('activeLink', ['$location', function (location) {
-    return{
+    return {
         restrict: 'A',
-        link: function(scope, element, attrs, controller){
+        link: function (scope, element, attrs, controller) {
             var clazz = attrs.activeLink;
             var path = attrs.href;
             path = path.substring(2);
             scope.location = location;
-            scope.$watch('location.path()', function (newPath){
-                if(path === newPath) {
+            scope.$watch('location.path()', function (newPath) {
+                if (path === newPath) {
                     element.addClass(clazz);
                 } else {
                     element.removeClass(clazz);
