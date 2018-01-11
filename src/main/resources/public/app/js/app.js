@@ -1,7 +1,9 @@
 'use strict';
 var app = angular.module('gmApp', [
     'ngMaterial',
-    'ngRoute'
+    'ngRoute',
+    'ngResource',
+    'ngCookies'
 ]);
 
 app.controller('LayoutController', function ($scope, $mdSidenav) {
