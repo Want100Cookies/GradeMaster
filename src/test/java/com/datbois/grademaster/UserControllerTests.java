@@ -39,6 +39,7 @@ public class UserControllerTests extends OAuthTests {
                 .when()
                 .get("/api/v1/users")
                 .then()
+                .contentType(ContentType.JSON)
                 .body("size()", greaterThan(0));
     }
 
@@ -52,6 +53,7 @@ public class UserControllerTests extends OAuthTests {
                 .when()
                 .get("/api/v1/users")
                 .then()
+                .contentType(ContentType.JSON)
                 .body("size()", greaterThan(0));
     }
 
@@ -81,6 +83,7 @@ public class UserControllerTests extends OAuthTests {
                 .get("/api/v1/users/" + user.getId())
                 .then()
                 .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
                 .body("name", is(user.getName()));
     }
 
@@ -97,6 +100,7 @@ public class UserControllerTests extends OAuthTests {
                 .get("/api/v1/users/self")
                 .then()
                 .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
                 .body("name", is(user.getName()));
     }
 
@@ -128,6 +132,7 @@ public class UserControllerTests extends OAuthTests {
                 .get("/api/v1/users/" + user.getId())
                 .then()
                 .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
                 .body("name", is(user.getName()));
     }
 
@@ -146,6 +151,7 @@ public class UserControllerTests extends OAuthTests {
                 .post("/api/v1/users")
                 .then()
                 .statusCode(HttpStatus.CREATED.value())
+                .contentType(ContentType.JSON)
                 .body("name", is(userData.get("name")));
 
         User testUser = userService.findByEmail(userData.get("email"));
@@ -171,6 +177,7 @@ public class UserControllerTests extends OAuthTests {
                 .post("/api/v1/users")
                 .then()
                 .statusCode(HttpStatus.CREATED.value())
+                .contentType(ContentType.JSON)
                 .body("name", is(userData.get("name")));
 
         User testUser = userService.findByEmail(userData.get("email"));
@@ -196,6 +203,7 @@ public class UserControllerTests extends OAuthTests {
                 .patch("/api/v1/users/{userId}", testUser.getId())
                 .then()
                 .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
                 .body("name", is(userData.get("name")));
 
         User updatedUser = userService.findById(testUser.getId());

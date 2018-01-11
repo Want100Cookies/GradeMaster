@@ -55,6 +55,25 @@ This includes adding a role (for example super user) and adding a profile pictur
 ### (DELETE)
 Delete a single user
 
+## /api/{v1}/courses
+### (GET)
+Get all courses
+
+### (POST)
+Make a new course (only admins)
+```
+{
+  name
+}
+```
+
+## /api/{v1}/courses/{id}
+### (GET)
+Get a single course
+### (PATCH)
+Update specific field of the course
+### (DELETE)
+Delete a single course
 
 ## /api/{v1}/groups
 ### (GET)
