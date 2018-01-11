@@ -125,7 +125,7 @@ public class UserControllerTests extends OAuthTests {
                 .when()
                 .post("/api/v1/users")
                 .then()
-                .statusCode(HttpStatus.OK.value())
+                .statusCode(HttpStatus.CREATED.value())
                 .body("name", is(userData.get("name")));
 
         User testUser = userService.findByEmail(userData.get("email"));
@@ -150,7 +150,7 @@ public class UserControllerTests extends OAuthTests {
                 .when()
                 .post("/api/v1/users")
                 .then()
-                .statusCode(HttpStatus.OK.value())
+                .statusCode(HttpStatus.CREATED.value())
                 .body("name", is(userData.get("name")));
 
         User testUser = userService.findByEmail(userData.get("email"));

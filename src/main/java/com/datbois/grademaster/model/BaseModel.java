@@ -1,5 +1,6 @@
 package com.datbois.grademaster.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 
@@ -10,6 +11,8 @@ import java.util.Arrays;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 abstract public class BaseModel {
 
     public void copyNonNullProperties(BaseModel target) throws Exception {
