@@ -1,5 +1,7 @@
 package com.datbois.grademaster.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -23,18 +25,23 @@ public class Group extends BaseModel {
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
 
+    @ManyToMany(mappedBy = "groups", fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.REMOVE})
+    @JsonIgnore
+    private Set<User> users;
+
     private String groupName;
 
     public Group() {
     }
 
-    public Group(String education, int startYear, int endYear, Set<Period> period, Course course, String groupName) {
+    public Group(String education, int startYear, int endYear, Set<Period> period, Course course, String groupName, Set<User> users) {
         this.education = education;
         this.startYear = startYear;
         this.endYear = endYear;
         this.period = period;
         this.course = course;
         this.groupName = groupName;
+        this.users = users;
     }
 
     public boolean isValid() {
@@ -103,6 +110,14 @@ public class Group extends BaseModel {
         this.groupName = groupName;
     }
 
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
+
     @Override
     public String toString() {
         return "Group{" +
@@ -112,7 +127,8 @@ public class Group extends BaseModel {
                 ", endYear=" + endYear +
                 ", period=" + period +
                 ", course='" + course + '\'' +
-                ", groupName='" + groupName +
+                ", groupName='" + groupName + '\'' +
+                ", users='" + users +
                 '}';
     }
 }

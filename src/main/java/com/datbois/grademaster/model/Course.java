@@ -14,7 +14,7 @@ public class Course extends BaseModel {
 
     private String name;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private Set<Group> groups;
 
@@ -55,7 +55,6 @@ public class Course extends BaseModel {
         return "Course{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", groups=" + groups +
                 '}';
     }
 }

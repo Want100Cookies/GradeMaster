@@ -39,7 +39,7 @@ public class User extends BaseModel {
     @JsonIgnore
     private String retardToken;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinTable(
             joinColumns = @JoinColumn(name = "userId", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "roleId", referencedColumnName = "id")
@@ -158,7 +158,6 @@ public class User extends BaseModel {
                 ", verified=" + verified +
                 ", emailVerifyToken='" + emailVerifyToken + '\'' +
                 ", roles=" + roles +
-                ", groups=" + groups +
                 '}';
     }
 }

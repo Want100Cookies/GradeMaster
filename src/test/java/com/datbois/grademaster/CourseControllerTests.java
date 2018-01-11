@@ -1,9 +1,14 @@
 package com.datbois.grademaster;
 
 import com.datbois.grademaster.model.Course;
+import com.datbois.grademaster.model.Group;
+import com.datbois.grademaster.model.User;
 import com.datbois.grademaster.service.CourseService;
+import com.datbois.grademaster.service.GroupService;
+import com.datbois.grademaster.service.UserService;
 import io.restassured.http.ContentType;
 import org.junit.Test;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
@@ -12,14 +17,18 @@ import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 
 public class CourseControllerTests extends OAuthTests {
 
     @Autowired
     private CourseService courseService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private GroupService groupService;
 
     @Test
     public void userCanViewAllGroups() {
@@ -104,9 +113,11 @@ public class CourseControllerTests extends OAuthTests {
 
     @Test
     public void adminCanDeleteCourse() {
-        String token = obtainAccessToken("admin@stenden.com", "password");
+        User user = userService.findByEmail("admin@stenden.com");
+        String token = obtainAccessToken(user.getEmail(), "password");
 
         Course course = courseService.findById(1L);
+        long groupCount = groupService.count();
 
         given()
                 .auth()
@@ -117,5 +128,7 @@ public class CourseControllerTests extends OAuthTests {
                 .statusCode(HttpStatus.ACCEPTED.value());
 
         assertThat(courseService.findById(course.getId()), is(nullValue()));
+        assertThat("Course deletion results in group deletion", groupService.count(), lessThan(groupCount));
+        assertThat("Course deletion results in no user deletion", userService.findById(user.getId()), notNullValue());
     }
 }
