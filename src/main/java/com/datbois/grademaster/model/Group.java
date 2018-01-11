@@ -17,7 +17,6 @@ public class Group extends BaseModel {
     @ElementCollection(targetClass = Period.class)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "group_periods")
-    @Column(name = "period")
     private Set<Period> period;
 
     private String course; // TODO make course an object;
