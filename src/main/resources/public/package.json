@@ -10,5 +10,8 @@
     "update-deps": "npm update",
     "prestart": "npm install",
     "start": "http-server -a localhost -p 4200 -c-1 ./app/"
+  },
+  "dependencies": {
+    "angular-oauth2": "^4.1.1"
   }
 }
