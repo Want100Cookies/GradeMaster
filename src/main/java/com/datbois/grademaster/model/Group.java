@@ -1,6 +1,8 @@
 package com.datbois.grademaster.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -29,6 +31,11 @@ public class Group extends BaseModel {
             inverseJoinColumns = @JoinColumn(name = "userId", referencedColumnName = "id")
     )
     private Set<User> users;
+
+    private double groupGrade;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "group")
+    private List<Grade> grades;
 
     public Group() {
     }
@@ -115,6 +122,14 @@ public class Group extends BaseModel {
 
     public void setUsers(Set<User> users) {
         this.users = users;
+    }
+
+    public double getGroupGrade() {
+        return groupGrade;
+    }
+
+    public void setGroupGrade(double groupGrade) {
+        this.groupGrade = groupGrade;
     }
 
     @Override

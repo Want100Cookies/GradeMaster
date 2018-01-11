@@ -16,6 +16,7 @@ public class GradeController{
     @Autowired
     GradeService gradeService;
 
+//  POST JSON:  {"id":5,"grade":8.0,"fromUser":{"id":1},"toUser":{"id":1},"group":{"id":1}}
     @RequestMapping(value = "/grade", method = RequestMethod.POST)
     public ResponseEntity createGrade(@RequestBody Grade grade){
         grade = gradeService.save(grade);

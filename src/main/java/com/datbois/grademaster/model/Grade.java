@@ -2,6 +2,7 @@ package com.datbois.grademaster.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 @Entity
 public class Grade{
@@ -20,6 +21,10 @@ public class Grade{
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     public User toUser;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    public Group group;
 
     public Grade(){
 
