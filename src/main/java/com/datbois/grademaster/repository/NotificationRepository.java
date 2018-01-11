@@ -6,5 +6,6 @@ import com.datbois.grademaster.model.Notification;
 
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
+
     Notification findById(Long id);
 }

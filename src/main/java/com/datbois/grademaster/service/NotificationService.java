@@ -9,8 +9,4 @@ public interface NotificationService {
     List<Notification> findAll();
 
     Notification findById(Long id);
-
-    Notification save(Notification notification);
-
-    void delete(Long id);
 }

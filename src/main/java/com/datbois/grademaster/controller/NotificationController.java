@@ -1,6 +1,7 @@
 package com.datbois.grademaster.controller;
 
 import com.datbois.grademaster.model.Notification;
+import com.datbois.grademaster.service.EmailService;
 import com.datbois.grademaster.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,22 +25,5 @@ public class NotificationController {
     @ResponseStatus(HttpStatus.OK)
     public Notification notification(@PathVariable long notificationId){
         return notificationService.findById(notificationId);
-    }
-
-    @RequestMapping(value = "/notifications/{notificationId}", method = RequestMethod.PATCH)
-    @ResponseStatus(HttpStatus.OK)
-    public Notification updateNotification(@PathVariable long id, @RequestBody Notification notification){
-        Notification notify = notificationService.findById(id);
-        boolean read = notify.isSeen();
-
-        notify.setSeen(read);
-
-        return notificationService.save(notify);
-    }
-
-    @RequestMapping(value = "/notifications/{notificationId}", method = RequestMethod.DELETE)
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void removeUser(@PathVariable Long notificationId) {
-        notificationService.delete(notificationId);
     }
 }
