@@ -11,6 +11,24 @@ INSERT INTO `role` (`id`, `code`, `label`) VALUES
 INSERT INTO `user_roles` (`user_id`, `role_id`) VALUES
   (1, 1),
   (2, 2),
-  (3, 3)
+  (3, 3);
+
+INSERT INTO `group` (`id`, `course`, `education`, `group_name`, `start_year`, `end_year`) VALUES
+  (1, "AJP", "INF", "Musketiers", 2017, 2018),
+  (2, "EthHack", "INF", "Hackerman", 2017, 2018),
+  (3, "Minor", "ENG", "Madam", 2016, 2017);
+
+INSERT INTO `group_periods` (`group_id`, `period`) VALUES
+  (1, "Q1"),
+  (1, "Q2"),
+  (2, "Q3"),
+  (2, "Q4"),
+  (3, "Q1");
+
+INSERT INTO `group_users` (`group_id`, `user_id`) VALUES
+  (1, 1),
+  (1, 2),
+  (2, 2),
+  (3, 3);
 
 # All passwords are bcrypt hash of 'password'
