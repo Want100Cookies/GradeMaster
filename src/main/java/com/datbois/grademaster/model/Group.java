@@ -22,24 +22,16 @@ public class Group extends BaseModel {
     private String course; // TODO make course an object;
     private String groupName;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(
-            joinColumns = @JoinColumn(name = "groupId", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "userId", referencedColumnName = "id")
-    )
-    private Set<User> users;
-
     public Group() {
     }
 
-    public Group(String education, int startYear, int endYear, Set<Period> period, String course, String groupName, Set<User> users) {
+    public Group(String education, int startYear, int endYear, Set<Period> period, String course, String groupName) {
         this.education = education;
         this.startYear = startYear;
         this.endYear = endYear;
         this.period = period;
         this.course = course;
         this.groupName = groupName;
-        this.users = users;
     }
 
     public boolean isValid() {
@@ -108,14 +100,6 @@ public class Group extends BaseModel {
         this.groupName = groupName;
     }
 
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
-
     @Override
     public String toString() {
         return "Group{" +
@@ -125,8 +109,7 @@ public class Group extends BaseModel {
                 ", endYear=" + endYear +
                 ", period=" + period +
                 ", course='" + course + '\'' +
-                ", groupName='" + groupName + '\'' +
-                ", users=" + users +
+                ", groupName='" + groupName +
                 '}';
     }
 }
