@@ -28,6 +28,7 @@ public class CourseController {
 
     @RequestMapping(value = "/courses", method = RequestMethod.POST)
     @PreAuthorize("hasAuthority('ADMIN_ROLE')")
+    @ResponseStatus(HttpStatus.CREATED)
     public Course createCourse(@RequestBody Course course) {
         return courseService.save(course);
     }

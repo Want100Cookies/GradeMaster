@@ -25,7 +25,7 @@ public class Group extends BaseModel {
 
     private String groupName;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinTable(
             joinColumns = @JoinColumn(name = "groupId", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "userId", referencedColumnName = "id")
