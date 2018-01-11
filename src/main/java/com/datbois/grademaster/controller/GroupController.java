@@ -25,7 +25,7 @@ public class GroupController {
     public ResponseEntity getGroups(Authentication authentication) {
         User user = ((UserDetails) authentication.getPrincipal()).getUser();
         Set<Role> roles = user.getRoles();
-        if (roles.stream().filter(role -> role.getCode().equalsIgnoreCase("TEACHER_ROLE") || role.getCode().equalsIgnoreCase("ADMIN_ROLE")).findFirst().orElse(null) != null) {
+        if (roles.stream().filter(role -> role.getCode().equalsIgnoreCase("ADMIN_ROLE")).findFirst().orElse(null) != null) {
             return new ResponseEntity<>(groupService.findAll(), HttpStatus.OK);
         }
         return new ResponseEntity<>(user.getGroups(), HttpStatus.OK);
