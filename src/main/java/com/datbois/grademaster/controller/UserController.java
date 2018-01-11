@@ -7,8 +7,6 @@ import com.datbois.grademaster.model.User;
 import com.datbois.grademaster.model.UserDetails;
 import com.datbois.grademaster.service.RoleService;
 import com.datbois.grademaster.service.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,8 +32,6 @@ public class UserController {
 
     @Autowired
     private RoleService roleService;
-
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE')")

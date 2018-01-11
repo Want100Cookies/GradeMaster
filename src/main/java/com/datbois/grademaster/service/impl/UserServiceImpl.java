@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public User findByEmail(String email) {
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmailContainingIgnoreCase(email);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(s);
+        User user = userRepository.findByEmailContainingIgnoreCase(s);
         if (user == null) {
             throw new UsernameNotFoundException("Invalid username or password.");
         }

@@ -1,7 +1,6 @@
 package com.datbois.grademaster.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.Email;
 
@@ -15,7 +14,6 @@ import java.util.Set;
                 @UniqueConstraint(columnNames = "emailVerifyToken")
         }
 )
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User extends BaseModel {
 
     @Id
