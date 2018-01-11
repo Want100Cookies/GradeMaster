@@ -1,11 +1,11 @@
 SET FOREIGN_KEY_CHECKS=0;
 
 TRUNCATE TABLE `user_roles`;
+TRUNCATE TABLE `user_groups`;
 TRUNCATE TABLE `user`;
-TRUNCATE TABLE `group_users`;
-TRUNCATE TABLE `group`;
-TRUNCATE TABLE `group_periods`;
 TRUNCATE TABLE `course`;
+TRUNCATE TABLE `group_periods`;
+TRUNCATE TABLE `group`;
 
 INSERT INTO `user` (`id`, `email`, `name`, `password`, `verified`) VALUES
   (1, "john.doe@student.stenden.com", "John Doe", "$2a$04$FYZXxiv7A74rX33gfs2m/.AGqhQ/unlJCB2nHLRiuHCVlECcyLyb6", 1),
@@ -34,10 +34,10 @@ INSERT INTO `group_periods` (`group_id`, `period`) VALUES
   (2, "Q4"),
   (3, "Q1");
 
-INSERT INTO `group_users` (`group_id`, `user_id`) VALUES
+INSERT INTO `user_groups` (`user_id`, `group_id`) VALUES
   (1, 1),
   (1, 2),
-  (2, 2),
+  (2, 3),
   (3, 3);
 
 SET FOREIGN_KEY_CHECKS=1;

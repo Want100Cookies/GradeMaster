@@ -46,10 +46,17 @@ public class User extends BaseModel {
     )
     private Set<Role> roles;
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "userId", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "groupId", referencedColumnName = "id")
+    )
+    private Set<Group> groups;
+
     public User() {
     }
 
-    public User(String name, String email, String referenceId, String password, boolean verified, String emailVerifyToken, Set<Role> roles) {
+    public User(String name, String email, String referenceId, String password, boolean verified, String emailVerifyToken, Set<Role> roles, Set<Group> groups) {
         this.name = name;
         this.email = email;
         this.referenceId = referenceId;
@@ -57,6 +64,7 @@ public class User extends BaseModel {
         this.verified = verified;
         this.emailVerifyToken = emailVerifyToken;
         this.roles = roles;
+        this.groups = groups;
     }
 
     public Long getId() {
@@ -131,6 +139,14 @@ public class User extends BaseModel {
         this.roles = roles;
     }
 
+    public Set<Group> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(Set<Group> groups) {
+        this.groups = groups;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -138,9 +154,11 @@ public class User extends BaseModel {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", referenceId='" + referenceId + '\'' +
+                ", password='" + password + '\'' +
                 ", verified=" + verified +
                 ", emailVerifyToken='" + emailVerifyToken + '\'' +
                 ", roles=" + roles +
+                ", groups=" + groups +
                 '}';
     }
 }

@@ -30,10 +30,10 @@ INSERT INTO `group_periods` (`group_id`, `period`) VALUES
   (2, "Q4"),
   (3, "Q1");
 
-INSERT INTO `group_users` (`group_id`, `user_id`) VALUES
+INSERT INTO `user_groups` (`user_id`, `group_id`) VALUES
   (1, 1),
   (1, 2),
-  (2, 2),
+  (2, 3),
   (3, 3);
 
 # All passwords are bcrypt hash of 'password'
