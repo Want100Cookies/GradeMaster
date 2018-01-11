@@ -131,4 +131,18 @@ public class CourseControllerTests extends OAuthTests {
         assertThat("Course deletion results in group deletion", groupService.count(), lessThan(groupCount));
         assertThat("Course deletion results in no user deletion", userService.findById(user.getId()), notNullValue());
     }
+
+    @Test
+    public void userCanGetGroupsInCourse() {
+        String token = obtainAccessToken("john.doe@student.stenden.com", "password");
+
+        given()
+                .auth()
+                .oauth2(token)
+                .when()
+                .get("/api/v1/courses/{courseId}/groups", 1L)
+                .then()
+                .contentType(ContentType.JSON)
+                .body("size()", greaterThan(0));
+    }
 }

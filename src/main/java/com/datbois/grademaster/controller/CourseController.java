@@ -1,6 +1,7 @@
 package com.datbois.grademaster.controller;
 
 import com.datbois.grademaster.model.Course;
+import com.datbois.grademaster.model.Group;
 import com.datbois.grademaster.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/api/v1")
@@ -48,5 +50,12 @@ public class CourseController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void deleteCourse(@PathVariable Long courseId) {
         courseService.delete(courseId);
+    }
+
+    @RequestMapping(value = "/courses/{courseId}/groups", method = RequestMethod.GET)
+    public Set<Group> groupsInCourse(@PathVariable Long courseId) {
+        Course course = courseService.findById(courseId);
+
+        return course.getGroups();
     }
 }
