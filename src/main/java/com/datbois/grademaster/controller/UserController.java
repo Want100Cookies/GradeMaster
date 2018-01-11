@@ -45,13 +45,11 @@ public class UserController {
 
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.GET)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE') or isCurrentUser(#userId)")
-    @ResponseStatus(HttpStatus.OK)
     public User user(@PathVariable Long userId) {
         return userService.findById(userId);
     }
 
     @RequestMapping(value = "/users/self", method = RequestMethod.GET)
-    @ResponseStatus(HttpStatus.OK)
     public User currentUser(Authentication authentication) {
         return ((UserDetails) authentication.getPrincipal()).getUser();
     }
