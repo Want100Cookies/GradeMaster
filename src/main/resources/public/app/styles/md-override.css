@@ -7,6 +7,12 @@
     background: #555C78;
     color: white;
 }
+#override-menubutton{
+    text-transform: none;
+    text-align: left;
+    margin: 0;
+    font-size: 18px;
+}
 .md-sidenav-left{
     background: #4E546C;
 }
