@@ -2,6 +2,9 @@ SET FOREIGN_KEY_CHECKS=0;
 
 TRUNCATE TABLE `user_roles`;
 TRUNCATE TABLE `user`;
+TRUNCATE TABLE `group`;
+TRUNCATE TABLE `group_periods`;
+TRUNCATE TABLE `group_users`;
 
 INSERT INTO `user` (`id`, `email`, `name`, `password`, `verified`) VALUES
   (1, "john.doe@student.stenden.com", "John Doe", "$2a$04$FYZXxiv7A74rX33gfs2m/.AGqhQ/unlJCB2nHLRiuHCVlECcyLyb6", 1),
