@@ -2,25 +2,29 @@ package com.datbois.grademaster.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.util.Set;
 
 @Entity
-public class Grade{
+public class Grade extends BaseModel{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotNull
+    @Null
     private double grade;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
-    public User fromUser;
+    @Null
+    private String motivation;
 
-    @NotNull
+    @Null
     @ManyToOne(fetch = FetchType.LAZY)
-    public User toUser;
+    private User fromUser;
+
+    @Null
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User toUser;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
@@ -30,8 +34,9 @@ public class Grade{
 
     }
 
-    public Grade(double grade){
+    public Grade(double grade, String motivation){
         this.grade = grade;
+        this.motivation = motivation;
     }
 
     public Long getId() {
@@ -48,6 +53,22 @@ public class Grade{
 
     public void setGrade(double grade) {
         this.grade = grade;
+    }
+
+    public String getMotivation() {
+        return motivation;
+    }
+
+    public void setMotivation(String motivation) {
+        this.motivation = motivation;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
     }
 
     public User getFromUser() {

@@ -32,7 +32,10 @@ public class Group extends BaseModel {
     )
     private Set<User> users;
 
-    private double groupGrade;
+//    private double groupGrade;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    public GroupGrade groupGrade;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "group")
     private List<Grade> grades;
@@ -124,11 +127,11 @@ public class Group extends BaseModel {
         this.users = users;
     }
 
-    public double getGroupGrade() {
+    public GroupGrade getGroupGrade() {
         return groupGrade;
     }
 
-    public void setGroupGrade(double groupGrade) {
+    public void setGroupGrade(GroupGrade groupGrade) {
         this.groupGrade = groupGrade;
     }
 

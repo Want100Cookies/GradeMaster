@@ -13,13 +13,17 @@ INSERT INTO `user_roles` (`user_id`, `role_id`) VALUES
   (2, 2),
   (3, 3);
 
-INSERT INTO `group` (`group_grade`) VALUES
-  (8);
+INSERT INTO `group_grade` (`grade`,`comment`) VALUES
+  (6, 'comment'),
+  (7, 'comment');
 
-INSERT INTO `grade` (`grade`,`from_user_id`, `group_id`, `to_user_id`) VALUES
-  (8, 1, 1, 1),
-  (7, 1, 1, 2),
-  (5, 1, 1, 3);
+INSERT INTO `group` (`group_grade_id`) VALUES
+  (1);
+
+INSERT INTO `grade` (`grade`, `motivation`, `from_user_id`, `group_id`, `to_user_id`) VALUES
+  (8, 'motivation', 1, 1, 1),
+  (7, 'motivation', 1, 1, 2),
+  (5, 'motivation', 1, 1, 3);
 
 
 
