@@ -20,7 +20,7 @@ public class Group extends BaseModel {
     @Column(name = "period")
     private Set<Period> period;
 
-    private String course;
+    private String course; // TODO make course an object;
     private String groupName;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
