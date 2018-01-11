@@ -3,14 +3,17 @@ package com.datbois.grademaster.controller;
 import com.datbois.grademaster.configuration.RoleProperties;
 import com.datbois.grademaster.model.Role;
 import com.datbois.grademaster.model.User;
+import com.datbois.grademaster.model.UserDetails;
 import com.datbois.grademaster.service.RoleService;
 import com.datbois.grademaster.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -42,6 +45,12 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public User user(@PathVariable Long userId) {
         return userService.findById(userId);
+    }
+
+    @RequestMapping(value = "/users/self", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public User currentUser(Authentication authentication) {
+        return ((UserDetails) authentication.getPrincipal()).getUser();
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
@@ -96,7 +105,7 @@ public class UserController {
         // Unfortunately because verified is a boolean, the requestbody set's it to false and not null and therefore is copied to the existing model
         existing.setVerified(verified);
 
-        return userService.update(existing);
+        return userService.save(existing);
     }
 
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.DELETE)

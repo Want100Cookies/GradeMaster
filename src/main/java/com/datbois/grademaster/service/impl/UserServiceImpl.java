@@ -1,16 +1,17 @@
 package com.datbois.grademaster.service.impl;
 
 import com.datbois.grademaster.model.User;
+import com.datbois.grademaster.model.UserDetails;
 import com.datbois.grademaster.repository.UserRepository;
 import com.datbois.grademaster.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Service
 public class UserServiceImpl implements UserDetailsService, UserService {
@@ -23,12 +24,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public User save(User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
-    }
-
-    @Override
-    public User update(User user) {
+        if (user.getPassword() != null) {
+            if (!Pattern.compile("\\A\\$2a?\\$\\d\\d\\$[./0-9A-Za-z]{53}").matcher(user.getPassword()).matches()) {
+                user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            }
+        }
         return userRepository.save(user);
     }
 
@@ -64,6 +64,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             throw new UsernameNotFoundException("Invalid username or password.");
         }
 
-        return new com.datbois.grademaster.model.UserDetails(user);
+        return new UserDetails(user);
     }
 }
