@@ -22,6 +22,9 @@
     color: #FFFFFF;
     background-color:#555C78;    
 }
+md-input-container:not(.md-input-invalid).md-input-focused .md-input {
+    border-color: #555C78;
+}
 .md-sidenav-left{
     background: #4E546C;
 }
