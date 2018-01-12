@@ -3,6 +3,8 @@ package com.datbois.grademaster.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -28,6 +30,12 @@ public class Group extends BaseModel {
     @ManyToMany(mappedBy = "groups", fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.REMOVE})
     @JsonIgnore
     private Set<User> users;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    public GroupGrade groupGrade;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "group")
+    private List<Grade> grades;
 
     private String groupName;
 
@@ -116,6 +124,14 @@ public class Group extends BaseModel {
 
     public void setUsers(Set<User> users) {
         this.users = users;
+    }
+
+    public GroupGrade getGroupGrade() {
+        return groupGrade;
+    }
+
+    public void setGroupGrade(GroupGrade groupGrade) {
+        this.groupGrade = groupGrade;
     }
 
     @Override
