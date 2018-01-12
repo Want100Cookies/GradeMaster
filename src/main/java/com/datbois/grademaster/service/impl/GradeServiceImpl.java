@@ -16,8 +16,7 @@ public class GradeServiceImpl implements GradeService {
     private GradeRepository gradeRepository;
 
     @Override
-    public Grade save(Grade grade){
-        grade.setGrade(grade.getGrade());
+    public Grade save(Grade grade) {
         return gradeRepository.save(grade);
     }
 

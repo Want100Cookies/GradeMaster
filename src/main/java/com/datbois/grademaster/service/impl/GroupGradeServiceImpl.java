@@ -1,5 +1,7 @@
 package com.datbois.grademaster.service.impl;
 
+import com.datbois.grademaster.model.Grade;
+import com.datbois.grademaster.model.Group;
 import com.datbois.grademaster.model.GroupGrade;
 import com.datbois.grademaster.repository.GroupGradeRepository;
 import com.datbois.grademaster.service.GroupGradeService;
@@ -14,8 +16,6 @@ public class GroupGradeServiceImpl implements GroupGradeService {
 
     @Override
     public GroupGrade save(GroupGrade groupGrade) {
-        groupGrade.setGrade(groupGrade.getGrade());
-        groupGrade.setComment(groupGrade.getComment());
         return groupGradeRepository.save(groupGrade);
     }
 
