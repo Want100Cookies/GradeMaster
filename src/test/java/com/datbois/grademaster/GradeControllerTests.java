@@ -1,11 +1,7 @@
 package com.datbois.grademaster;
 
-import com.datbois.grademaster.model.Grade;
-import com.datbois.grademaster.model.User;
 import com.datbois.grademaster.service.GradeService;
-import com.fasterxml.jackson.core.JsonParser;
 import io.restassured.http.ContentType;
-import org.hamcrest.Matcher;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,25 +10,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.number.IsCloseTo.closeTo;
+import static org.hamcrest.Matchers.equalTo;
 
-public class GradeControllerTests extends OAuthTests{
+public class GradeControllerTests extends OAuthTests {
     @Autowired
     GradeService gradeService;
 
-//    Matcher<Double> isDouble(double value) {
-//        return is(Double.valueOf(value));
-//    }
-
     @Test
-    public void TeacherCanInsertGroupGrade(){
+    public void TeacherCanInsertGroupGrade() {
         String token = this.obtainAccessToken("jane.doe@stenden.com", "password");
 
         Map<String, Object> gradeData = new HashMap<>();
-        gradeData.put("grade", 9.0f);
+        gradeData.put("grade", 9.5f);
         gradeData.put("comment", "Well Done!");
 
         given()
@@ -44,8 +33,7 @@ public class GradeControllerTests extends OAuthTests{
                 .patch("/api/v1/grade/group/1")
                 .then()
                 .statusCode(HttpStatus.OK.value())
-                .body("grade", isDouble((double)gradeData.get("grade")));
-
+                .body("grade", equalTo(gradeData.get("grade")));
     }
 
 //    @Test
@@ -64,4 +52,4 @@ public class GradeControllerTests extends OAuthTests{
 //                .body("grade", is(grade.getGrade()));
 //    }
 
-    }
+}
