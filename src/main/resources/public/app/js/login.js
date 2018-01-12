@@ -17,7 +17,7 @@ app.controller('LoginCtrl', function ($scope, $resource, $http, $httpParamSerial
         }
         var req = {
             method: 'POST',
-            url: 'http://192.168.1.128:8080/oauth/token',
+            url: '/oauth/token',
             headers: {
                 "Authorization": "Basic " + "Z3JhZGVtYXN0ZXItY2xpZW50OmdyYWRlbWFzdGVyLXNlY3JldA==",
                 "Content-type": "application/x-www-form-urlencoded; charset=utf-8"

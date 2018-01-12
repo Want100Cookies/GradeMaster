@@ -41,6 +41,7 @@ app.config(function ($routeProvider) {
         })
         .when('/grades', {
             templateUrl: '/app/pages/grades.html',
+            controller: 'GradesCtrl',
             resolve: {
                 'auth': function(AuthService){
                     return AuthService.authenticate();

@@ -1,1 +1,33 @@
 <p>grades</p>
+
+<md-card>
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>
+                <span>Grade team members</span>
+            </h2>
+        </div>
+    </md-toolbar>
+    <md-card-content>
+        <md-list>
+            <md-list-item layout="row" ng-repeat="student in vm.students">
+                <div flex="auto">
+                    {{student.name}}
+                </div>
+                <div flex="auto">
+                    <b><i>{{student.grade|number:1}}</i></b>
+                </div>
+                <md-slider flex="auto" min="01.0" max="10.0" step="0.1" ng-model="student.grade" ng-change="vm.change(student)"></md-slider>
+            </md-list-item>
+            <md-list-item layout="row">
+                <div flex="auto">
+                </div>
+                <div flex="auto">
+                    {{vm.totalCurrent()|number:2}}
+                </div>
+                <div flex="auto">
+                </div>
+            </md-list-item>
+        </md-list>
+    </md-card-content>
+</md-card>
