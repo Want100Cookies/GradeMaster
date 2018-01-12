@@ -1,4 +1,5 @@
-app.controller('LoginCtrl', function ($scope, $resource, $http, $httpParamSerializer, $cookies) {
+app.controller('LoginCtrl', function ($scope, $resource, $http, $httpParamSerializer, $cookies, $mdDialog, $state) {
+  
     $scope.vm = {
         formData: {
             email: '',
@@ -28,7 +29,7 @@ app.controller('LoginCtrl', function ($scope, $resource, $http, $httpParamSerial
             $http.defaults.headers.common.Authorization =
                 'Bearer ' + data.data.access_token;
             $cookies.put("access_token", data.data.access_token);
-            window.location.href = "#!/";
+            $state.transitionTo('app.dashboard')
         }).catch(function (data){
             
         });

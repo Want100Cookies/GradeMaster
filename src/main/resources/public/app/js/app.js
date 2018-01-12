@@ -5,7 +5,8 @@ var app = angular.module('gmApp', [
     'ngAnimate',
     'ngRoute',
     'ngResource',
-    'ngCookies'
+    'ngCookies',
+    'ui.router'
 ]);
 
 app.controller('LayoutController', function ($scope, $mdSidenav) {
@@ -17,9 +18,25 @@ app.controller('LayoutController', function ($scope, $mdSidenav) {
     };
 });
 
-app.config(function ($routeProvider) {
-    $routeProvider
-        .when('/', {
+app.config(function ($stateProvider, $urlRouterProvider) {
+
+    $stateProvider
+        .state('login', {
+            url: '/login',
+            templateUrl: '/app/pages/login.html',
+            controller: 'LoginCtrl'
+        })
+        .state('app', {
+            url: '/home',
+            templateUrl: '/app/pages/app.html',
+            resolve: {
+                'auth': function(AuthService){
+                    return AuthService.authenticate();
+                },
+            }
+        })
+        .state('app.dashboard', {
+            url: '/dashboard',
             templateUrl: '/app/pages/dashboard.html',
             resolve: {
                 'auth': function(AuthService){
@@ -27,50 +44,22 @@ app.config(function ($routeProvider) {
                 },
             }
         })
-        .when('/login', {
-            templateUrl: '/app/pages/login.html',
-            controller: 'LoginCtrl',
-        })
-        .when('/groups', {
+        .state('app.groups', {
+            url: '/groups',
             templateUrl: '/app/pages/groups.html',
             resolve: {
                 'auth': function(AuthService){
                     return AuthService.authenticate();
-                }
+                },
             }
         })
-        .when('/grades', {
+        .state('app.grades', {
+            url: '/grades',
             templateUrl: '/app/pages/grades.html',
             resolve: {
                 'auth': function(AuthService){
                     return AuthService.authenticate();
-                }
+                },
             }
         });
 });
-app.run(function($rootScope, $location){
-    //If the route change failed due to authentication error, redirect them out
-    $rootScope.$on('$routeChangeError', function(event, current, previous, rejection){
-        if(rejection === 'Not Authenticated'){
-            $location.path('/login');
-        }
-    })
-});
-app.directive('activeLink', ['$location', function (location) {
-    return {
-        restrict: 'A',
-        link: function (scope, element, attrs, controller) {
-            var clazz = attrs.activeLink;
-            var path = attrs.href;
-            path = path.substring(2);
-            scope.location = location;
-            scope.$watch('location.path()', function (newPath) {
-                if (path === newPath) {
-                    element.addClass(clazz);
-                } else {
-                    element.removeClass(clazz);
-                }
-            });
-        }
-    };
-}]);

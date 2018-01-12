@@ -1,4 +1,4 @@
-app.factory('AuthService', function($cookies, $q, $location, $resource, $http, $httpParamSerializer){
+app.factory('AuthService', function($cookies, $q, $location, $resource, $http, $httpParamSerializer, $state){
     return {
         authenticate : function(){
             var accessToken = $cookies.get("access_token");
@@ -13,8 +13,7 @@ app.factory('AuthService', function($cookies, $q, $location, $resource, $http, $
                 return true;
                 console.log(data);
             }).catch(function(data){
-                return $q.reject('Not Authenticated')
-                console.log(data);
+                $state.transitionTo('login')
             });
         }
     }
