@@ -3,6 +3,7 @@ SET FOREIGN_KEY_CHECKS=0;
 TRUNCATE TABLE `user_roles`;
 TRUNCATE TABLE `user`;
 TRUNCATE TABLE `role`;
+TRUNCATE TABLE `notification`;
 
 INSERT INTO `user` (`id`, `email`, `name`, `password`, `verified`) VALUES
   (1, "john.doe@student.stenden.com", "John Doe", "$2a$04$FYZXxiv7A74rX33gfs2m/.AGqhQ/unlJCB2nHLRiuHCVlECcyLyb6", 1),
@@ -18,6 +19,13 @@ INSERT INTO `user_roles` (`user_id`, `role_id`) VALUES
   (1, 1),
   (2, 2),
   (3, 3);
+
+INSERT INTO `notification`(`id`, `message`, `seen`) VALUES
+ (1, "You have pending grades!", 0),
+ (2, "Your grade ratings have been sent!", 0),
+ (3, "Your final grade has been determined.", 0),
+ (4, "All group ratings received", 0),
+ (5, "Group grade can be made final", 0);
 
 SET FOREIGN_KEY_CHECKS=1;
 # All passwords are bcrypt hash of 'password'

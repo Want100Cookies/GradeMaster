@@ -1,16 +1,18 @@
 package com.datbois.grademaster.controller;
 
 import com.datbois.grademaster.model.Notification;
-import com.datbois.grademaster.service.EmailService;
 import com.datbois.grademaster.service.NotificationService;
+
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
 
-@Controller
+@RestController
 @RequestMapping("/api/v1")
 public class NotificationController {
 
@@ -19,11 +21,31 @@ public class NotificationController {
 
     @RequestMapping(value = "/notifications", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public List<Notification> notifications(){return notificationService.findAll(); }
+    public List<Notification> notifications(){ return notificationService.findAll(); }
 
-    @RequestMapping(value = "/notifications/{notificationId}", method = RequestMethod.GET)
+
+    @RequestMapping(value = "/notifications", method = RequestMethod.PATCH)
     @ResponseStatus(HttpStatus.OK)
-    public Notification notification(@PathVariable long notificationId){
-        return notificationService.findById(notificationId);
+    public List<Notification> markAllNotificationsSeen(){
+        List<Notification> notifications = notificationService.findAll();
+
+        boolean seen = true;
+
+        for(Notification notification : notifications){
+            notification.setSeen(seen);
+        }
+
+        return notifications;
+    }
+
+    @RequestMapping(value = "/notifications/{notificationId}", method = RequestMethod.PATCH)
+    @ResponseStatus(HttpStatus.OK)
+    public Notification markNotificationSeen(@PathVariable Long notificationId){
+        Notification notify = notificationService.findById(notificationId);
+        boolean seen = true;
+
+        notify.setSeen(seen);
+
+        return notificationService.save(notify);
     }
 }

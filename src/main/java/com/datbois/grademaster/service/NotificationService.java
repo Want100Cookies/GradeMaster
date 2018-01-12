@@ -8,5 +8,7 @@ public interface NotificationService {
 
     List<Notification> findAll();
 
+    Notification save(Notification notification);
+
     Notification findById(Long id);
 }
