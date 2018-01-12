@@ -42,7 +42,7 @@ public class GradeController{
         exists.setGroupGrade(groupGrade);
         groupGradeService.save(groupGrade);
         groupService.save(exists);
-        return new ResponseEntity<>(exists, HttpStatus.OK);
+        return new ResponseEntity<>(groupGrade, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/grade/{gradeId}", method = RequestMethod.GET)
