@@ -6,12 +6,18 @@ import com.datbois.grademaster.model.GroupGrade;
 import com.datbois.grademaster.service.GradeService;
 import com.datbois.grademaster.service.GroupGradeService;
 import com.datbois.grademaster.service.GroupService;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -30,7 +36,15 @@ public class GradeController{
     @RequestMapping(value = "/grade", method = RequestMethod.POST)
     public ResponseEntity createGrade(@RequestBody Grade grade){
         grade = gradeService.save(grade);
-        return new ResponseEntity<>(grade, HttpStatus.OK);
+
+        Map<Object, Object> response = new HashMap<>();
+        response.put("grade", grade.getGrade());
+        response.put("motivation", grade.getMotivation());
+        response.put("fromUser", grade.getFromUser().getId());
+        response.put("toUser", grade.getToUser().getId());
+        response.put("group", grade.getGroup().getId());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     //  POST JSON:  {"grade":5,"comment":"test"}
