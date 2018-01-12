@@ -91,7 +91,7 @@ public class CourseControllerTests extends OAuthTests {
         Course testCourse = courseService.findById(new Long(id));
 
         assertThat(testCourse.getName(), is(data.get("name")));
-        assertThat(testCourse.getGroups().size(), greaterThan(0));
+        assertThat(testCourse.getEducation(), notNullValue());
     }
 
     @Test
