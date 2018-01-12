@@ -12,17 +12,13 @@ public class Grade extends BaseModel{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Null
     private double grade;
 
-    @Null
     private String motivation;
 
-    @Null
     @ManyToOne(fetch = FetchType.LAZY)
     private User fromUser;
 
-    @Null
     @ManyToOne(fetch = FetchType.LAZY)
     private User toUser;
 

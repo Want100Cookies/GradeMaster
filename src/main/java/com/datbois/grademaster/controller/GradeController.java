@@ -4,6 +4,7 @@ import com.datbois.grademaster.model.Grade;
 import com.datbois.grademaster.model.Group;
 import com.datbois.grademaster.model.GroupGrade;
 import com.datbois.grademaster.service.GradeService;
+import com.datbois.grademaster.service.GroupGradeService;
 import com.datbois.grademaster.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,20 +23,24 @@ public class GradeController{
     @Autowired
     GroupService groupService;
 
-    //  POST JSON:  {"id":5,"grade":8.0,"motivation":"motivation","fromUser":{"id":1},"toUser":{"id":1},"group":{"id":1}}
+    @Autowired
+    GroupGradeService groupGradeService;
+
+    //  POST JSON:  {"grade":8.0,"motivation":"motivation","fromUser":{"id":1},"toUser":{"id":1},"group":{"id":1}}
     @RequestMapping(value = "/grade", method = RequestMethod.POST)
     public ResponseEntity createGrade(@RequestBody Grade grade){
         grade = gradeService.save(grade);
         return new ResponseEntity<>(grade, HttpStatus.OK);
     }
 
-    //  POST JSON:  5
+    //  POST JSON:  {"grade":5,"comment":"test"}
     @RequestMapping(value = "/grade/group/{groupId}", method = RequestMethod.PATCH)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE')")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity insertGroupGrade(@PathVariable Long groupId, @RequestBody GroupGrade groupGrade){
         Group exists = groupService.findById(groupId);
         exists.setGroupGrade(groupGrade);
+        groupGradeService.save(groupGrade);
         groupService.save(exists);
         return new ResponseEntity<>(exists, HttpStatus.OK);
     }
