@@ -1,0 +1,64 @@
+<!doctype html>
+<html ng-app="gmApp">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Angular Material style sheet -->
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+    <link rel="stylesheet" href="styles/app.css">
+    <link rel="stylesheet" href="styles/md-override.css">
+</head>
+
+<body>
+    <div layout="column" ng-controller="LayoutController" ng-cloak class="container">
+        <section layout="row" flex>
+            <md-sidenav class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')" md-whiteframe="4">
+                <md-toolbar id="override-sidebar">
+                    <div layout="row" class="sideToolbar">
+                        <md-button hide-gt-md class="md-icon-button" aria-label="close" ng-click="closeSideNav()" style="margin-top: 12px;">
+                            <md-icon md-svg-icon="icons/close.svg"></md-icon>
+                        </md-button>
+                        <h1 class="md-toolbar-tools">Grade Master</h1>
+                    </div>
+                </md-toolbar>
+                <md-content class="sideContent" layout-padding layout="column">
+                    <md-button md-no-ink href="#!/" active-link="active" id="override-menubutton">Dashboard</md-button>
+                    <md-button md-no-ink href="#!/groups" active-link="active" id="override-menubutton">Groups</md-button>
+                    <md-button md-no-ink href="#!/grades" active-link="active" id="override-menubutton">Grades</md-button>
+                </md-content>
+            </md-sidenav>
+            <md-content class="mainContent">
+                <md-toolbar id="override-toolbar">
+                    <div class="md-toolbar-tools">
+                        <md-button ng-click="openSideNav()" hide-gt-md class="md-icon-button" aria-label="Menu">
+                            <md-icon md-svg-icon="icons/menu.svg"></md-icon>
+                        </md-button>
+                        <span flex></span>
+                        <md-button class="md-icon-button" aria-label="Notification">
+                            <md-icon md-svg-icon="icons/notification.svg"></md-icon>
+                        </md-button>
+                        <md-button class="md-icon-button" aria-label="Recent">
+                            <md-icon md-svg-icon="icons/recent.svg"></md-icon>
+                        </md-button>
+                        <md-button class="md-icon-button" aria-label="Profile">
+                            <md-icon md-svg-icon="icons/account.svg"></md-icon>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+            </md-content>
+        </section>
+    </div>
+
+    <!-- AngularJS libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular-route.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular-messages.min.js"></script>
+
+    <!-- Angular Material Library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>

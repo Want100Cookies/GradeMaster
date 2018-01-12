@@ -22,6 +22,16 @@ Set your new password
 }
 ```
 
+## /api/{v1}/auth/verify
+### (PATCH)
+Verify your email address
+```
+{
+  token,
+  email
+}
+```
+
 ## /api/{v1}/users
 ### (GET)
 Get all users
@@ -45,6 +55,25 @@ This includes adding a role (for example super user) and adding a profile pictur
 ### (DELETE)
 Delete a single user
 
+## /api/{v1}/courses
+### (GET)
+Get all courses
+
+### (POST)
+Make a new course (only admins)
+```
+{
+  name
+}
+```
+
+## /api/{v1}/courses/{id}
+### (GET)
+Get a single course
+### (PATCH)
+Update specific field of the course
+### (DELETE)
+Delete a single course
 
 ## /api/{v1}/groups
 ### (GET)

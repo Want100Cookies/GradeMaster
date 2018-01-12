@@ -1,5 +1,7 @@
 package com.datbois.grademaster.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -19,20 +21,15 @@ public class Group extends BaseModel {
     @ElementCollection(targetClass = Period.class)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "group_periods")
-    @Column(name = "period")
     private Set<Period> period;
 
-    private String course;
-    private String groupName;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "course_id", nullable = false)
+    private Course course;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(
-            joinColumns = @JoinColumn(name = "groupId", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "userId", referencedColumnName = "id")
-    )
+    @ManyToMany(mappedBy = "groups", fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.REMOVE})
+    @JsonIgnore
     private Set<User> users;
-
-//    private double groupGrade;
 
     @OneToOne(fetch = FetchType.LAZY)
     public GroupGrade groupGrade;
@@ -40,10 +37,12 @@ public class Group extends BaseModel {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "group")
     private List<Grade> grades;
 
+    private String groupName;
+
     public Group() {
     }
 
-    public Group(String education, int startYear, int endYear, Set<Period> period, String course, String groupName, Set<User> users) {
+    public Group(String education, int startYear, int endYear, Set<Period> period, Course course, String groupName, Set<User> users) {
         this.education = education;
         this.startYear = startYear;
         this.endYear = endYear;
@@ -58,7 +57,7 @@ public class Group extends BaseModel {
         if (this.startYear == -1) return false;
         if (this.endYear == -1) return false;
         if (this.period == null || this.period.isEmpty()) return false;
-        if (this.course == null || this.course.isEmpty()) return false;
+        if (this.course == null) return false;
         if (this.groupName == null || this.groupName.isEmpty()) return false;
         return true;
     }
@@ -103,11 +102,11 @@ public class Group extends BaseModel {
         this.period = period;
     }
 
-    public String getCourse() {
+    public Course getCourse() {
         return course;
     }
 
-    public void setCourse(String course) {
+    public void setCourse(Course course) {
         this.course = course;
     }
 
@@ -145,7 +144,7 @@ public class Group extends BaseModel {
                 ", period=" + period +
                 ", course='" + course + '\'' +
                 ", groupName='" + groupName + '\'' +
-                ", users=" + users +
+                ", users='" + users +
                 '}';
     }
 }

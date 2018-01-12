@@ -8,6 +8,7 @@ import io.restassured.http.ContentType;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +26,9 @@ public class UserControllerTests extends OAuthTests {
     @Autowired
     private RoleService roleService;
 
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
     @Test
     public void adminCanViewAllUsers() {
         String token = this.obtainAccessToken("admin@stenden.com", "password");
@@ -35,6 +39,7 @@ public class UserControllerTests extends OAuthTests {
                 .when()
                 .get("/api/v1/users")
                 .then()
+                .contentType(ContentType.JSON)
                 .body("size()", greaterThan(0));
     }
 
@@ -48,6 +53,7 @@ public class UserControllerTests extends OAuthTests {
                 .when()
                 .get("/api/v1/users")
                 .then()
+                .contentType(ContentType.JSON)
                 .body("size()", greaterThan(0));
     }
 
@@ -65,7 +71,7 @@ public class UserControllerTests extends OAuthTests {
     }
 
     @Test
-    public void studentCanGetSelf() {
+    public void studentCanGetSelfViaId() {
         String token = this.obtainAccessToken("john.doe@student.stenden.com", "password");
 
         User user = userService.findByEmail("john.doe@student.stenden.com");
@@ -77,6 +83,24 @@ public class UserControllerTests extends OAuthTests {
                 .get("/api/v1/users/" + user.getId())
                 .then()
                 .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
+                .body("name", is(user.getName()));
+    }
+
+    @Test
+    public void userCanGetSelf() {
+        String token = this.obtainAccessToken("john.doe@student.stenden.com", "password");
+
+        User user = userService.findByEmail("john.doe@student.stenden.com");
+
+        given()
+                .auth()
+                .oauth2(token)
+                .when()
+                .get("/api/v1/users/self")
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
                 .body("name", is(user.getName()));
     }
 
@@ -108,6 +132,7 @@ public class UserControllerTests extends OAuthTests {
                 .get("/api/v1/users/" + user.getId())
                 .then()
                 .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
                 .body("name", is(user.getName()));
     }
 
@@ -126,6 +151,7 @@ public class UserControllerTests extends OAuthTests {
                 .post("/api/v1/users")
                 .then()
                 .statusCode(HttpStatus.CREATED.value())
+                .contentType(ContentType.JSON)
                 .body("name", is(userData.get("name")));
 
         User testUser = userService.findByEmail(userData.get("email"));
@@ -151,6 +177,7 @@ public class UserControllerTests extends OAuthTests {
                 .post("/api/v1/users")
                 .then()
                 .statusCode(HttpStatus.CREATED.value())
+                .contentType(ContentType.JSON)
                 .body("name", is(userData.get("name")));
 
         User testUser = userService.findByEmail(userData.get("email"));
@@ -176,13 +203,39 @@ public class UserControllerTests extends OAuthTests {
                 .patch("/api/v1/users/{userId}", testUser.getId())
                 .then()
                 .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
                 .body("name", is(userData.get("name")));
 
         User updatedUser = userService.findById(testUser.getId());
 
         assertThat("Email stays the same", testUser.getEmail(), equalTo(updatedUser.getEmail()));
         assertThat("Verified stays the same", testUser.isVerified(), equalTo(updatedUser.isVerified()));
+        assertThat("Password stays the same", testUser.getPassword(), equalTo(updatedUser.getPassword()));
         assertThat("Name is changed", updatedUser.getName(), equalTo(userData.get("name")));
+    }
+
+    @Test
+    public void userCanUpdatePassword() {
+        User testUser = userService.findByEmail("john.doe@student.stenden.com");
+        String token = this.obtainAccessToken(testUser.getEmail(), "password");
+
+        Map<String, String> userData = new HashMap<>();
+        userData.put("password", "newPassword");
+
+        given()
+                .auth()
+                .oauth2(token)
+                .contentType(ContentType.JSON)
+                .body(userData)
+                .when()
+                .patch("/api/v1/users/{userId}", testUser.getId())
+                .then()
+                .statusCode(HttpStatus.OK.value());
+
+        User updatedUser = userService.findById(testUser.getId());
+
+        assertThat("Password is changed", testUser.getPassword(), not(equalTo(updatedUser.getPassword())));
+        assertThat("Password is correct", passwordEncoder.matches(userData.get("password"), updatedUser.getPassword()), is(true));
     }
 
     @Test
