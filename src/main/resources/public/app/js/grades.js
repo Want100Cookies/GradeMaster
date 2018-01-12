@@ -30,25 +30,17 @@ app.controller('GradesCtrl', function ($scope) {
 
     $scope.calculate = function (student) {
         student.lock = true;
-        let diff = $scope.vm.groupGrade - student.grade;
+        let students = $scope.getUnlockedStudents().sort(function (a, b) {
+            return a.grade - b.grade;
+        });
 
-        let students = $scope.getUnlockedStudents();
-        let length = students.length;
-        let change = 0;
+        const length = students.length;
 
-        if (Math.abs(diff * 10) < students.length) {
-            change = (diff > 0) ? -0.1 : 0.1;
-            length = Math.abs(diff) * 10;
+        const currentGoingUp = $scope.vm.totalCurrent() > $scope.vm.total();
 
-        } else {
-            change = diff / students.length;
-        }
+        const index = currentGoingUp ? length - 1 : 0;
 
-        const remaining = $scope.getRemainingPoints();
-
-        for (let i = 0; i < length; i++) {
-            students[i].grade = (remaining / students.length) + change;
-        }
+        students[index].grade += currentGoingUp ? -0.1 : 0.1;
     };
 
     $scope.getUnlockedStudents = function () {
