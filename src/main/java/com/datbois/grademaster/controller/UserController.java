@@ -2,6 +2,7 @@ package com.datbois.grademaster.controller;
 
 import com.datbois.grademaster.configuration.RoleProperties;
 import com.datbois.grademaster.exception.BadRequestException;
+import com.datbois.grademaster.model.Group;
 import com.datbois.grademaster.model.Role;
 import com.datbois.grademaster.model.User;
 import com.datbois.grademaster.model.UserDetails;
@@ -161,5 +162,17 @@ public class UserController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void removeUser(@PathVariable Long userId) {
         userService.delete(userId);
+    }
+
+    /**
+     * Get all groups assigned to a user
+     * @param userId The id of the user
+     * @return A list of all groups the user is member of
+     */
+    @RequestMapping(value = "/users/{userId}/groups", method = RequestMethod.GET)
+    @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE') or isCurrentUser(#userId)")
+    public Set<Group> getGroupsForUser(@PathVariable Long userId) {
+        User user = userService.findById(userId);
+        return user.getGroups();
     }
 }
