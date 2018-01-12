@@ -166,8 +166,10 @@ public class UserController {
 
     /**
      * Get all groups assigned to a user
+     * @endpoint (GET) /api/v1/users/{userId}/groups
      * @param userId The id of the user
      * @return A list of all groups the user is member of
+     * @responseStatus OK
      */
     @RequestMapping(value = "/users/{userId}/groups", method = RequestMethod.GET)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE') or isCurrentUser(#userId)")
