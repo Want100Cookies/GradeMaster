@@ -5,14 +5,13 @@ app.controller('LoginCtrl', function($scope, $resource, $http, $httpParamSeriali
         password: 'password',
         scope: 'read write'
     }
-
-    $scope.encoded = btoa('clientIdPassword:secret');
+    
     $scope.login = function() {
         var req = {
             method: 'POST',
             url: 'http://192.168.1.128:8080/oauth/token',
             headers: {
-                "Authorization": "Basic" + $scope.encoded,
+                "Authorization": "Basic " + "Z3JhZGVtYXN0ZXItY2xpZW50OmdyYWRlbWFzdGVyLXNlY3JldA==",
                 "Content-type": "application/x-www-form-urlencoded; charset=utf-8"
             },
             data: $httpParamSerializer($scope.data)
@@ -22,7 +21,6 @@ app.controller('LoginCtrl', function($scope, $resource, $http, $httpParamSeriali
             'Bearer ' + data.data.access_token;
             $cookies.put("access_token", data.data.access_token);
             window.location.href="#!/";
-            // console.log($cookies.get("access_token"));
         })
     }
 });

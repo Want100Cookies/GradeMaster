@@ -19,19 +19,41 @@ app.config(function ($routeProvider) {
     $routeProvider
         .when('/', {
             templateUrl: '/app/pages/dashboard.html',
+            resolve: {
+                'auth': function(AuthService){
+                    return AuthService.authenticate();
+                },
+            }
         })
         .when('/login', {
             templateUrl: '/app/pages/login.html',
-            controller: 'LoginCtrl'
+            controller: 'LoginCtrl',
         })
         .when('/groups', {
             templateUrl: '/app/pages/groups.html',
+            resolve: {
+                'auth': function(AuthService){
+                    return AuthService.authenticate();
+                }
+            }
         })
         .when('/grades', {
             templateUrl: '/app/pages/grades.html',
+            resolve: {
+                'auth': function(AuthService){
+                    return AuthService.authenticate();
+                }
+            }
         });
 });
-
+app.run(function($rootScope, $location){
+    //If the route change failed due to authentication error, redirect them out
+    $rootScope.$on('$routeChangeError', function(event, current, previous, rejection){
+        if(rejection === 'Not Authenticated'){
+            $location.path('/login');
+        }
+    })
+});
 app.directive('activeLink', ['$location', function (location) {
     return {
         restrict: 'A',
