@@ -51,6 +51,7 @@ public class User extends BaseModel {
             joinColumns = @JoinColumn(name = "userId", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "groupId", referencedColumnName = "id")
     )
+    @JsonIgnore
     private Set<Group> groups;
 
     public User() {

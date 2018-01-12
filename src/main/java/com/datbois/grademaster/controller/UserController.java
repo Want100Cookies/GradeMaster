@@ -36,8 +36,9 @@ public class UserController {
     /**
      * Get all users in the application including their groups.
      * But only if logged in user is a teacher or admin.
-     * @endpoint (GET) /api/v1/users
+     *
      * @return All users
+     * @endpoint (GET) /api/v1/users
      * @responseStatus OK
      */
     @RequestMapping(value = "/users", method = RequestMethod.GET)
@@ -50,9 +51,10 @@ public class UserController {
      * Retrieve a single user and his group.
      * But only retrieve this user if it is the currently logged in user,
      * or the logged in user is an teacher/admin.
-     * @endpoint (GET) /api/v1/users/{userId}
+     *
      * @param userId ID of needed user
      * @return A single user
+     * @endpoint (GET) /api/v1/users/{userId}
      * @responseStatus OK
      */
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.GET)
@@ -63,9 +65,10 @@ public class UserController {
 
     /**
      * Retrieve the currently logged in user
-     * @endpoint (GET) /api/v1/users/self
+     *
      * @param authentication The UserDetails implementation of Authentication
      * @return Logged in user
+     * @endpoint (GET) /api/v1/users/self
      * @responseStatus OK
      */
     @RequestMapping(value = "/users/self", method = RequestMethod.GET)
@@ -77,9 +80,10 @@ public class UserController {
      * Create a new user using the RequestBody.
      * The first user that registers with the application becomes admin.
      * Also the role is matched using the email address provided.
-     * @endpoint (POST) /api/v1/users
+     *
      * @param user JSON object with {name, email, referenceId, password}
      * @return The created user
+     * @endpoint (POST) /api/v1/users
      * @responseStatus CREATED
      */
     @RequestMapping(value = "/users", method = RequestMethod.POST)
@@ -128,12 +132,13 @@ public class UserController {
     /**
      * Update a user with only the given fields.
      * An student can only update himself and an teacher/admin can update any user.
-     * @endpoint (PATCH) /api/v1/users/{userId}
+     *
      * @param userId The id of the user that has to be updated.
-     * @param user A JSON object with some or all of the following fields: {name, email, referenceId, password}
+     * @param user   A JSON object with some or all of the following fields: {name, email, referenceId, password}
      * @return The updated user
-     * @responseStatus OK
      * @throws Exception If some fields don't exist in the User model
+     * @endpoint (PATCH) /api/v1/users/{userId}
+     * @responseStatus OK
      */
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.PATCH)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE') or isCurrentUser(#userId)")
@@ -152,8 +157,9 @@ public class UserController {
     /**
      * Remove a user from the database.
      * Only admins can delete users.
-     * @endpoint (DELETE) /api/v1/users/{userID}
+     *
      * @param userId The id of the to be deleted user.
+     * @endpoint (DELETE) /api/v1/users/{userID}
      * @responseStatus ACCEPTED
      */
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.DELETE)

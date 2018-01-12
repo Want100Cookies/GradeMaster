@@ -20,8 +20,9 @@ public class CourseController {
 
     /**
      * Get all courses
-     * @endpoint (GET) /api/v1/courses
+     *
      * @return All courses
+     * @endpoint (GET) /api/v1/courses
      * @responseStatus OK
      */
     @RequestMapping(value = "/courses", method = RequestMethod.GET)
@@ -31,9 +32,10 @@ public class CourseController {
 
     /**
      * Get a single course
-     * @endpoint (GET) /api/v1/courses/{courseId}
+     *
      * @param courseId The id of the needed course
      * @return A single course
+     * @endpoint (GET) /api/v1/courses/{courseId}
      * @responseStatus OK
      */
     @RequestMapping(value = "/courses/{courseId}", method = RequestMethod.GET)
@@ -44,9 +46,10 @@ public class CourseController {
     /**
      * Create a new course.
      * Only admins can use this endpoint.
-     * @endpoint (POST) /api/v1/courses
+     *
      * @param course JSON object with {name}
      * @return The saved course
+     * @endpoint (POST) /api/v1/courses
      * @responseStatus CREATED
      */
     @RequestMapping(value = "/courses", method = RequestMethod.POST)
@@ -58,12 +61,13 @@ public class CourseController {
 
     /**
      * Update the course.
-     * @endpoint (PATCH) /api/v1/courses/{courseId}
+     *
      * @param courseId The id of the to be updated course
-     * @param course JSON object with {name}
+     * @param course   JSON object with {name}
      * @return The updated course
-     * @responseStatus OK
      * @throws Exception If any given method is not in the Course object
+     * @endpoint (PATCH) /api/v1/courses/{courseId}
+     * @responseStatus OK
      */
     @RequestMapping(value = "/courses/{courseId}", method = RequestMethod.PATCH)
     @PreAuthorize("hasAuthority('ADMIN_ROLE')")
@@ -77,8 +81,9 @@ public class CourseController {
 
     /**
      * Delete a single course
-     * @endpoint (DELETE) /api/v1/courses/{courseId}
+     *
      * @param courseId The id of the to be deleted course
+     * @endpoint (DELETE) /api/v1/courses/{courseId}
      * @responseStatus ACCEPTED
      */
     @RequestMapping(value = "/courses/{courseId}", method = RequestMethod.DELETE)
