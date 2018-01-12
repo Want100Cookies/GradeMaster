@@ -1,6 +1,8 @@
 'use strict';
 var app = angular.module('gmApp', [
     'ngMaterial',
+    'ngMessages',
+    'ngAnimate',
     'ngRoute',
     'ngResource',
     'ngCookies'

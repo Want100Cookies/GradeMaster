@@ -14,6 +14,14 @@
     font-size: 18px;
     font-weight: 400;
 }
+#override-login-toolbar{
+    background: #555C78;
+}
+.md-button.md-raised.md-primary.formPage:not([disabled]) {
+    position: right !important;
+    color: #FFFFFF;
+    background-color:#555C78;    
+}
 .md-sidenav-left{
     background: #4E546C;
 }
