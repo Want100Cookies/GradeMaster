@@ -23,16 +23,16 @@ public class GradeControllerTests extends OAuthTests{
     @Autowired
     GradeService gradeService;
 
-    Matcher<Double> isDouble(double value) {
-        return is(Double.valueOf(value));
-    }
+//    Matcher<Double> isDouble(double value) {
+//        return is(Double.valueOf(value));
+//    }
 
     @Test
     public void TeacherCanInsertGroupGrade(){
         String token = this.obtainAccessToken("jane.doe@stenden.com", "password");
 
         Map<String, Object> gradeData = new HashMap<>();
-        gradeData.put("grade", 9.0D);
+        gradeData.put("grade", 9.0f);
         gradeData.put("comment", "Well Done!");
 
         given()
@@ -45,6 +45,7 @@ public class GradeControllerTests extends OAuthTests{
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .body("grade", isDouble((double)gradeData.get("grade")));
+
     }
 
 //    @Test
