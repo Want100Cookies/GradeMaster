@@ -73,7 +73,7 @@ public class GroupController {
      */
     @RequestMapping(value = "/groups/{groupId}", method = RequestMethod.GET)
     @PreAuthorize("hasAnyAuthority('ADMIN_ROLE') or isInGroup(#groupId)")
-    public Group changeGroup(@PathVariable Long groupId) {
+    public Group getGroup(@PathVariable Long groupId) {
         return groupService.findById(groupId);
     }
 
