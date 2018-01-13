@@ -32,6 +32,7 @@ public class UserControllerTests extends OAuthTests {
     @Test
     public void adminCanViewAllUsers() {
         String token = this.obtainAccessToken("admin@stenden.com", "password");
+        long count = userService.count();
 
         given()
                 .auth()
@@ -40,12 +41,13 @@ public class UserControllerTests extends OAuthTests {
                 .get("/api/v1/users")
                 .then()
                 .contentType(ContentType.JSON)
-                .body("size()", greaterThan(0));
+                .body("size()", is((int) count));
     }
 
     @Test
     public void teacherCanViewAllUsers() {
         String token = this.obtainAccessToken("jane.doe@stenden.com", "password");
+        long count = userService.count();
 
         given()
                 .auth()
@@ -54,7 +56,7 @@ public class UserControllerTests extends OAuthTests {
                 .get("/api/v1/users")
                 .then()
                 .contentType(ContentType.JSON)
-                .body("size()", greaterThan(0));
+                .body("size()", is((int) count));
     }
 
     @Test
@@ -129,7 +131,7 @@ public class UserControllerTests extends OAuthTests {
                 .auth()
                 .oauth2(token)
                 .when()
-                .get("/api/v1/users/" + user.getId())
+                .get("/api/v1/users/{userId}", user.getId())
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
@@ -253,5 +255,22 @@ public class UserControllerTests extends OAuthTests {
                 .statusCode(HttpStatus.ACCEPTED.value());
 
         assertThat("User", userService.findByEmail("john.doe@student.stenden.com"), is(nullValue()));
+    }
+
+    @Test
+    public void userCanGetAssignedGroups() {
+        User user = userService.findByEmail("john.doe@student.stenden.com");
+        String token = this.obtainAccessToken(user.getEmail(), "password");
+
+        int size = user.getGroups().size();
+
+        given()
+                .auth()
+                .oauth2(token)
+                .when()
+                .get("/api/v1/users/{userId}/groups", user.getId())
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .body("size()", is(size));
     }
 }
