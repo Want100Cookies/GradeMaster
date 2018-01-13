@@ -5,6 +5,7 @@ import com.datbois.grademaster.model.Role;
 import com.datbois.grademaster.model.User;
 import com.datbois.grademaster.model.UserDetails;
 import com.datbois.grademaster.service.GroupService;
+import com.datbois.grademaster.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @RestController
@@ -20,6 +22,9 @@ public class GroupController {
 
     @Autowired
     private GroupService groupService;
+
+    @Autowired
+    private UserService userService;
 
     @RequestMapping(value = "/groups", method = RequestMethod.GET)
     public ResponseEntity getGroups(Authentication authentication) {
@@ -33,9 +38,7 @@ public class GroupController {
 
     @RequestMapping(value = "/groups", method = RequestMethod.POST)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE')")
-    public ResponseEntity createGroup(@RequestBody Group group) {
-        if (group == null || !group.isValid())
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    public ResponseEntity createGroup(@RequestBody @NotNull Group group) {
         return new ResponseEntity<>(groupService.save(group), HttpStatus.CREATED);
     }
 
@@ -50,11 +53,18 @@ public class GroupController {
 
     @RequestMapping(value = "/groups/{id}", method = RequestMethod.DELETE)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE')")
-    public ResponseEntity deleteGroup(@PathVariable Long id) {
-        Group existing = groupService.findById(id);
-        if (existing == null) return new ResponseEntity(HttpStatus.NOT_FOUND);
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void deleteGroup(@PathVariable Long id) {
+        Group group = groupService.findById(id);
+        for (User u : group.getUsers()) {
+            User user = userService.findById(u.getId());
+            Set<Group> groups = user.getGroups();
+            groups.remove(group);
+            user.setGroups(groups);
+            userService.save(user);
+        }
+
         groupService.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/groups/{id}/users", method = RequestMethod.GET)
@@ -71,6 +81,13 @@ public class GroupController {
         Group group = groupService.findById(id);
         if (group == null) return new ResponseEntity(HttpStatus.NOT_FOUND);
         group.setUsers(users);
+        for (User u : users) {
+            User user = userService.findById(u.getId());
+            Set<Group> groups = user.getGroups();
+            groups.add(group);
+            user.setGroups(groups);
+            userService.save(user);
+        }
         return new ResponseEntity<>(groupService.save(group), HttpStatus.OK);
     }
 
