@@ -63,6 +63,21 @@ public class GroupController {
     }
 
     /**
+     * Get a specific group.
+     * Only admin || user in group.
+     *
+     * @param groupId id of the group
+     * @return group
+     * @endpoint (GET) /api/v1/groups/{groupId}
+     * @responseStatus OK
+     */
+    @RequestMapping(value = "/groups/{groupId}", method = RequestMethod.GET)
+    @PreAuthorize("hasAnyAuthority('ADMIN_ROLE') or isInGroup(#groupId)")
+    public Group changeGroup(@PathVariable Long groupId) {
+        return groupService.findById(groupId);
+    }
+
+    /**
      * Update a group.
      * Only admin || teacher in group.
      *

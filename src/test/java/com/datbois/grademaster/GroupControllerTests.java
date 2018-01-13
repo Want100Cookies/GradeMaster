@@ -161,6 +161,108 @@ public class GroupControllerTests extends OAuthTests {
     }
 
     @Test
+    public void studentCanGetOwnSpecificGroup() {
+        String token = obtainAccessToken("john.doe@student.stenden.com", "password");
+
+        Group g = groupService.findById(1L);
+
+        given()
+                .auth()
+                .oauth2(token)
+                .when()
+                .get("/api/v1/groups/{groupId}", g.getId())
+                .then()
+                .contentType(ContentType.JSON)
+                .statusCode(HttpStatus.OK.value());
+    }
+
+    @Test
+    public void studentCantGetOtherSpecificGroup() {
+        String token = obtainAccessToken("john.doe@student.stenden.com", "password");
+
+        Group g = groupService.findById(3L);
+
+        given()
+                .auth()
+                .oauth2(token)
+                .when()
+                .get("/api/v1/groups/{groupId}", g.getId())
+                .then()
+                .contentType(ContentType.JSON)
+                .statusCode(HttpStatus.FORBIDDEN.value());
+    }
+
+    @Test
+    public void teacherCanGetOwnSpecificGroup() {
+        String token = obtainAccessToken("jane.doe@stenden.com", "password");
+
+        Group g = groupService.findById(3L);
+
+        given()
+                .auth()
+                .oauth2(token)
+                .when()
+                .get("/api/v1/groups/{groupId}", g.getId())
+                .then()
+                .contentType(ContentType.JSON)
+                .statusCode(HttpStatus.OK.value());
+    }
+
+    @Test
+    public void teacherCantGetOtherSpecificGroup() {
+        String token = obtainAccessToken("jane.doe@stenden.com", "password");
+
+        Group g = groupService.findById(1L);
+
+        given()
+                .auth()
+                .oauth2(token)
+                .when()
+                .get("/api/v1/groups/{groupId}", g.getId())
+                .then()
+                .contentType(ContentType.JSON)
+                .statusCode(HttpStatus.FORBIDDEN.value());
+    }
+
+    @Test
+    public void adminCanGetAllSpecificGroups() {
+        String token = obtainAccessToken("admin@stenden.com", "password");
+
+        Group g = groupService.findById(1L);
+
+        given()
+                .auth()
+                .oauth2(token)
+                .when()
+                .get("/api/v1/groups/{groupId}", g.getId())
+                .then()
+                .contentType(ContentType.JSON)
+                .statusCode(HttpStatus.OK.value());
+
+        g = groupService.findById(2L);
+
+        given()
+                .auth()
+                .oauth2(token)
+                .when()
+                .get("/api/v1/groups/{groupId}", g.getId())
+                .then()
+                .contentType(ContentType.JSON)
+                .statusCode(HttpStatus.OK.value());
+
+        g = groupService.findById(3L);
+
+        given()
+                .auth()
+                .oauth2(token)
+                .when()
+                .get("/api/v1/groups/{groupId}", g.getId())
+                .then()
+                .contentType(ContentType.JSON)
+                .statusCode(HttpStatus.OK.value());
+    }
+
+    @Test
     public void studentCantEditGroup() {
         String token = obtainAccessToken("john.doe@student.stenden.com", "password");
 
