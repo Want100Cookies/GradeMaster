@@ -10,24 +10,25 @@
     </md-toolbar>
     <md-card-content>
         <md-list>
-            <md-list-item layout="row" ng-repeat="student in vm.students">
-                <div flex="auto">
+            <md-list-item layout="row" layout-margin ng-repeat="student in vm.students">
+                <div flex="noshrink">
                     {{student.name}}
                 </div>
-                <div flex="auto">
+                <div flex="noshrink">
                     <b><i>{{student.grade|number:1}}</i></b>
                 </div>
-                <md-slider flex="auto" min="01.0" max="10.0" step="0.1" ng-model="student.grade" ng-change="vm.change(student)"></md-slider>
-            </md-list-item>
-            <md-list-item layout="row">
-                <div flex="auto">
-                </div>
-                <div flex="auto">
-                    {{vm.totalCurrent()|number:2}}
-                </div>
-                <div flex="auto">
+                <md-slider flex="grow" min="01.0" max="10.0" step="0.1" ng-model="student.grade"
+                           ng-change="vm.change(student)"
+                           aria-label="Grade slider"></md-slider>
+                <div flex="none">
+                    <md-button ng-click="vm.toggleLock(student)" class="md-icon-button" aria-label="Lock button">
+                        <md-icon md-svg-src="/app/icons/lock{{student.lock ? '' : '_open'}}.svg"
+                                 aria-hidden="true"></md-icon>
+                        <div class="md-ripple-container"></div>
+                    </md-button>
                 </div>
             </md-list-item>
         </md-list>
+        {{vm.totalCurrent()|number:2}}
     </md-card-content>
 </md-card>

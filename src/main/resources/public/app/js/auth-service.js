@@ -9,6 +9,7 @@ app.factory('AuthService', function($cookies, $q, $location, $resource, $http, $
                     "Authorization": "Bearer " + accessToken
                 }
             }
+            return true;
             return $http(req).then(function(data){
                 return true;
                 console.log(data);
