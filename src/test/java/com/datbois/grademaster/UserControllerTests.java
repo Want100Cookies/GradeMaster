@@ -131,7 +131,7 @@ public class UserControllerTests extends OAuthTests {
                 .auth()
                 .oauth2(token)
                 .when()
-                .get("/api/v1/users/" + user.getId())
+                .get("/api/v1/users/{userId}", user.getId())
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)

@@ -14,7 +14,6 @@ public class Group extends BaseModel {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String education;
     private Integer startYear;
     private Integer endYear;
 
@@ -42,8 +41,7 @@ public class Group extends BaseModel {
     public Group() {
     }
 
-    public Group(String education, int startYear, int endYear, Set<Period> period, Course course, String groupName, Set<User> users) {
-        this.education = education;
+    public Group(int startYear, int endYear, Set<Period> period, Course course, String groupName, Set<User> users) {
         this.startYear = startYear;
         this.endYear = endYear;
         this.period = period;
@@ -53,7 +51,6 @@ public class Group extends BaseModel {
     }
 
     public boolean isValid() {
-        if (this.education == null || this.education.isEmpty()) return false;
         if (this.startYear == -1) return false;
         if (this.endYear == -1) return false;
         if (this.period == null || this.period.isEmpty()) return false;
@@ -68,14 +65,6 @@ public class Group extends BaseModel {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getEducation() {
-        return education;
-    }
-
-    public void setEducation(String education) {
-        this.education = education;
     }
 
     public Integer getStartYear() {
@@ -138,7 +127,6 @@ public class Group extends BaseModel {
     public String toString() {
         return "Group{" +
                 "id=" + id +
-                ", education='" + education + '\'' +
                 ", startYear=" + startYear +
                 ", endYear=" + endYear +
                 ", period=" + period +
