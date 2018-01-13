@@ -185,10 +185,10 @@ public class GroupControllerTests extends OAuthTests {
     }
 
     @Test
-    public void teacherCanEditGroup() {
+    public void teacherCanEditOwnGroup() {
         String token = obtainAccessToken("jane.doe@stenden.com", "password");
 
-        Group g = groupService.findById(1L);
+        Group g = groupService.findById(3L);
 
         g.setGroupName("But can you do this");
 
@@ -208,6 +208,25 @@ public class GroupControllerTests extends OAuthTests {
         Group group = groupService.findById(new Long(id));
 
         assertThat(group.getGroupName(), is(g.getGroupName()));
+    }
+
+    @Test
+    public void teacherCantEditOtherGroup() {
+        String token = obtainAccessToken("jane.doe@stenden.com", "password");
+
+        Group g = groupService.findById(1L);
+
+        g.setGroupName("But can you do this");
+
+        given()
+                .auth()
+                .oauth2(token)
+                .contentType(ContentType.JSON)
+                .body(g)
+                .when()
+                .patch("/api/v1/groups/{groupId}", g.getId())
+                .then()
+                .statusCode(HttpStatus.FORBIDDEN.value());
     }
 
     @Test
@@ -258,7 +277,7 @@ public class GroupControllerTests extends OAuthTests {
 
     @Test
     @Ignore("Disabled until fixed.")
-    public void teacherCanDeleteGroup() {
+    public void teacherCanDeleteOwnGroup() {
         String token = obtainAccessToken("jane.doe@stenden.com", "password");
 
         Group g = groupService.findById(2L);
@@ -274,6 +293,21 @@ public class GroupControllerTests extends OAuthTests {
         Group group = groupService.findById(g.getId());
 
         assertThat(group, is(nullValue()));
+    }
+
+    @Test
+    public void teacherCantDeleteOtherGroup() {
+        String token = obtainAccessToken("jane.doe@stenden.com", "password");
+
+        Group g = groupService.findById(2L);
+
+        given()
+                .auth()
+                .oauth2(token)
+                .when()
+                .delete("/api/v1/groups/{groupId}", g.getId())
+                .then()
+                .statusCode(HttpStatus.FORBIDDEN.value());
     }
 
     @Test
@@ -346,7 +380,7 @@ public class GroupControllerTests extends OAuthTests {
     }
 
     @Test
-    public void teacherCanGetUsersInOtherGroup() {
+    public void teacherCantGetUsersInOtherGroup() {
         String token = obtainAccessToken("jane.doe@stenden.com", "password");
 
         Group g = groupService.findById(1L);
@@ -357,9 +391,7 @@ public class GroupControllerTests extends OAuthTests {
                 .when()
                 .get("/api/v1/groups/{groupId}/users", g.getId())
                 .then()
-                .statusCode(HttpStatus.OK.value())
-                .contentType(ContentType.JSON)
-                .body("size()", greaterThan(0));
+                .statusCode(HttpStatus.FORBIDDEN.value());
     }
 
     @Test
@@ -416,10 +448,10 @@ public class GroupControllerTests extends OAuthTests {
     }
 
     @Test
-    public void teacherCanChangeUsersInGroup() {
+    public void teacherCanChangeUsersInOwnGroup() {
         String token = obtainAccessToken("jane.doe@stenden.com", "password");
 
-        Group g = groupService.findById(2L);
+        Group g = groupService.findById(3L);
 
         Set<User> users = new HashSet<>(Arrays.asList(userService.findById(1L), userService.findById(2L), userService.findById(3L)));
 
@@ -440,6 +472,25 @@ public class GroupControllerTests extends OAuthTests {
 
         assertThat(group.getUsers().size(), equalTo(users.size()));
         assertThat(g.getUsers().size(), lessThanOrEqualTo(group.getUsers().size()));
+    }
+
+    @Test
+    public void teacherCantChangeUsersInOtherGroup() {
+        String token = obtainAccessToken("jane.doe@stenden.com", "password");
+
+        Group g = groupService.findById(2L);
+
+        Set<User> users = new HashSet<>(Arrays.asList(userService.findById(1L), userService.findById(2L), userService.findById(3L)));
+
+        given()
+                .auth()
+                .oauth2(token)
+                .contentType(ContentType.JSON)
+                .body(users)
+                .when()
+                .patch("/api/v1/groups/{groupId}/users", g.getId())
+                .then()
+                .statusCode(HttpStatus.FORBIDDEN.value());
     }
 
     @Test
