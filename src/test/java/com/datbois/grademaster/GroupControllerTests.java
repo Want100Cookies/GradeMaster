@@ -378,11 +378,10 @@ public class GroupControllerTests extends OAuthTests {
     }
 
     @Test
-    @Ignore("Disabled until fixed.")
     public void teacherCanDeleteOwnGroup() {
         String token = obtainAccessToken("jane.doe@stenden.com", "password");
 
-        Group g = groupService.findById(2L);
+        Group g = groupService.findById(3L);
 
         given()
                 .auth()
@@ -413,7 +412,6 @@ public class GroupControllerTests extends OAuthTests {
     }
 
     @Test
-    @Ignore("Disabled until fixed.")
     public void adminCanDeleteGroup() {
         String token = obtainAccessToken("admin@stenden.com", "password");
 
