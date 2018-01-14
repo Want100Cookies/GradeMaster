@@ -3,7 +3,6 @@ package com.datbois.grademaster.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Set;
 
@@ -48,15 +47,6 @@ public class Group extends BaseModel {
         this.course = course;
         this.groupName = groupName;
         this.users = users;
-    }
-
-    public boolean isValid() {
-        if (this.startYear == -1) return false;
-        if (this.endYear == -1) return false;
-        if (this.period == null || this.period.isEmpty()) return false;
-        if (this.course == null) return false;
-        if (this.groupName == null || this.groupName.isEmpty()) return false;
-        return true;
     }
 
     public Long getId() {

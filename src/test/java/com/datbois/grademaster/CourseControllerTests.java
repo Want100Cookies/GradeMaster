@@ -34,7 +34,7 @@ public class CourseControllerTests extends OAuthTests {
     private EducationService educationService;
 
     @Test
-    public void userCanViewAllGroups() {
+    public void userCanViewAllCourses() {
         String token = obtainAccessToken("john.doe@student.stenden.com", "password");
 
         given()
