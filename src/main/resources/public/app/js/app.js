@@ -44,6 +44,11 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             url: '/registered',
             templateUrl: '/app/pages/registered.html',
         })
+        .state('verify', {
+            url: '/verify?email&token',
+            templateUrl: '/app/pages/verify.html',
+            controller: 'VerifyCtrl'
+        })
         .state('app', {
             url: '/home',
             templateUrl: '/app/pages/app.html',
