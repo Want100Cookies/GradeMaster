@@ -1,5 +1,7 @@
 package com.datbois.grademaster.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -14,6 +16,7 @@ public class GroupGrade extends BaseModel {
 
     private String comment;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "groupGrade")
     private Group group;
 

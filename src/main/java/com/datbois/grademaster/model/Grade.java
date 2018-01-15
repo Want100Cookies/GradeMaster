@@ -1,5 +1,7 @@
 package com.datbois.grademaster.model;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
@@ -12,8 +14,10 @@ public class Grade extends BaseModel{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column
     private double grade;
 
+    @Column
     private String motivation;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -22,7 +26,6 @@ public class Grade extends BaseModel{
     @ManyToOne(fetch = FetchType.LAZY)
     private User toUser;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     public Group group;
 
@@ -30,9 +33,12 @@ public class Grade extends BaseModel{
 
     }
 
-    public Grade(double grade, String motivation){
+    public Grade(double grade, String motivation, User fromUser, User toUser, Group group){
         this.grade = grade;
         this.motivation = motivation;
+        this.fromUser = fromUser;
+        this.toUser = toUser;
+        this.group = group;
     }
 
     public Long getId() {

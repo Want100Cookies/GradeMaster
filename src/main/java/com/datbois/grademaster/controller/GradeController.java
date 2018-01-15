@@ -1,11 +1,10 @@
 package com.datbois.grademaster.controller;
 
-import com.datbois.grademaster.model.Grade;
-import com.datbois.grademaster.model.Group;
-import com.datbois.grademaster.model.GroupGrade;
+import com.datbois.grademaster.model.*;
 import com.datbois.grademaster.service.GradeService;
 import com.datbois.grademaster.service.GroupGradeService;
 import com.datbois.grademaster.service.GroupService;
+import com.datbois.grademaster.service.RoleService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,22 +31,17 @@ public class GradeController{
     @Autowired
     GroupGradeService groupGradeService;
 
-    //  POST JSON:  {"grade":8.0,"motivation":"motivation","fromUser":{"id":1},"toUser":{"id":1},"group":{"id":1}}
-    @RequestMapping(value = "/grade", method = RequestMethod.POST)
-    public ResponseEntity createGrade(@RequestBody Grade grade){
-        grade = gradeService.save(grade);
+    @RequestMapping(value = "/grade/users/{userId}", method = RequestMethod.POST)
+    @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE') or isCurrentUser(#userId)")
+    public ResponseEntity createGrade(@PathVariable Long userId, @RequestBody Grade[] grades){
 
-        Map<Object, Object> response = new HashMap<>();
-        response.put("grade", grade.getGrade());
-        response.put("motivation", grade.getMotivation());
-        response.put("fromUser", grade.getFromUser().getId());
-        response.put("toUser", grade.getToUser().getId());
-        response.put("group", grade.getGroup().getId());
+        for(Grade grade : grades){
+            grade = gradeService.save(grade);
+        }
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(grades, HttpStatus.OK);
     }
 
-    //  POST JSON:  {"grade":5,"comment":"test"}
     @RequestMapping(value = "/grade/group/{groupId}", method = RequestMethod.PATCH)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE')")
     @ResponseStatus(HttpStatus.OK)
@@ -59,10 +53,53 @@ public class GradeController{
         return new ResponseEntity<>(groupGrade, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/grade/{gradeId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/grade/group/{groupId}", method = RequestMethod.GET)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE')")
     @ResponseStatus(HttpStatus.OK)
-    public Grade grade(@PathVariable Long gradeId){
-        return gradeService.findById(gradeId);
+    public ResponseEntity getAllGradesForAGroup(@PathVariable Long groupId){
+        Group exists = groupService.findById(groupId);
+
+        Map<Object, Object> response = new HashMap<>();
+        response.put("groupId", exists.getId());
+        response.put("groupGrade", exists.getGroupGrade());
+
+        Map<Object, Object> users = new HashMap<>();
+
+        for(User user : exists.getUsers()){
+            List<Object[]> grades = new ArrayList<>();
+            for(Grade grade : user.getGradesReceived()){
+                if(exists.getId().equals(grade.getGroup().getId())){
+                    grades.add(new Object[]{grade.getGrade(), grade.getMotivation()});
+                }
+            }
+            users.put(user.getId(), grades);
+        }
+
+        response.put("user", users);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/grade/group/{groupId}", method = RequestMethod.DELETE)
+    @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE')")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public ResponseEntity removeGrades(@PathVariable Long groupId){
+        Group exists = groupService.findById(groupId);
+
+//        List<Object> deleted = new ArrayList<>();
+
+        Long id = 0L;
+
+        for(Grade grade : exists.getGrades()){
+            for(Role role : grade.getFromUser().getRoles()){
+                if(role.getCode().contains("STUDENT_ROLE")){
+                    id = grade.getId();
+                    gradeService.delete(grade.getId());
+                }
+            }
+        }
+
+        return new ResponseEntity<>(id, HttpStatus.OK);
+    }
+
 }
