@@ -15,18 +15,18 @@ app.controller('LayoutController', function ($scope, $mdSidenav) {
 
 app.config(function ($routeProvider){
     $routeProvider
-    .when('/', {
-        
-    })
-    .when('/login', {
+        .when('/', {
 
-    })
-    .when('/groups', {
+        })
+        .when('/login', {
 
-    })
-    .when('/grades', {
+        })
+        .when('/groups', {
 
-    });
+        })
+        .when('/grades', {
+
+        });
 });
 
 app.directive('activeLink', ['$location', function (location) {
