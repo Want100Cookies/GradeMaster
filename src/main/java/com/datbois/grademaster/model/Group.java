@@ -25,7 +25,7 @@ public class Group extends BaseModel {
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
 
-    @ManyToMany(mappedBy = "groups", fetch = FetchType.EAGER, cascade = {CascadeType.DETACH})
+    @ManyToMany(mappedBy = "groups", fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JsonIgnore
     private Set<User> users;
 
