@@ -35,3 +35,7 @@ h1 {
 .user {
     display: none;
 }
+.error{
+    color: red;
+    margin-top: 15px;
+}

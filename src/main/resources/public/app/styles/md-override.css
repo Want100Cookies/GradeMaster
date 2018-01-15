@@ -28,3 +28,6 @@ md-input-container:not(.md-input-invalid).md-input-focused .md-input {
 .md-sidenav-left{
     background: #4E546C;
 }
+md-input-container:not(.md-input-invalid).md-input-focused label {
+    color: #555C78;
+}

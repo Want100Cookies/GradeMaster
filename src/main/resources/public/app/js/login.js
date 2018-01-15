@@ -1,5 +1,5 @@
 app.controller('LoginCtrl', function ($scope, $resource, $http, $httpParamSerializer, $cookies, $mdDialog, $state) {
-  
+    $scope.valid = "";
     $scope.vm = {
         formData: {
             email: '',
@@ -31,7 +31,7 @@ app.controller('LoginCtrl', function ($scope, $resource, $http, $httpParamSerial
             $cookies.put("access_token", data.data.access_token);
             $state.transitionTo('app.dashboard')
         }).catch(function (data){
-            console.log("Error, you don't know de wey")
+            $scope.valid = "Invalid login, you dun kno de wea";
         });
     }
 });

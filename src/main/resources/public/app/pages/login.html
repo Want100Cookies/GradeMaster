@@ -25,7 +25,10 @@
                             <div class="my-message" ng-message="required">You must supply a password.</div>
                         </div>
                     </md-input-container>
+                    <div layout="layout">
                     <md-button class="md-raised md-primary pull-right formPage" ng-disabled="!Form.$valid" ng-click="vm.submit()" id="override-login-button">&nbsp Login &nbsp</md-button>
+                    <div class="error">{{valid}}</div>
+                    </div>
                 </form>
             </md-card-content>
         </md-card>
