@@ -1,10 +1,13 @@
 package com.datbois.grademaster.controller;
 
 import com.datbois.grademaster.model.Notification;
+import com.datbois.grademaster.model.User;
+import com.datbois.grademaster.model.UserDetails;
 import com.datbois.grademaster.service.NotificationService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -17,7 +20,7 @@ public class NotificationController {
     private NotificationService notificationService;
 
     /**
-     * GET all notifications
+     * GET all notifications for a specific user
      *
      * @return All notifications
      * @endpoint (GET) /api/v1/notifications
@@ -25,8 +28,11 @@ public class NotificationController {
      */
     @RequestMapping(value = "/notifications", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public List<Notification> notifications(){ return notificationService.findAll(); }
+    public List<Notification> getAllUserNotifications(Authentication authentication){
+        User user = ((UserDetails) authentication.getPrincipal()).getUser();
 
+        return user.getNotificationList();
+    }
 
     /**
      * PATCH all notifications
@@ -37,8 +43,10 @@ public class NotificationController {
      */
     @RequestMapping(value = "/notifications", method = RequestMethod.PATCH)
     @ResponseStatus(HttpStatus.OK)
-    public List<Notification> markAllNotificationsSeen(){
-        List<Notification> notifications = notificationService.findAll();
+    public List<Notification> markAllNotificationsSeen(Authentication authentication){
+        User user = ((UserDetails) authentication.getPrincipal()).getUser();
+
+        List<Notification> notifications = user.getNotificationList();
 
         boolean seen = true;
 
@@ -52,18 +60,19 @@ public class NotificationController {
     /**
      * PATCH a specific notification
      *
-     * @return A notification set as seen
-     * @endpoint (PATCH) /api/v1/notifications/{notificationId}
+     * @return A specific notification
+     * @endpoint (PATCH) /api/v1/notifications
      * @responseStatus OK
      */
     @RequestMapping(value = "/notifications/{notificationId}", method = RequestMethod.PATCH)
     @ResponseStatus(HttpStatus.OK)
-    public Notification markNotificationSeen(@PathVariable Long notificationId){
-        Notification notify = notificationService.findById(notificationId);
-        boolean seen = true;
+    public Notification markNotificationSeen(Authentication authentication, @PathVariable Long notificationId){
+        User user = ((UserDetails) authentication.getPrincipal()).getUser();
 
-        notify.setSeen(seen);
+        Notification notify = user.getNotificationList().get(notificationId.intValue());
 
-        return notificationService.save(notify);
+        notify.setSeen(true);
+
+        return notify;
     }
 }
