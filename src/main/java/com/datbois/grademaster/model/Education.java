@@ -14,7 +14,7 @@ public class Education extends BaseModel {
 
     private String name;
 
-    @OneToMany(mappedBy = "education", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "education")
     @JsonIgnore
     private Set<Course> courses;
 

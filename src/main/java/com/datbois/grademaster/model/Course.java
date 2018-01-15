@@ -14,7 +14,7 @@ public class Course extends BaseModel {
 
     private String name;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "course")
     @JsonIgnore
     private Set<Group> groups;
 
