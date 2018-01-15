@@ -105,7 +105,7 @@ Delete this user from the group
 
 ## /api/{v1}/grade/user/{id}
 ### (POST)
-Set grade for a group member
+Set grades for group members
 
 ## api/{v1}/grade/group/{id}
 ### (GET)
