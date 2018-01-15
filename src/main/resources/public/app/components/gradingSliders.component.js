@@ -29,13 +29,13 @@ function gradingSlidersController() {
     };
 
     this.getUnlockedStudents = () => {
-        return this.students.filter(function (student) {
+        return this.students.filter(student => {
             return !student.lock;
         });
     };
 
     this.getRemainingPoints = () => {
-        let lockedStudents = this.students.filter(function (student) {
+        let lockedStudents = this.students.filter(student => {
             return student.lock;
         });
 
