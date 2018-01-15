@@ -1,6 +1,7 @@
 package com.datbois.grademaster.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -14,14 +15,25 @@ public class Notification {
     private Long id;
 
     @NotNull
+    private String title;
+
+    @NotNull
     private String message;
 
     private boolean seen;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    private User user;
+
     public Notification() { }
 
-    public Notification(String message) {
+    public Notification(String title, String message, boolean seen, User user) {
+        this.title = title;
         this.message = message;
+        this.seen = seen;
+        this.user = user;
     }
 
     public Long getId() {
@@ -30,6 +42,14 @@ public class Notification {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getMessage() {
@@ -46,6 +66,14 @@ public class Notification {
 
     public void setSeen(boolean seen) {
         this.seen = seen;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
