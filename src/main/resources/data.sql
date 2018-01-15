@@ -50,12 +50,12 @@ INSERT INTO `grade` (`id`, `grade`, `motivation`, `from_user_id`, `group_id`, `t
   (2, 7, "motivation", 1, 1, 2),
   (3, 5, "motivation", 1, 1, 3);
 
-INSERT INTO `notification`(`id`, `message`, `seen`, `user_id`) VALUES
- (1, "You have pending grades!", 0, 1),
- (2, "Your grade ratings have been sent!", 0, 1),
- (3, "Your final grade has been determined.", 0, 1),
- (4, "All group ratings received", 0, 2),
- (5, "Group grade can be made final", 0, 2);
+INSERT INTO `notification`(`id`, `message`, `seen`) VALUES
+ (1, "You have pending grades!", 0),
+ (2, "Your grade ratings have been sent!", 0),
+ (3, "Your final grade has been determined.", 0),
+ (4, "All group ratings received", 0),
+ (5, "Group grade can be made final", 0);
 
 
 

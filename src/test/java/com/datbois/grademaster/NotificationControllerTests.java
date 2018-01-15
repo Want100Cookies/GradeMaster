@@ -3,6 +3,7 @@ package com.datbois.grademaster;
 import com.datbois.grademaster.model.Notification;
 import com.datbois.grademaster.service.NotificationService;
 import io.restassured.http.ContentType;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,25 +35,26 @@ public class NotificationControllerTests extends OAuthTests {
                 .body("size()", greaterThan(0));
     }
 
-//    @Test
-//    public void updateAllNotificationsSeen(){
-//        List<Notification> notifications = notificationService.findAll();
-//        String token = this.obtainAccessToken("admin@stenden.com", "password");
-//
-//        given()
-//                .auth()
-//                .oauth2(token)
-//                .contentType(ContentType.JSON)
-//                .when()
-//                .patch("/api/v1/notifications")
-//                .then()
-//                .statusCode(HttpStatus.OK.value());
-//
-//        for(Notification notification : notifications){
-//            assertThat(notification.isSeen(), is(equalTo(true)));
-//        }
-//
-//    }
+    @Test
+    @Ignore("Does not work yet")
+    public void updateAllNotificationsSeen(){
+        List<Notification> notifications = notificationService.findAll();
+        String token = this.obtainAccessToken("admin@stenden.com", "password");
+
+        given()
+                .auth()
+                .oauth2(token)
+                .contentType(ContentType.JSON)
+                .when()
+                .patch("/api/v1/notifications")
+                .then()
+                .statusCode(HttpStatus.OK.value());
+
+        for(Notification notification : notifications){
+            assertThat(notification.isSeen(), is(equalTo(true)));
+        }
+
+    }
 
     @Test
     public void updateNotification(){
