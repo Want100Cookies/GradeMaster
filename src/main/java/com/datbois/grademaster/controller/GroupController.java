@@ -5,7 +5,6 @@ import com.datbois.grademaster.model.Role;
 import com.datbois.grademaster.model.User;
 import com.datbois.grademaster.model.UserDetails;
 import com.datbois.grademaster.service.GroupService;
-import com.datbois.grademaster.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,9 +23,6 @@ public class GroupController {
 
     @Autowired
     private GroupService groupService;
-
-    @Autowired
-    private UserService userService;
 
     /**
      * Get all groups for user.
@@ -109,14 +105,6 @@ public class GroupController {
     @PreAuthorize("hasAnyAuthority('ADMIN_ROLE') or (hasAnyAuthority('TEACHER_ROLE') and isInGroup(#groupId))")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void deleteGroup(@PathVariable Long groupId) {
-        Group group = groupService.findById(groupId);
-        for (User u : group.getUsers()) { // Delete group from the users
-            User user = userService.findById(u.getId());
-            Set<Group> groups = user.getGroups();
-            groups.remove(group);
-            user.setGroups(groups);
-            userService.save(user);
-        }
         groupService.delete(groupId);
     }
 
@@ -152,15 +140,7 @@ public class GroupController {
     public Group setGroupUsers(@PathVariable Long groupId, @RequestBody Set<User> users) {
         Group group = groupService.findById(groupId);
         if (group == null) throw new InvalidParameterException("Group id not found");
-        group.setUsers(users);
-        for (User u : users) {
-            User user = userService.findById(u.getId());
-            Set<Group> groups = user.getGroups();
-            groups.add(group);
-            user.setGroups(groups);
-            userService.save(user);
-        }
-        return groupService.save(group);
+        return groupService.save(groupService.setUsers(group, users));
     }
 
 }

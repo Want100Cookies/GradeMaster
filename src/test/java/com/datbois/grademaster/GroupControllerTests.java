@@ -8,7 +8,8 @@ import com.datbois.grademaster.service.CourseService;
 import com.datbois.grademaster.service.GroupService;
 import com.datbois.grademaster.service.UserService;
 import io.restassured.http.ContentType;
-import org.junit.Ignore;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,19 @@ public class GroupControllerTests extends OAuthTests {
 
     @Autowired
     private UserService userService;
+
+    private int userCount;
+
+    @Before
+    public void getUserCount() {
+        userCount = (int) userService.count();
+    }
+
+    @After
+    public void checkUserCount() {
+        int newUserCount = (int) userService.count();
+        assertThat(userCount, equalTo(newUserCount));
+    }
 
     @Test
     public void studentCanOnlyGetOwnGroups() {
