@@ -1,4 +1,4 @@
-app.controller('LoginCtrl', function ($scope, $resource, $http, $httpParamSerializer, $cookies, $mdDialog, $state) {
+app.controller('LoginCtrl', function ($scope, $resource, $http, $httpParamSerializer, $cookies, $state) {
     $scope.valid = "";
     $scope.vm = {
         formData: {
@@ -8,6 +8,9 @@ app.controller('LoginCtrl', function ($scope, $resource, $http, $httpParamSerial
         submit: function () {
             $scope.login($scope.vm.formData.email, $scope.vm.formData.password);
         }
+    }
+    $scope.changeLogin = function() {
+        $state.transitionTo('register')
     }
     $scope.login = function (username, password) {
         var data = {
@@ -33,5 +36,18 @@ app.controller('LoginCtrl', function ($scope, $resource, $http, $httpParamSerial
         }).catch(function (data){
             $scope.valid = "Invalid login, you dun kno de wea";
         });
+    }
+});
+
+app.controller('RegisterCtrl', function ($scope, $resource, $http, $httpParamSerializer, $cookies, $state) {
+    $scope.vm = {
+        formData: {
+            email: '',
+            password: '',
+            confirmPassword: ''
+        },
+        submit: function () {
+            $scope.register($scope.vm.formData.email, $scope.vm.formData.password);
+        }
     }
 });
