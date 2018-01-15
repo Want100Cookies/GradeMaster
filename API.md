@@ -112,6 +112,8 @@ Set grades for group members
 Get the group grade and all the grades for the group members
 ### (PATCH)
 Adjust group grade
+### (DELETE)
+Delete graden given out by students for specific group
 
 ## /api/{v1}/notifications
 ### (GET)
