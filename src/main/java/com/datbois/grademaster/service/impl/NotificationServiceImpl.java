@@ -24,5 +24,4 @@ public class NotificationServiceImpl implements NotificationService {
     public Notification findById(Long id){
         return notificationRepository.findById(id);
     }
-
 }

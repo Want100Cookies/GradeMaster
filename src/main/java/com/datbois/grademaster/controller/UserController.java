@@ -2,9 +2,11 @@ package com.datbois.grademaster.controller;
 
 import com.datbois.grademaster.configuration.RoleProperties;
 import com.datbois.grademaster.exception.BadRequestException;
+import com.datbois.grademaster.model.Notification;
 import com.datbois.grademaster.model.Role;
 import com.datbois.grademaster.model.User;
 import com.datbois.grademaster.model.UserDetails;
+import com.datbois.grademaster.service.NotificationService;
 import com.datbois.grademaster.service.RoleService;
 import com.datbois.grademaster.service.UserService;
 import org.slf4j.Logger;
@@ -34,6 +36,9 @@ public class UserController {
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private NotificationService notificationService;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -119,5 +124,55 @@ public class UserController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void removeUser(@PathVariable Long userId) {
         userService.delete(userId);
+    }
+
+    /**
+     * GET all notifications for a specific user
+     *
+     * @return All notifications
+     * @endpoint (GET) /api/v1/users/{userId}/notifications
+     * @responseStatus OK
+     */
+    @RequestMapping(value = "/users/{userId}/notifications", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public List<Notification> getAllUserNotifications(@PathVariable Long userId){
+        User user = userService.findById(userId);
+
+        return user.getNotificationList();
+    }
+
+    /**
+     * PATCH all notifications
+     *
+     * @return All notifications as seen
+     * @endpoint (PATCH) /api/v1/users/{userId}/notifications
+     * @responseStatus OK
+     */
+    @RequestMapping(value = "/users/{userId}/notifications", method = RequestMethod.PATCH)
+    @ResponseStatus(HttpStatus.OK)
+    public List<Notification> markAllNotificationsSeen(@PathVariable Long userId){
+        User user = userService.findById(userId);
+
+        List<Notification> notifications = user.getNotificationList();
+
+        boolean seen = true;
+
+        for(Notification notification : notifications){
+            notification.setSeen(seen);
+        }
+
+        return notifications;
+    }
+
+    @RequestMapping(value = "/users/{userId}/notifications/{notificationId}", method = RequestMethod.PATCH)
+    @ResponseStatus(HttpStatus.OK)
+    public Notification markNotificationSeen(@PathVariable Long userId, @PathVariable Long notificationId){
+        User user = userService.findById(userId);
+
+        Notification notify = user.getNotificationList().get(notificationId.intValue());
+
+        notify.setSeen(true);
+
+        return notify;
     }
 }

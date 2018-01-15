@@ -3,11 +3,8 @@ package com.datbois.grademaster.controller;
 import com.datbois.grademaster.model.Notification;
 import com.datbois.grademaster.service.NotificationService;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -19,11 +16,25 @@ public class NotificationController {
     @Autowired
     private NotificationService notificationService;
 
+    /**
+     * GET all notifications
+     *
+     * @return All notifications
+     * @endpoint (GET) /api/v1/notifications
+     * @responseStatus OK
+     */
     @RequestMapping(value = "/notifications", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public List<Notification> notifications(){ return notificationService.findAll(); }
 
 
+    /**
+     * PATCH all notifications
+     *
+     * @return All notifications as seen
+     * @endpoint (PATCH) /api/v1/notifications
+     * @responseStatus OK
+     */
     @RequestMapping(value = "/notifications", method = RequestMethod.PATCH)
     @ResponseStatus(HttpStatus.OK)
     public List<Notification> markAllNotificationsSeen(){
@@ -38,6 +49,13 @@ public class NotificationController {
         return notifications;
     }
 
+    /**
+     * PATCH a specific notification
+     *
+     * @return A notification set as seen
+     * @endpoint (PATCH) /api/v1/notifications/{notificationId}
+     * @responseStatus OK
+     */
     @RequestMapping(value = "/notifications/{notificationId}", method = RequestMethod.PATCH)
     @ResponseStatus(HttpStatus.OK)
     public Notification markNotificationSeen(@PathVariable Long notificationId){
