@@ -1,12 +1,15 @@
 package com.datbois.grademaster.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(
@@ -60,6 +63,9 @@ public class User extends BaseModel {
     )
     @JsonIgnore
     private Set<Group> groups;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
+    private List<Notification> notificationList;
 
     public User() {
     }
@@ -153,6 +159,14 @@ public class User extends BaseModel {
 
     public void setGroups(Set<Group> groups) {
         this.groups = groups;
+    }
+
+    public List<Notification> getNotificationList() {
+        return notificationList;
+    }
+
+    public void setNotificationList(List<Notification> notificationList) {
+        this.notificationList = notificationList;
     }
 
     @Override

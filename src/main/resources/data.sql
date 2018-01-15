@@ -50,4 +50,13 @@ INSERT INTO `grade` (`id`, `grade`, `motivation`, `from_user_id`, `group_id`, `t
   (2, 7, "motivation", 1, 1, 2),
   (3, 5, "motivation", 1, 1, 3);
 
+INSERT INTO `notification`(`id`, `title`, `message`, `seen`, `user_id`) VALUES
+ (1, "Test", "You have pending grades!", 0, 1),
+ (2, "Ratings","Your grade ratings have been sent!", 0, 1),
+ (3, "Final", "Your final grade has been determined.", 0, 1),
+ (4, "Received", "All group ratings received", 0, 2),
+ (5, "Test", "Group grade can be made final", 0, 2);
+
+
+
 # All passwords are bcrypt hash of 'password'
