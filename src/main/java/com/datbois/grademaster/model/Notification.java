@@ -1,14 +1,14 @@
 package com.datbois.grademaster.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
 public class Notification {
+
+    public static final String QUEUE = "NotificationQueue";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,7 +27,8 @@ public class Notification {
     @JsonIgnore
     private User user;
 
-    public Notification() { }
+    public Notification() {
+    }
 
     public Notification(String title, String message, boolean seen, User user) {
         this.title = title;
