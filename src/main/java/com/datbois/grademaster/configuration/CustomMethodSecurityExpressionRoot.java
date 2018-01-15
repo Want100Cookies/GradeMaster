@@ -1,10 +1,13 @@
 package com.datbois.grademaster.configuration;
 
+import com.datbois.grademaster.model.Group;
 import com.datbois.grademaster.model.User;
 import com.datbois.grademaster.model.UserDetails;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionOperations;
 import org.springframework.security.core.Authentication;
+
+import java.util.Set;
 
 public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot implements MethodSecurityExpressionOperations {
 
@@ -16,9 +19,19 @@ public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot i
     }
 
     public boolean isCurrentUser(Long userId) {
-        User user = ((UserDetails) getPrincipal()).getUser();
+        return getUser().getId().equals(userId);
+    }
 
-        return user.getId().equals(userId);
+    public boolean isInGroup(Long groupId) {
+        User user = getUser();
+        Set<Group> groups = user.getGroups();
+        return groups.stream()
+                .filter(group -> group.getId().equals(groupId))
+                .findFirst().orElse(null) != null;
+    }
+
+    private User getUser() {
+        return ((UserDetails) getPrincipal()).getUser();
     }
 
     @Override

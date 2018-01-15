@@ -55,6 +55,25 @@ This includes adding a role (for example super user) and adding a profile pictur
 ### (DELETE)
 Delete a single user
 
+## /api/{v1}/courses
+### (GET)
+Get all courses
+
+### (POST)
+Make a new course (only admins)
+```
+{
+  name
+}
+```
+
+## /api/{v1}/courses/{id}
+### (GET)
+Get a single course
+### (PATCH)
+Update specific field of the course
+### (DELETE)
+Delete a single course
 
 ## /api/{v1}/groups
 ### (GET)
@@ -74,12 +93,6 @@ Make a new student group
 ### (PATCH)
 Update a specific field from the group
 
-## /api/{v1}/groups/{id}/grades
-### (GET)
-Get the group grade and all the grades for the group members
-### (POST)
-Set the grade for this project
-
 ## /api/{v1}/groups/{id}/users
 ### (GET)
 Get all users in this group
@@ -90,14 +103,15 @@ Add users to this group
 ### (DELETE)
 Delete this user from the group
 
-## /api/{v1}/groups/{id}/users/{id}/grades
-### (GET)
-Get the group/past grade(s)
+## /api/{v1}/grade/user/{id}
 ### (POST)
-Set the grades for all the group members
-### (PATCH)
-Adjust a grade for all the group members
+Set grade for a group member
 
+## api/{v1}/grade/group/{id}
+### (GET)
+Get the group grade and all the grades for the group members
+### (PATCH)
+Adjust group grade
 
 ## /api/{v1}/notifications
 ### (GET)

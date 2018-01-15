@@ -21,6 +21,6 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role findByName(String name) {
-        return roleRepository.findByLabel(name);
+        return roleRepository.findByLabelContainingIgnoreCase(name);
     }
 }

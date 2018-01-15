@@ -1,0 +1,33 @@
+body html {
+    margin: 0 auto;
+    height: 100%;
+}
+
+h1 {
+    text-align: center;
+}
+
+.container {
+    height: 100%;
+}
+
+.mainContent {
+    width: 100%;
+    background: #EEF4F9;
+}
+
+.sideContent {
+    background: #4E546C;
+    color: #A8B7C5;
+    text-align: center;
+}
+
+.mdIcon {
+    margin-left: 10px;
+}
+
+.active {
+    color: #2DD1AC;
+    font-weight: 700 !important;
+    font-size: 20px !important;
+}
