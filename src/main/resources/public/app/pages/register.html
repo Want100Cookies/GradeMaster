@@ -32,11 +32,11 @@
                         <div ng-messages="RegisterForm.confirmPassword.$error" role="alert" multiple="">
                             <div class="my-message" ng-message="required">You must supply a password.</div>
                             <div class="my-message" ng-message="passwordVerify">No match</div>
+                            <div class="error">{{error}}</div>
                         </div>
                     </md-input-container>
                     <div layout="layout">
                     <md-button class="md-raised md-primary pull-right formPage" ng-disabled="!RegisterForm.$valid" ng-click="vm.register()" id="override-register-button">&nbsp Register &nbsp</md-button>
-                    <div class="error">{{valid}}</div>
                     </div>
                 </form>
             </md-card-content>

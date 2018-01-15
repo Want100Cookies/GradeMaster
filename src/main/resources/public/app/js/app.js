@@ -40,6 +40,10 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             templateUrl: '/app/pages/register.html',
             controller: 'RegisterCtrl'
         })
+        .state('registered', {
+            url: '/registered',
+            templateUrl: '/app/pages/registered.html',
+        })
         .state('app', {
             url: '/home',
             templateUrl: '/app/pages/app.html',

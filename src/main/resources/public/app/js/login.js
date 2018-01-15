@@ -34,20 +34,7 @@ app.controller('LoginCtrl', function ($scope, $resource, $http, $httpParamSerial
             $cookies.put("access_token", data.data.access_token);
             $state.transitionTo('app.dashboard')
         }).catch(function (data){
-            $scope.valid = "Invalid login, you dun kno de wea";
+            $scope.valid = "Invalid credentials.";
         });
-    }
-});
-
-app.controller('RegisterCtrl', function ($scope, $resource, $http, $httpParamSerializer, $cookies, $state) {
-    $scope.vm = {
-        formData: {
-            email: '',
-            password: '',
-            confirmPassword: ''
-        },
-        submit: function () {
-            $scope.register($scope.vm.formData.email, $scope.vm.formData.password);
-        }
     }
 });

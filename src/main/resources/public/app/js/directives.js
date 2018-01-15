@@ -40,8 +40,8 @@ app.directive('passwordVerify', function() {
         restrict: 'A', 
         require: '?ngModel', 
         link: function(scope, elem, attrs, ngModel) {
+        
           if (!ngModel) return; 
-  
           scope.$watch(attrs.ngModel, function() {
             validate();
           });
@@ -51,12 +51,14 @@ app.directive('passwordVerify', function() {
           });
   
           var validate = function() {
+            if(attrs.passwordVerify){
             // values
             var val1 = ngModel.$viewValue;
             var val2 = attrs.passwordVerify;
   
             // set validity
             ngModel.$setValidity('passwordVerify', val1 === val2);
+            }
           };
         }
       }
