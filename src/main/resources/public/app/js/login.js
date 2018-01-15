@@ -18,7 +18,7 @@ app.controller('LoginCtrl', function ($scope, $resource, $http, $httpParamSerial
         }
         var req = {
             method: 'POST',
-            url: 'http://192.168.1.128:8080/oauth/token',
+            url: 'http://localhost:8080/oauth/token',
             headers: {
                 "Authorization": "Basic " + "Z3JhZGVtYXN0ZXItY2xpZW50OmdyYWRlbWFzdGVyLXNlY3JldA==",
                 "Content-type": "application/x-www-form-urlencoded; charset=utf-8"
@@ -31,7 +31,7 @@ app.controller('LoginCtrl', function ($scope, $resource, $http, $httpParamSerial
             $cookies.put("access_token", data.data.access_token);
             $state.transitionTo('app.dashboard')
         }).catch(function (data){
-            
+            console.log("Error, you don't know de wey")
         });
     }
 });

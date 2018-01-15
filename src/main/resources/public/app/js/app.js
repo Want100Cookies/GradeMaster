@@ -21,6 +21,15 @@ app.controller('LayoutController', function ($scope, $mdSidenav) {
 app.config(function ($stateProvider, $urlRouterProvider) {
 
     $stateProvider
+        .state('root', {
+            url: '',
+            templateUrl: '/app/pages/app.html',
+            resolve: {
+                'auth': function(AuthService){
+                    return AuthService.authenticate();
+                },
+            }
+        })
         .state('login', {
             url: '/login',
             templateUrl: '/app/pages/login.html',
