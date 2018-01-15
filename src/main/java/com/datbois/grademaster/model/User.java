@@ -65,6 +65,7 @@ public class User extends BaseModel {
     private Set<Group> groups;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonIgnore
     private List<Notification> notificationList;
 
     public User() {
