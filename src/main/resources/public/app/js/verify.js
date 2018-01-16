@@ -1,4 +1,4 @@
-app.controller('VerifyCtrl', function ($scope, $state, $stateParams, $resource, $http) {
+app.controller('VerifyCtrl', function ($scope, $state, $stateParams, $resource, $http, $timeout) {
     $scope.email = $stateParams.email;
     $scope.token = $stateParams.token;
     $scope.isLoading = true;
@@ -20,6 +20,9 @@ app.controller('VerifyCtrl', function ($scope, $state, $stateParams, $resource, 
         $http(req).then(function (data) {
             $scope.isLoading = false;
             $scope.isFinished = true;
+            $timeout(function() {
+                $state.transitionTo('login')
+                }, 8000);
         }).catch(function (data) {
             $scope.error = "verification failed."
             $scope.isLoading = false;
