@@ -21,9 +21,9 @@ app.directive('activeUser', function (AuthService) {
     return {
         link: function (scope, element, attrs, controller, rejection) {
             var clazz = attrs.activeUser;
-            Auth = AuthService.authenticate().then(function(data){
+            Auth = AuthService.authenticate().then(function (data) {
                 element.removeClass(clazz);
-            }).catch(function() {
+            }).catch(function () {
                 element.addClass(clazz);
                 console.log("catch");
             })
@@ -35,31 +35,31 @@ app.directive('activeUser', function (AuthService) {
         }
     }
 });
-app.directive('passwordVerify', function() {
+app.directive('passwordVerify', function () {
     return {
-        restrict: 'A', 
-        require: '?ngModel', 
-        link: function(scope, elem, attrs, ngModel) {
-        
-          if (!ngModel) return; 
-          scope.$watch(attrs.ngModel, function() {
-            validate();
-          });
+        restrict: 'A',
+        require: '?ngModel',
+        link: function (scope, elem, attrs, ngModel) {
 
-          attrs.$observe('passwordVerify', function(val) {
-            validate();
-          });
-  
-          var validate = function() {
-            if(attrs.passwordVerify){
-            // values
-            var val1 = ngModel.$viewValue;
-            var val2 = attrs.passwordVerify;
-  
-            // set validity
-            ngModel.$setValidity('passwordVerify', val1 === val2);
-            }
-          };
+            if (!ngModel) return;
+            scope.$watch(attrs.ngModel, function () {
+                validate();
+            });
+
+            attrs.$observe('passwordVerify', function (val) {
+                validate();
+            });
+
+            var validate = function () {
+                if (attrs.passwordVerify) {
+                    // values
+                    var val1 = ngModel.$viewValue;
+                    var val2 = attrs.passwordVerify;
+
+                    // set validity
+                    ngModel.$setValidity('passwordVerify', val1 === val2);
+                }
+            };
         }
-      }
+    }
 });

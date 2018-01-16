@@ -1,16 +1,32 @@
+<div class="spinnerContainer" ng-show="isLoading">
+    <md-progress-circular class="spinner" md-mode="indeterminate" ng-show="isLoading"></md-progress-circular>
+</div>
 <div flex-xs="" flex-gt-xs="50" style="margin: 0 auto;">
-    <md-card>
+    <md-card ng-show="isFinished">
         <md-toolbar id="override-login-toolbar">
             <div class="md-toolbar-tools">
                 <h2>
                     <span class="md-headline">Succesfully verified!</span>
                 </h2>
-            </div>
+            </div>-
         </md-toolbar>
         <md-content style="height: 75px;">
             <div class="md-body-2" style="text-align: center; margin-top: 20px;">Thank you for verifying your email.</br>
-            {{email}} + {{token}}
             </div>
         </md-content>
     </md-card>
+    <md-card ng-show="isError">
+            <md-toolbar id="override-login-toolbar">
+                <div class="md-toolbar-tools">
+                    <h2>
+                        <span class="md-headline">An error has occured!</span>
+                    </h2>
+                </div>
+            </md-toolbar>
+            <md-content style="height: 75px;">
+                <div class="md-body-2" style="text-align: center; margin-top: 20px;">Somehow we weren't able to verify your email. Please try again later.</br>
+                </div>
+            </md-content>
+        </md-card>
 </div>
+ 
