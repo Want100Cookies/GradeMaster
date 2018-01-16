@@ -5,8 +5,7 @@ var app = angular.module('gmApp', [
     'ngAnimate',
     'ngRoute',
     'ngResource',
-    'ngCookies',
-    'ui.router'
+    'ngCookies'
 ]);
 
 app.controller('LayoutController', function ($scope, $mdSidenav) {
@@ -18,48 +17,9 @@ app.controller('LayoutController', function ($scope, $mdSidenav) {
     };
 });
 
-app.config(function ($stateProvider, $urlRouterProvider) {
-
-    $stateProvider
-        .state('root', {
-            url: '',
-            templateUrl: '/app/pages/app.html',
-            resolve: {
-                'auth': function(AuthService){
-                    return AuthService.authenticate();
-                },
-            }
-        })
-        .state('login', {
-            url: '/login',
-            templateUrl: '/app/pages/login.html',
-            controller: 'LoginCtrl'
-        })
-        .state('register', {
-            url: '/register',
-            templateUrl: '/app/pages/register.html',
-            controller: 'RegisterCtrl'
-        })
-        .state('registered', {
-            url: '/registered',
-            templateUrl: '/app/pages/registered.html',
-        })
-        .state('verify', {
-            url: '/verify?email&token',
-            templateUrl: '/app/pages/verify.html',
-            controller: 'VerifyCtrl'
-        })
-        .state('app', {
-            url: '/home',
-            templateUrl: '/app/pages/app.html',
-            resolve: {
-                'auth': function(AuthService){
-                    return AuthService.authenticate();
-                },
-            }
-        })
-        .state('app.dashboard', {
-            url: '/dashboard',
+app.config(function ($routeProvider) {
+    $routeProvider
+        .when('/', {
             templateUrl: '/app/pages/dashboard.html',
             resolve: {
                 'auth': function(AuthService){
@@ -67,22 +27,50 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 },
             }
         })
-        .state('app.groups', {
-            url: '/groups',
+        .when('/login', {
+            templateUrl: '/app/pages/login.html',
+            controller: 'LoginCtrl',
+        })
+        .when('/groups', {
             templateUrl: '/app/pages/groups.html',
             resolve: {
                 'auth': function(AuthService){
                     return AuthService.authenticate();
-                },
+                }
             }
         })
-        .state('app.grades', {
-            url: '/grades',
+        .when('/grades', {
             templateUrl: '/app/pages/grades.html',
             resolve: {
                 'auth': function(AuthService){
                     return AuthService.authenticate();
-                },
+                }
             }
         });
 });
+app.run(function($rootScope, $location){
+    //If the route change failed due to authentication error, redirect them out
+    $rootScope.$on('$routeChangeError', function(event, current, previous, rejection){
+        if(rejection === 'Not Authenticated'){
+            $location.path('/login');
+        }
+    })
+});
+app.directive('activeLink', ['$location', function (location) {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attrs, controller) {
+            var clazz = attrs.activeLink;
+            var path = attrs.href;
+            path = path.substring(2);
+            scope.location = location;
+            scope.$watch('location.path()', function (newPath) {
+                if (path === newPath) {
+                    element.addClass(clazz);
+                } else {
+                    element.removeClass(clazz);
+                }
+            });
+        }
+    };
+}]);
