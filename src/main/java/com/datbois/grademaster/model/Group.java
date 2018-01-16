@@ -35,7 +35,7 @@ public class Group extends BaseModel {
     public GroupGrade groupGrade;
 
     @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "group")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "group")
     private List<Grade> grades;
 
     private String groupName;

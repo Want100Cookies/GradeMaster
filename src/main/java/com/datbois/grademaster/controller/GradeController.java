@@ -35,11 +35,20 @@ public class GradeController{
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE') or isCurrentUser(#userId)")
     public ResponseEntity createGrade(@PathVariable Long userId, @RequestBody Grade[] grades){
 
+        List<Map<String, Object>> response = new ArrayList<>();
+
         for(Grade grade : grades){
-            grade = gradeService.save(grade);
+            gradeService.save(grade);
+            Map<String, Object> data = new HashMap<>();
+            data.put("grade", grade.getGrade());
+            data.put("motivation", grade.getMotivation());
+            data.put("fromUser", grade.getFromUser().getId());
+            data.put("toUser", grade.getToUser().getId());
+            data.put("group", grade.getGroup().getId());
+            response.add(data);
         }
 
-        return new ResponseEntity<>(grades, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/grade/group/{groupId}", method = RequestMethod.PATCH)
@@ -61,7 +70,7 @@ public class GradeController{
 
         Map<Object, Object> response = new HashMap<>();
         response.put("groupId", exists.getId());
-        response.put("groupGrade", exists.getGroupGrade());
+        response.put("groupGrade", exists.getGroupGrade().getId());
 
         Map<Object, Object> users = new HashMap<>();
 
@@ -83,23 +92,16 @@ public class GradeController{
     @RequestMapping(value = "/grade/group/{groupId}", method = RequestMethod.DELETE)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE')")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public ResponseEntity removeGrades(@PathVariable Long groupId){
+    public void removeGrades(@PathVariable Long groupId){
         Group exists = groupService.findById(groupId);
-
-//        List<Object> deleted = new ArrayList<>();
-
-        Long id = 0L;
 
         for(Grade grade : exists.getGrades()){
             for(Role role : grade.getFromUser().getRoles()){
                 if(role.getCode().contains("STUDENT_ROLE")){
-                    id = grade.getId();
                     gradeService.delete(grade.getId());
                 }
             }
         }
-
-        return new ResponseEntity<>(id, HttpStatus.OK);
     }
 
 }

@@ -40,6 +40,7 @@ public class User extends BaseModel {
     @JsonIgnore
     private String retardToken;
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinTable(
             joinColumns = @JoinColumn(name = "userId", referencedColumnName = "id"),
@@ -48,11 +49,11 @@ public class User extends BaseModel {
     private Set<Role> roles;
 
     @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "fromUser")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "fromUser")
     private List<Grade> gradeDistributed;
 
     @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "toUser")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "toUser")
     private List<Grade> gradesReceived;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
