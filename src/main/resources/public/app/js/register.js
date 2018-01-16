@@ -17,7 +17,7 @@ app.controller('RegisterCtrl', function ($scope, $resource, $http, $httpParamSer
         }
         var req = {
             method: 'POST',
-            url: 'http://192.168.1.128:8080/api/v1/users',
+            url: 'http://localhost:8080/api/v1/users',
             headers: {
                 "Content-type": "application/json"
             },

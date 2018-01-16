@@ -11,7 +11,7 @@ app.controller('VerifyCtrl', function ($scope, $state, $stateParams, $resource, 
         }
         var req = {
             method: 'PATCH',
-            url: 'http://192.168.1.128:8080/api/v1/auth/verify',
+            url: 'http://localhost:8080/api/v1/auth/verify',
             headers: {
                 "Content-type": "application/json"
             },
