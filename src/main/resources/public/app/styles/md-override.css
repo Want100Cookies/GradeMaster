@@ -31,3 +31,7 @@ md-input-container:not(.md-input-invalid).md-input-focused .md-input {
 md-input-container:not(.md-input-invalid).md-input-focused label {
     color: #555C78;
 }
+#override-card-toolbar {
+    background: white;
+    color: black;
+}

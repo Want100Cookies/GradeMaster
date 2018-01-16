@@ -71,12 +71,11 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             url: '/groups',
             templateProvider: function (UserService) {
                 return UserService.getRole().then(function (response) {
-                    if(response === 'Admin'){
+                    if(response === 'Admin' || response === 'Teacher'){
                         return '<div ng-include="\'/app/pages/teacher-groups.html\'"></div>';
                     } else {
-                        return '<div ng-include="\'/app/pages/'+response+'-groups.html\'"></div>';
+                        return '<div ng-include="\'/app/pages/groups.html\'"></div>';
                     }
-                    
                 })
             },
             resolve: {
@@ -87,11 +86,20 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         })
         .state('app.grades', {
             url: '/grades',
-            templateUrl: '/app/pages/grades.html',
+            templateProvider: function (UserService) {
+                return UserService.getRole().then(function (response) {
+                    if(response === 'Admin' || response === 'Teacher'){
+                        return '<div ng-include="\'/app/pages/teacher-grades.html\'"></div>';
+                    } else {
+                        return '<div ng-include="\'/app/pages/grades.html\'"></div>';
+                    }
+                })
+            },
             resolve: {
                 'auth': function (AuthService) {
                     return AuthService.authenticate();
                 },
-            }
+            },
+            controller: 'GradesCtrl'
         });
 });
