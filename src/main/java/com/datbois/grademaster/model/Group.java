@@ -3,6 +3,7 @@ package com.datbois.grademaster.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -12,7 +13,6 @@ public class Group extends BaseModel {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String education;
     private Integer startYear;
     private Integer endYear;
 
@@ -25,17 +25,22 @@ public class Group extends BaseModel {
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
 
-    @ManyToMany(mappedBy = "groups", fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.REMOVE})
+    @ManyToMany(mappedBy = "groups", fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JsonIgnore
     private Set<User> users;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    public GroupGrade groupGrade;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "group")
+    private List<Grade> grades;
 
     private String groupName;
 
     public Group() {
     }
 
-    public Group(String education, int startYear, int endYear, Set<Period> period, Course course, String groupName, Set<User> users) {
-        this.education = education;
+    public Group(int startYear, int endYear, Set<Period> period, Course course, String groupName, Set<User> users) {
         this.startYear = startYear;
         this.endYear = endYear;
         this.period = period;
@@ -44,30 +49,12 @@ public class Group extends BaseModel {
         this.users = users;
     }
 
-    public boolean isValid() {
-        if (this.education == null || this.education.isEmpty()) return false;
-        if (this.startYear == -1) return false;
-        if (this.endYear == -1) return false;
-        if (this.period == null || this.period.isEmpty()) return false;
-        if (this.course == null) return false;
-        if (this.groupName == null || this.groupName.isEmpty()) return false;
-        return true;
-    }
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getEducation() {
-        return education;
-    }
-
-    public void setEducation(String education) {
-        this.education = education;
     }
 
     public Integer getStartYear() {
@@ -118,11 +105,18 @@ public class Group extends BaseModel {
         this.users = users;
     }
 
+    public GroupGrade getGroupGrade() {
+        return groupGrade;
+    }
+
+    public void setGroupGrade(GroupGrade groupGrade) {
+        this.groupGrade = groupGrade;
+    }
+
     @Override
     public String toString() {
         return "Group{" +
                 "id=" + id +
-                ", education='" + education + '\'' +
                 ", startYear=" + startYear +
                 ", endYear=" + endYear +
                 ", period=" + period +

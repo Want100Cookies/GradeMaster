@@ -14,16 +14,21 @@ public class Course extends BaseModel {
 
     private String name;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "course")
     @JsonIgnore
     private Set<Group> groups;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "education_id", nullable = false)
+    private Education education;
 
     public Course() {
     }
 
-    public Course(String name, Set<Group> groups) {
+    public Course(String name, Set<Group> groups, Education education) {
         this.name = name;
         this.groups = groups;
+        this.education = education;
     }
 
     public Long getId() {
@@ -50,11 +55,20 @@ public class Course extends BaseModel {
         this.groups = groups;
     }
 
+    public Education getEducation() {
+        return education;
+    }
+
+    public void setEducation(Education education) {
+        this.education = education;
+    }
+
     @Override
     public String toString() {
         return "Course{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", education=" + education +
                 '}';
     }
 }

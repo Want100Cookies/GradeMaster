@@ -77,6 +77,7 @@ public class AuthControllerTests extends OAuthTests {
         User user = userService.findByEmail("john.doe@student.stenden.com");
 
         user.setEmailVerifyToken(UUID.randomUUID().toString());
+        user.setVerified(false);
         userService.save(user);
 
         Map<String, String> data = new HashMap<>();

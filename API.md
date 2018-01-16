@@ -93,12 +93,6 @@ Make a new student group
 ### (PATCH)
 Update a specific field from the group
 
-## /api/{v1}/groups/{id}/grades
-### (GET)
-Get the group grade and all the grades for the group members
-### (POST)
-Set the grade for this project
-
 ## /api/{v1}/groups/{id}/users
 ### (GET)
 Get all users in this group
@@ -109,14 +103,17 @@ Add users to this group
 ### (DELETE)
 Delete this user from the group
 
-## /api/{v1}/groups/{id}/users/{id}/grades
-### (GET)
-Get the group/past grade(s)
+## /api/{v1}/grade/user/{id}
 ### (POST)
-Set the grades for all the group members
-### (PATCH)
-Adjust a grade for all the group members
+Set grades for group members
 
+## api/{v1}/grade/group/{id}
+### (GET)
+Get the group grade and all the grades for the group members
+### (PATCH)
+Adjust group grade
+### (DELETE)
+Delete graden given out by students for specific group
 
 ## /api/{v1}/notifications
 ### (GET)
