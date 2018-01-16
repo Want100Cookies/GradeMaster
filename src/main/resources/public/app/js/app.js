@@ -74,7 +74,8 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 'auth': function(AuthService){
                     return AuthService.authenticate();
                 },
-            }
+            },
+            controller: 'GroupsCtrl'
         })
         .state('app.grades', {
             url: '/grades',
