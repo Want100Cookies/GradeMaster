@@ -9,6 +9,7 @@
   TRUNCATE TABLE `education`;
   TRUNCATE TABLE `group_grade`;
   TRUNCATE TABLE `course`;
+  TRUNCATE TABLE `notification`;
 
   INSERT INTO `user` (`id`, `email`, `name`, `password`, `verified`) VALUES
     (1, "john.doe@student.stenden.com", "John Doe", "$2a$04$FYZXxiv7A74rX33gfs2m/.AGqhQ/unlJCB2nHLRiuHCVlECcyLyb6", 1),
@@ -56,6 +57,13 @@
     (1, 8, "motivation", 1, 1, 1),
     (2, 7, "motivation", 1, 1, 2),
     (3, 5, "motivation", 1, 1, 3);
+
+  INSERT INTO `notification`(`id`, `title`, `message`, `seen`, `user_id`) VALUES
+   (1, "Test", "You have pending grades!", 0, 1),
+   (2, "Ratings","Your grade ratings have been sent!", 0, 1),
+   (3, "Final", "Your final grade has been determined.", 0, 1),
+   (4, "Received", "All group ratings received", 0, 2),
+   (5, "Test", "Group grade can be made final", 0, 2);
 
   SET FOREIGN_KEY_CHECKS = 1;
   # All passwords are bcrypt hash of 'password'

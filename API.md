@@ -105,13 +105,15 @@ Delete this user from the group
 
 ## /api/{v1}/grade/user/{id}
 ### (POST)
-Set grade for a group member
+Set grades for group members
 
 ## api/{v1}/grade/group/{id}
 ### (GET)
 Get the group grade and all the grades for the group members
 ### (PATCH)
 Adjust group grade
+### (DELETE)
+Delete graden given out by students for specific group
 
 ## /api/{v1}/notifications
 ### (GET)

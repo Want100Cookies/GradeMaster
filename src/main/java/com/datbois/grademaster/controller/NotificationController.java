@@ -52,6 +52,7 @@ public class NotificationController {
 
         for(Notification notification : notifications){
             notification.setSeen(seen);
+            notificationService.save(notification);
         }
 
         return notifications;
@@ -73,6 +74,6 @@ public class NotificationController {
 
         notify.setSeen(true);
 
-        return notify;
+        return notificationService.save(notify);
     }
 }
