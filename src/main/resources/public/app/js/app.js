@@ -25,7 +25,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             url: '',
             templateUrl: '/app/pages/app.html',
             resolve: {
-                'auth': function(AuthService){
+                'auth': function (AuthService) {
                     return AuthService.authenticate();
                 },
             }
@@ -53,7 +53,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             url: '/home',
             templateUrl: '/app/pages/app.html',
             resolve: {
-                'auth': function(AuthService){
+                'auth': function (AuthService) {
                     return AuthService.authenticate();
                 },
             }
@@ -62,16 +62,25 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             url: '/dashboard',
             templateUrl: '/app/pages/dashboard.html',
             resolve: {
-                'auth': function(AuthService){
+                'auth': function (AuthService) {
                     return AuthService.authenticate();
                 },
             }
         })
         .state('app.groups', {
             url: '/groups',
-            templateUrl: '/app/pages/groups.html',
+            templateProvider: function (UserService) {
+                return UserService.getRole().then(function (response) {
+                    if(response === 'Admin'){
+                        return '<div ng-include="\'/app/pages/teacher-groups.html\'"></div>';
+                    } else {
+                        return '<div ng-include="\'/app/pages/'+response+'-groups.html\'"></div>';
+                    }
+                    
+                })
+            },
             resolve: {
-                'auth': function(AuthService){
+                'auth': function (AuthService) {
                     return AuthService.authenticate();
                 },
             }
@@ -80,7 +89,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             url: '/grades',
             templateUrl: '/app/pages/grades.html',
             resolve: {
-                'auth': function(AuthService){
+                'auth': function (AuthService) {
                     return AuthService.authenticate();
                 },
             }

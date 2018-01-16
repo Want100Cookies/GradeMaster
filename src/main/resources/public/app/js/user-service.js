@@ -1,6 +1,6 @@
-app.factory('AuthService', function($cookies, $q, $location, $resource, $http, $httpParamSerializer, $state){
+app.factory('UserService', function($cookies, $q, $resource, $http, $state){
     return {
-        authenticate : function(){
+        getRole : function(){
             var accessToken = $cookies.get("access_token");
             var req = {
                 method: 'GET',
@@ -10,9 +10,12 @@ app.factory('AuthService', function($cookies, $q, $location, $resource, $http, $
                 }
             }
             return $http(req).then(function(data){
-                return true;
+               for(key in data.data.roles) {
+                   var role = data.data.roles[key].label; 
+               }
+               return role;
             }).catch(function(data){
-                $state.transitionTo('login')
+                console.log(data);
             });
         }
     }
