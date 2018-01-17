@@ -5,6 +5,7 @@ sudo: required
 services:
   - docker
 before_script:
-  - docker-compose up -d
+  - sudo /etc/init.d/mysql stop
+  - docker-compose up -d mysql activemq
 notifications:
   email: false
