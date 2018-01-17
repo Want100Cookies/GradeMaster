@@ -1,6 +1,6 @@
-app.factory('UserService', function($cookies, $q, $resource, $http, $state){
+app.factory('UserService', function ($cookies, $q, $resource, $http, $state) {
     return {
-        getRole : function(){
+        getRole: function () {
             var accessToken = $cookies.get("access_token");
             var req = {
                 method: 'GET',
@@ -9,12 +9,27 @@ app.factory('UserService', function($cookies, $q, $resource, $http, $state){
                     "Authorization": "Bearer " + accessToken
                 }
             }
-            return $http(req).then(function(data){
-               for(key in data.data.roles) {
-                   var role = data.data.roles[key].label; 
-               }
-               return role;
-            }).catch(function(data){
+            return $http(req).then(function (data) {
+                for (key in data.data.roles) {
+                    var role = data.data.roles[key].label;
+                }
+                return role;
+            }).catch(function (data) {
+                console.log(data);
+            });
+        },
+        getAllUsers: function () {
+            var accessToken = $cookies.get("access_token");
+            var req = {
+                method: 'GET',
+                url: 'http://localhost:8080/api/v1/users',
+                headers: {
+                    "Authorization": "Bearer " + accessToken
+                }
+            }
+            return $http(req).then(function (data) {
+                return data;
+            }).catch(function (data) {
                 console.log(data);
             });
         }
