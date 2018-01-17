@@ -1,5 +1,6 @@
 package com.datbois.grademaster.receiver;
 
+import com.datbois.grademaster.configuration.DomainProperties;
 import com.datbois.grademaster.model.Email;
 import com.datbois.grademaster.model.Notification;
 import com.datbois.grademaster.repository.NotificationRepository;
@@ -21,9 +22,12 @@ public class NotificationReceiver {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private DomainProperties domainProperties;
+
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @JmsListener(destination = "NotificationQueue")
+    @JmsListener(destination = Notification.QUEUE)
     public void sendNotificationEmail(Long notificationId) throws IOException {
         Notification notification = notificationRepository.findById(notificationId);
 
@@ -36,7 +40,7 @@ public class NotificationReceiver {
 
         if (notification.getLink() != null && notification.getLinkText() != null) {
             mail.setLinkText(notification.getLinkText());
-            mail.setLink("http://localhost:8080" + notification.getLink());
+            mail.setLink(domainProperties.getBase() + notification.getLink());
         }
 
         emailService.sendEmail(mail);

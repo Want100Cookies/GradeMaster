@@ -1,11 +1,9 @@
 package com.datbois.grademaster.controller;
 
-import com.datbois.grademaster.configuration.RoleProperties;
+import com.datbois.grademaster.configuration.DomainProperties;
 import com.datbois.grademaster.exception.BadRequestException;
-import com.datbois.grademaster.model.Group;
-import com.datbois.grademaster.model.Role;
-import com.datbois.grademaster.model.User;
-import com.datbois.grademaster.model.UserDetails;
+import com.datbois.grademaster.model.*;
+import com.datbois.grademaster.service.EmailService;
 import com.datbois.grademaster.service.RoleService;
 import com.datbois.grademaster.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +27,13 @@ public class UserController {
     private UserService userService;
 
     @Autowired
-    private RoleProperties roleProperties;
+    private DomainProperties domainProperties;
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private EmailService emailService;
 
     /**
      * Get all users in the application including their groups.
@@ -103,18 +104,18 @@ public class UserController {
 
         Pattern pattern = Pattern.compile(String.format(
                 "([A-Z|a-z|0-9](\\.|_)?)+[A-Z|a-z|0-9]\\@(%s|%s)",
-                roleProperties.getStudent().replace(".", "\\."),
-                roleProperties.getTeacher().replace(".", "\\.")
+                domainProperties.getStudent().replace(".", "\\."),
+                domainProperties.getTeacher().replace(".", "\\.")
         ));
 
         Matcher matcher = pattern.matcher(user.getEmail());
 
         if (matcher.find()) {
-            if (matcher.group(3).equals(roleProperties.getStudent())) {
+            if (matcher.group(3).equals(domainProperties.getStudent())) {
                 roles.add(roleService.findByName("Student"));
             }
 
-            if (matcher.group(3).equals(roleProperties.getTeacher())) {
+            if (matcher.group(3).equals(domainProperties.getTeacher())) {
                 roles.add(roleService.findByName("Teacher"));
             }
         } else {
@@ -125,7 +126,15 @@ public class UserController {
 
         user = userService.save(user);
 
-        // Todo: Send e-mail verification e-mail
+        Email verificationMail = new Email(
+                user.getEmail(),
+                "Verify your email address",
+                "Click the button below to verify your email address.",
+                domainProperties.getBase() + String.format("/#!/verify?email=%s&token=%s", user.getEmail(), user.getEmailVerifyToken()),
+                "Verify"
+        );
+
+        emailService.sendToEmailQueue(verificationMail);
 
         return user;
     }
@@ -172,9 +181,10 @@ public class UserController {
 
     /**
      * Get all groups assigned to a user
-     * @endpoint (GET) /api/v1/users/{userId}/groups
+     *
      * @param userId The id of the user
      * @return A list of all groups the user is member of
+     * @endpoint (GET) /api/v1/users/{userId}/groups
      * @responseStatus OK
      */
     @RequestMapping(value = "/users/{userId}/groups", method = RequestMethod.GET)

@@ -6,6 +6,7 @@ import com.datbois.grademaster.utils.CssInliner;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -28,6 +29,14 @@ public class EmailServiceImpl implements EmailService {
 
     @Autowired
     private ResourceLoader resourceLoader;
+
+    @Autowired
+    private JmsTemplate jmsTemplate;
+
+    @Override
+    public void sendToEmailQueue(Email email) {
+        jmsTemplate.convertAndSend(Email.QUEUE, email);
+    }
 
     @Override
     public void sendEmail(Email email) {

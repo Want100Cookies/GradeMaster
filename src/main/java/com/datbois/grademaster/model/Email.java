@@ -2,6 +2,8 @@ package com.datbois.grademaster.model;
 
 public class Email {
 
+    public static final String QUEUE = "EmailQueue";
+
     private String from;
     private String to;
     private String subject;
@@ -11,15 +13,13 @@ public class Email {
 
     public Email(){}
 
-    public Email(String from, String to, String subject, String body) {
-        this.from = from;
+    public Email(String to, String subject, String body) {
         this.to = to;
         this.subject = subject;
         this.body = body;
     }
 
-    public Email(String from, String to, String subject, String body, String link, String linkText) {
-        this.from = from;
+    public Email(String to, String subject, String body, String link, String linkText) {
         this.to = to;
         this.subject = subject;
         this.body = body;
