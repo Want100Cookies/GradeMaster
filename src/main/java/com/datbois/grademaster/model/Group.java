@@ -32,7 +32,8 @@ public class Group extends BaseModel {
     @OneToOne(fetch = FetchType.LAZY)
     public GroupGrade groupGrade;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "group")
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "group")
     private List<Grade> grades;
 
     private String groupName;
@@ -111,6 +112,14 @@ public class Group extends BaseModel {
 
     public void setGroupGrade(GroupGrade groupGrade) {
         this.groupGrade = groupGrade;
+    }
+
+    public List<Grade> getGrades() {
+        return grades;
+    }
+
+    public void setGrades(List<Grade> grades) {
+        this.grades = grades;
     }
 
     @Override

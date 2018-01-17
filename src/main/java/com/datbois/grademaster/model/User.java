@@ -50,11 +50,13 @@ public class User extends BaseModel {
     )
     private Set<Role> roles;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "fromUser")
-    private List<Grade> gradesReceived;
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "toUser")
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "fromUser")
     private List<Grade> gradeDistributed;
+
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "toUser")
+    private List<Grade> gradesReceived;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinTable(
@@ -160,6 +162,22 @@ public class User extends BaseModel {
 
     public void setGroups(Set<Group> groups) {
         this.groups = groups;
+    }
+
+    public List<Grade> getGradesReceived() {
+        return gradesReceived;
+    }
+
+    public void setGradesReceived(List<Grade> gradesReceived) {
+        this.gradesReceived = gradesReceived;
+    }
+
+    public List<Grade> getGradeDistributed() {
+        return gradeDistributed;
+    }
+
+    public void setGradeDistributed(List<Grade> gradeDistributed) {
+        this.gradeDistributed = gradeDistributed;
     }
 
     public List<Notification> getNotificationList() {

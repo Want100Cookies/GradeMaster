@@ -6,5 +6,7 @@ public interface GradeService{
     Grade save (Grade grade);
 
     Grade findById(Long id);
+
+    void delete(Long id);
 }
 
