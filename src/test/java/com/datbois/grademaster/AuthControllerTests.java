@@ -14,6 +14,7 @@ import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -44,6 +45,7 @@ public class AuthControllerTests extends OAuthTests {
         User testUser = userService.findById(user.getId());
 
         assertThat("RetardToken is set", testUser.getRetardToken(), notNullValue());
+        assertThat("Mail has been send", smtpServerRule.getMessages().length, is(1));
     }
 
     @Test

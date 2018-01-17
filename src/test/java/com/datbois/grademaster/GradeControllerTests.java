@@ -6,7 +6,6 @@ import com.datbois.grademaster.service.GradeService;
 import com.datbois.grademaster.service.GroupService;
 import com.datbois.grademaster.service.UserService;
 import io.restassured.http.ContentType;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +15,8 @@ import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.core.Is.is;
 
 public class GradeControllerTests extends OAuthTests {
     @Autowired
@@ -47,12 +48,13 @@ public class GradeControllerTests extends OAuthTests {
                 .extract()
                 .path("$");
 
-        assertThat(result.get("grade"), Matchers.is(gradeData.get("grade")));
-        assertThat(result.get("comment"), Matchers.is(gradeData.get("comment")));
+        assertThat(result.get("grade"), is(gradeData.get("grade")));
+        assertThat(result.get("comment"), is(gradeData.get("comment")));
+        assertThat(smtpServerRule.getMessages().length, is(greaterThan(0)));
     }
 
     @Test
-    public void StudentCanInsertGrade(){
+    public void StudentCanInsertGrade() {
         String token = this.obtainAccessToken("john.doe@student.stenden.com", "password");
 
         User fromUser = userService.findById(1L);
@@ -77,10 +79,10 @@ public class GradeControllerTests extends OAuthTests {
                 .extract()
                 .path("$");
 
-        assertThat(result.get("grade"), Matchers.is(gradeData.get("grade")));
-        assertThat(result.get("motivation"), Matchers.is(gradeData.get("motivation")));
-        assertThat(Long.parseLong(result.get("fromUser").toString()), Matchers.is(fromUser.getId()));
-        assertThat(Long.parseLong(result.get("toUser").toString()), Matchers.is(toUser.getId()));
-        assertThat(Long.parseLong(result.get("group").toString()), Matchers.is(group.getId()));
+        assertThat(result.get("grade"), is(gradeData.get("grade")));
+        assertThat(result.get("motivation"), is(gradeData.get("motivation")));
+        assertThat(Long.parseLong(result.get("fromUser").toString()), is(fromUser.getId()));
+        assertThat(Long.parseLong(result.get("toUser").toString()), is(toUser.getId()));
+        assertThat(Long.parseLong(result.get("group").toString()), is(group.getId()));
     }
 }

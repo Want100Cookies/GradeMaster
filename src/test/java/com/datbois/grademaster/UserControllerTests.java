@@ -162,6 +162,7 @@ public class UserControllerTests extends OAuthTests {
         assertThat("Email", userData.get("email"), equalTo(testUser.getEmail()));
         assertThat("Role", testUser.getRoles().iterator().next().getCode(), equalTo(role.getCode()));
         assertThat("Password", userData.get("password"), not(testUser.getPassword()));
+        assertThat(smtpServerRule.getMessages().length, is(1));
     }
 
     @Test
@@ -186,6 +187,7 @@ public class UserControllerTests extends OAuthTests {
         Role role = roleService.findByName("Teacher");
 
         assertThat("Role", testUser.getRoles().iterator().next().getCode(), equalTo(role.getCode()));
+        assertThat(smtpServerRule.getMessages().length, is(1));
     }
 
     @Test

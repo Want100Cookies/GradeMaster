@@ -30,10 +30,10 @@
     (2, "EthHack", 1),
     (3, "Minor", 2);
 
-  INSERT INTO `group_grade` (`id`, `grade`, `comment`) VALUES
-    (1, 6, "comment"),
-    (2, 7, "comment"),
-    (3, 8, "comment");
+  INSERT INTO `group_grade` (`id`, `grade`, `comment`, `teacher_id`) VALUES
+    (1, 6, "comment", 2),
+    (2, 7, "comment", 2),
+    (3, 8, "comment", 2);
 
   INSERT INTO `group` (`id`, `course_id`, `group_name`, `start_year`, `end_year`, `group_grade_id`) VALUES
     (1, 1, "Musketiers", 2017, 2018, 1),

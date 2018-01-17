@@ -1,27 +1,20 @@
 package com.datbois.grademaster.controller;
 
-import com.datbois.grademaster.model.Grade;
-import com.datbois.grademaster.model.Group;
-import com.datbois.grademaster.model.GroupGrade;
+import com.datbois.grademaster.model.*;
 import com.datbois.grademaster.service.GradeService;
 import com.datbois.grademaster.service.GroupGradeService;
 import com.datbois.grademaster.service.GroupService;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1")
-public class GradeController{
+public class GradeController {
 
     @Autowired
     GradeService gradeService;
@@ -34,7 +27,7 @@ public class GradeController{
 
     //  POST JSON:  {"grade":8.0,"motivation":"motivation","fromUser":{"id":1},"toUser":{"id":1},"group":{"id":1}}
     @RequestMapping(value = "/grade", method = RequestMethod.POST)
-    public ResponseEntity createGrade(@RequestBody Grade grade){
+    public Map<Object, Object> createGrade(@RequestBody Grade grade) {
         grade = gradeService.save(grade);
 
         Map<Object, Object> response = new HashMap<>();
@@ -44,25 +37,29 @@ public class GradeController{
         response.put("toUser", grade.getToUser().getId());
         response.put("group", grade.getGroup().getId());
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return response;
     }
 
     //  POST JSON:  {"grade":5,"comment":"test"}
     @RequestMapping(value = "/grade/group/{groupId}", method = RequestMethod.PATCH)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE')")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity insertGroupGrade(@PathVariable Long groupId, @RequestBody GroupGrade groupGrade){
+    public GroupGrade insertGroupGrade(Authentication authentication, @PathVariable Long groupId, @RequestBody GroupGrade groupGrade) {
+        User user = ((UserDetails) authentication.getPrincipal()).getUser();
+        groupGrade.setTeacher(user);
+
         Group exists = groupService.findById(groupId);
         exists.setGroupGrade(groupGrade);
-        groupGradeService.save(groupGrade);
+
+        groupGrade = groupGradeService.save(groupGrade);
+
         groupService.save(exists);
-        return new ResponseEntity<>(groupGrade, HttpStatus.OK);
+
+        return groupGrade;
     }
 
     @RequestMapping(value = "/grade/{gradeId}", method = RequestMethod.GET)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE')")
-    @ResponseStatus(HttpStatus.OK)
-    public Grade grade(@PathVariable Long gradeId){
+    public Grade grade(@PathVariable Long gradeId) {
         return gradeService.findById(gradeId);
     }
 }

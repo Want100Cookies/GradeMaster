@@ -31,11 +31,9 @@
                                     <div th:text="${title}"></div>
                                 </div>
                                 <div th:text="${message}"></div>
-
                                 <p>&nbsp;</p>
                                 <div th:if="${buttonText != null}">
                                     <div th:if="${buttonLink != null}">
-                                        <p>&nbsp;</p>
                                         <table class="mui-btn" border="0" cellspacing="0" cellpadding="0"><tr><td>
                                             <a th:href="${buttonLink}" class="mui--text-light" style="background-color: #545D76;" th:text="${buttonText}"></a>
                                         </td></tr></table>
