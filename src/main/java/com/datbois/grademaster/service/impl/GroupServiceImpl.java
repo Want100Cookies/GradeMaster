@@ -1,7 +1,10 @@
 package com.datbois.grademaster.service.impl;
 
+import com.datbois.grademaster.model.Grade;
 import com.datbois.grademaster.model.Group;
+import com.datbois.grademaster.model.Role;
 import com.datbois.grademaster.model.User;
+import com.datbois.grademaster.repository.GradeRepository;
 import com.datbois.grademaster.repository.GroupRepository;
 import com.datbois.grademaster.repository.UserRepository;
 import com.datbois.grademaster.service.GroupService;
@@ -19,6 +22,9 @@ public class GroupServiceImpl implements GroupService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private GradeRepository gradeRepository;
 
     @Override
     public Group save(Group group) {
@@ -49,6 +55,10 @@ public class GroupServiceImpl implements GroupService {
             groups.remove(group);
             user.setGroups(groups);
             userRepository.save(user);
+        }
+        List<Grade> grades = group.getGrades();
+        for(Grade grade : grades){
+            gradeRepository.delete(grade.getId());
         }
         groupRepository.delete(id);
     }

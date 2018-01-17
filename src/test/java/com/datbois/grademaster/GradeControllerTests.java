@@ -44,7 +44,7 @@ public class GradeControllerTests extends OAuthTests {
                 .auth()
                 .oauth2(token)
                 .when()
-                .get("/api/v1/grade/group/3")
+                .get("/api/v1/grades/groups/3")
                 .then()
                 .contentType(ContentType.JSON)
                 .body("size()", greaterThan(0));
@@ -64,7 +64,7 @@ public class GradeControllerTests extends OAuthTests {
                 .contentType(ContentType.JSON)
                 .body(gradeData)
                 .when()
-                .patch("/api/v1/grade/group/1")
+                .patch("/api/v1/grades/groups/1")
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .extract()
@@ -97,7 +97,7 @@ public class GradeControllerTests extends OAuthTests {
                 .oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(grades)
-                .post("/api/v1/grade/users/1")
+                .post("/api/v1/grades/users/1")
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .extract()
@@ -118,7 +118,7 @@ public class GradeControllerTests extends OAuthTests {
                 .auth()
                 .oauth2(token)
                 .when()
-                .delete("/api/v1/grade/group/1")
+                .delete("/api/v1/grades/groups/1")
                 .then()
                 .statusCode(HttpStatus.ACCEPTED.value());
 

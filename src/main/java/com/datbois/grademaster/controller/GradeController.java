@@ -2,13 +2,10 @@ package com.datbois.grademaster.controller;
 
 import com.datbois.grademaster.model.*;
 import com.datbois.grademaster.service.*;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -18,7 +15,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1")
-//@RequestMapping("/")
 public class GradeController{
 
     @Autowired
@@ -39,7 +35,7 @@ public class GradeController{
      * @endpoint (POST) /api/v1/grade/users/{userId}
      * @return Inserted grades
      */
-    @RequestMapping(value = "/grade/users/{userId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/grades/users/{userId}", method = RequestMethod.POST)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE') or isCurrentUser(#userId)")
     public ResponseEntity createGrade(@PathVariable Long userId, @RequestBody Grade[] grades){
 
@@ -66,7 +62,7 @@ public class GradeController{
      * @return Inserted group grade
      * @responseStatus OK
      */
-    @RequestMapping(value = "/grade/group/{groupId}", method = RequestMethod.PATCH)
+    @RequestMapping(value = "/grades/groups/{groupId}", method = RequestMethod.PATCH)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE')")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity insertGroupGrade(@PathVariable Long groupId, @RequestBody GroupGrade groupGrade){
@@ -84,7 +80,7 @@ public class GradeController{
      * @return Group grades and grades assigned and received by users
      * @responseStatus OK
      */
-    @RequestMapping(value = "/grade/group/{groupId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/grades/groups/{groupId}", method = RequestMethod.GET)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE')")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity getAllGradesForAGroup(@PathVariable Long groupId){
@@ -117,7 +113,7 @@ public class GradeController{
      * @endpoint (DELETE) /api/v1/grade/group/{groupId}
      * @responseStatus ACCEPTED
      */
-    @RequestMapping(value = "/grade/group/{groupId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/grades/groups/{groupId}", method = RequestMethod.DELETE)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE')")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void removeGrades(@PathVariable Long groupId){

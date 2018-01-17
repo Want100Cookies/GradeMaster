@@ -89,6 +89,14 @@ public class Grade extends BaseModel{
         this.toUser = toUser;
     }
 
+    public void removeFromUser(){
+        fromUser = null;
+    }
+
+    public void removeToUser(){
+        toUser = null;
+    }
+
     @Override
     public String toString() {
         return "Grade{" +
