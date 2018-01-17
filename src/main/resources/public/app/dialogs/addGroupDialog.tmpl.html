@@ -9,10 +9,44 @@
                 </md-button>
             </div>
         </md-toolbar>
-        <md-content>
-            
+        <md-content style="padding: 10px;">
+            <form name="GroupForm">
+                <h1 class="md-headline" style="text-align: left;">Supply group information</h1>
+                </br>
+                <md-input-container class="md-block">
+                    <label>Group name</label>
+                    <input type="text" name="groupName" ng-model="vm.formData.groupName" placeholder="" required="" />
+                    <div ng-messages="GroupForm.groupName.$error" role="alert" multiple="">
+                        <div class="my-message" ng-message="required">You must supply a group name.</div>
+                    </div>
+                </md-input-container>
+                <div layout="row" style="width: 100%;">
+                    <md-input-container class="md-block" style="width: 50%;">
+                        <label>Start year</label>
+                        <input type="text" name="startYear" ng-model="vm.formData.startYear" placeholder="" required="" />
+                        <div ng-messages="GroupForm.startYear.$error" role="alert" multiple="">
+                            <div class="my-message" ng-message="required">You must supply a starting year.</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container class="md-block" style="width: 50%;">
+                        <label>End year</label>
+                        <input type="text" name="endYear" ng-model="vm.formData.endYear" placeholder="" required="" />
+                        <div ng-messages="GroupForm.EndYear.$error" role="alert" multiple="">
+                            <div class="my-message" ng-message="required">You must supply a ending year.</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <h1 class="md-headline" style="text-align: left;">Add students</h1>
+                </br>
+                <md-content class="md-padding autocomplete" ng-controller="ChipCtrl as ctrl"layout="column">
+                    <md-contact-chips ng-model="ctrl.SelectedStudents" md-contacts="ctrl.Search($query)"
+                    md-contact-name="name" md-contact-email="email" placeholder="Find user"></md-contact-chips>
+                </md-content>
+            </form>
         </md-content>
         <md-dialog-actions layout="row">
-           
+            <md-button class="md-raised md-primary pull-right formPage" md-autofocus>
+                Create group
+            </md-button>
         </md-dialog-actions>
 </md-dialog>

@@ -16,6 +16,7 @@
 }
 #override-login-toolbar{
     background: #555C78;
+    width: 100%;
 }
 .md-button.md-raised.md-primary.formPage:not([disabled]) {
     position: right !important;
@@ -42,4 +43,16 @@ md-input-container:not(.md-input-invalid).md-input-focused label {
     right:0;
     margin-bottom: 30px;
     margin-right: 30px;
+}
+.contactChips md-content.autocomplete {
+    z-index:25;
+}
+.modal{
+    z-index: 20;  
+}
+.modal-backdrop{
+    z-index: 10; 
+}
+.md-autocomplete-suggestions-container {
+    width:50%;
 }
