@@ -1,9 +1,9 @@
 <body ng-app="gmApp" ng-controller="GroupsCtrl">
-    <div flex-xs="" flex-gt-xs="50" style="margin: 0 auto;">
+    <div flex-xs="" flex-gt-xs="50" style="margin: 0 auto;" ng-controller="StudentGroupsCtrl">
         <md-card>
-            <md-card-title>
+            <md-card-title ng-repeat-start="group in studentGroupsDetails">
                 <md-card-title-text>
-                    <span class="md-headline">{{groupName}}</span>
+                    <span class="md-headline">{{group.groupName}}{{group.id}}</span>
                     <div layout="row" layout-align="left"> 
                         <span class="md-subhead" flex="">Status</span>
                         <span class="md-subhead" flex="">Group grade</span>
@@ -11,14 +11,16 @@
                     </div>
                     <div layout="row" layout-align="left">
                         <span class="active md-title" flex="">{{groupStatus}}</span>
-                        <span class="md-title" flex="">{{groupGrade}}</span>
+                        <span class="md-title" flex="">{{group.groupGrade.grade}}</span>
                         <span class="md-title" flex="">{{groupStudentGrade}}</span>
                     </div> 
                 </md-card-title-text>
             </md-card-title>
-            <md-card-content>
+            <md-card-content ng-repeat-end>
                 <div layout="row">
-                    <span class="md-caption" flex="">{{groupStudentList}}</span>
+                    <div>
+                        <span class="md-caption" flex="">{{groupStudentList}}</span>
+                    </div>
                     <md-button class="groupGradeBtn" flex="15">GRADE</md-button>
                 </div>
                 <md-divider></md-divider>
