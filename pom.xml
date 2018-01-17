@@ -77,6 +77,18 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>net.sf.supercsv</groupId>
+            <artifactId>super-csv</artifactId>
+            <version>2.4.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.5.10</version>
+        </dependency>
+
         <!-- Used for the custom configuration -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

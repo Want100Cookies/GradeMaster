@@ -1,16 +1,14 @@
 package com.datbois.grademaster.controller;
 
 import com.datbois.grademaster.model.*;
-import com.datbois.grademaster.service.GradeService;
-import com.datbois.grademaster.service.GroupGradeService;
-import com.datbois.grademaster.service.GroupService;
-import com.datbois.grademaster.service.RoleService;
+import com.datbois.grademaster.service.*;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -20,6 +18,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1")
+//@RequestMapping("/")
 public class GradeController{
 
     @Autowired
@@ -31,6 +30,15 @@ public class GradeController{
     @Autowired
     GroupGradeService groupGradeService;
 
+    @Autowired
+    UserService userService;
+
+    /**
+     * Insert grades for all group members.
+     * Only if logged in as student, teacher or admin.
+     * @endpoint (POST) /api/v1/grade/users/{userId}
+     * @return Inserted grades
+     */
     @RequestMapping(value = "/grade/users/{userId}", method = RequestMethod.POST)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE') or isCurrentUser(#userId)")
     public ResponseEntity createGrade(@PathVariable Long userId, @RequestBody Grade[] grades){
@@ -51,6 +59,13 @@ public class GradeController{
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * Insert group grade for a group.
+     * Only possible if logged in as teacher or admin.
+     * @endpoint (PATCH) /api/v1/grade/group/{groupId}
+     * @return Inserted group grade
+     * @responseStatus OK
+     */
     @RequestMapping(value = "/grade/group/{groupId}", method = RequestMethod.PATCH)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE')")
     @ResponseStatus(HttpStatus.OK)
@@ -62,6 +77,13 @@ public class GradeController{
         return new ResponseEntity<>(groupGrade, HttpStatus.OK);
     }
 
+    /**
+     * Get group grade and all grades assigned and received by users of this particular group.
+     * Only possible if logged in as teacher and admin.
+     * @endpoint (GET) /api/v1/grade/group/{groupId}
+     * @return Group grades and grades assigned and received by users
+     * @responseStatus OK
+     */
     @RequestMapping(value = "/grade/group/{groupId}", method = RequestMethod.GET)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE')")
     @ResponseStatus(HttpStatus.OK)
@@ -89,6 +111,12 @@ public class GradeController{
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * Delete grades given by students only for this particular group.
+     * Only possible if logged in as teacher or admin.
+     * @endpoint (DELETE) /api/v1/grade/group/{groupId}
+     * @responseStatus ACCEPTED
+     */
     @RequestMapping(value = "/grade/group/{groupId}", method = RequestMethod.DELETE)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE')")
     @ResponseStatus(HttpStatus.ACCEPTED)
@@ -103,5 +131,4 @@ public class GradeController{
             }
         }
     }
-
 }
