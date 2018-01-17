@@ -1,45 +1,48 @@
 package com.datbois.grademaster;
 
-import com.datbois.grademaster.model.Grade;
+import com.datbois.grademaster.model.Email;
 import com.datbois.grademaster.model.Group;
-import com.datbois.grademaster.model.GroupGrade;
 import com.datbois.grademaster.model.User;
+import com.datbois.grademaster.service.EmailService;
 import com.datbois.grademaster.service.GradeService;
 import com.datbois.grademaster.service.GroupService;
 import com.datbois.grademaster.service.UserService;
 import io.restassured.http.ContentType;
 import org.hamcrest.Matchers;
-import org.json.JSONArray;
 import org.junit.Test;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 
-import java.util.*;
-
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.core.Is.is;
-
-import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.core.Is.is;
+import static org.mockito.Mockito.verify;
 
 
 public class GradeControllerTests extends OAuthTests {
     @Autowired
-    GradeService gradeService;
+    private GradeService gradeService;
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    GroupService groupService;
+    private GroupService groupService;
+
+    @MockBean
+    private EmailService emailService;
 
     @Test
-    public void TeacherCanGetAllGradesFromAGroup(){
+    public void TeacherCanGetAllGradesFromAGroup() {
         String token = this.obtainAccessToken("jane.doe@stenden.com", "password");
 
         given()
@@ -74,7 +77,7 @@ public class GradeControllerTests extends OAuthTests {
 
         assertThat(result.get("grade"), is(gradeData.get("grade")));
         assertThat(result.get("comment"), is(gradeData.get("comment")));
-        assertThat(smtpServerRule.getMessages().length, is(greaterThan(0)));
+        verify(emailService).sendToEmailQueue(ArgumentMatchers.any(Email.class));
     }
 
     @Test

@@ -9,7 +9,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -65,16 +67,12 @@ public class GradeController {
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE')")
     public GroupGrade insertGroupGrade(Authentication authentication, @PathVariable Long groupId, @RequestBody GroupGrade groupGrade) {
         User user = ((UserDetails) authentication.getPrincipal()).getUser();
+        Group group = groupService.findById(groupId);
+
         groupGrade.setTeacher(user);
+        groupGrade.setGroup(group);
 
-        Group exists = groupService.findById(groupId);
-        exists.setGroupGrade(groupGrade);
-
-        groupGrade = groupGradeService.save(groupGrade);
-
-        groupService.save(exists);
-
-        return groupGrade;
+        return groupGradeService.save(groupGrade);
     }
 
     /**

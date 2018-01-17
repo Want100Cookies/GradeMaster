@@ -1,11 +1,16 @@
 package com.datbois.grademaster;
 
+import com.datbois.grademaster.model.Email;
 import com.datbois.grademaster.model.User;
+import com.datbois.grademaster.service.EmailService;
 import com.datbois.grademaster.service.UserService;
 import io.restassured.http.ContentType;
 import org.junit.Test;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.HashMap;
@@ -14,10 +19,10 @@ import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsNull.notNullValue;
+import static org.mockito.Mockito.verify;
 
 public class AuthControllerTests extends OAuthTests {
 
@@ -26,6 +31,9 @@ public class AuthControllerTests extends OAuthTests {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+    @MockBean
+    private EmailService emailService;
 
     @Test
     public void userCanRequestRetardToken() {
@@ -45,7 +53,7 @@ public class AuthControllerTests extends OAuthTests {
         User testUser = userService.findById(user.getId());
 
         assertThat("RetardToken is set", testUser.getRetardToken(), notNullValue());
-        assertThat("Mail has been send", smtpServerRule.getMessages().length, is(1));
+        verify(emailService).sendToEmailQueue(ArgumentMatchers.any(Email.class));
     }
 
     @Test

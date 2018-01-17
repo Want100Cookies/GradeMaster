@@ -8,8 +8,6 @@ import javax.validation.constraints.NotNull;
 @Entity
 public class Notification {
 
-    public static final String QUEUE = "NotificationQueue";
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

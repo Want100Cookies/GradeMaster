@@ -1,10 +1,8 @@
 package com.datbois.grademaster;
 
-import com.datbois.grademaster.mail.SmtpServerRule;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.runner.RunWith;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,9 +19,6 @@ public abstract class OAuthTests {
 
     @LocalServerPort
     private int port;
-
-    @Rule
-    public SmtpServerRule smtpServerRule = new SmtpServerRule(2525);
 
     @Before
     public void init() {
@@ -52,6 +47,4 @@ public abstract class OAuthTests {
 
         return response.jsonPath().getString("access_token");
     }
-
-
 }

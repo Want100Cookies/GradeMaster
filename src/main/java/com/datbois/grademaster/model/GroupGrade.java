@@ -3,7 +3,6 @@ package com.datbois.grademaster.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 public class GroupGrade extends BaseModel {
@@ -20,8 +19,7 @@ public class GroupGrade extends BaseModel {
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "groupGrade")
     private Group group;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     private User teacher;
 
     public GroupGrade() {

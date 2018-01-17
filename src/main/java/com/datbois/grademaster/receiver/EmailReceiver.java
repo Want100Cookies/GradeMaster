@@ -19,7 +19,7 @@ public class EmailReceiver {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @JmsListener(destination = Email.QUEUE)
-    public void sendNotificationEmail(Email mail) throws IOException {
+    public void sendEmail(Email mail) throws IOException {
         mail.setFrom("no-reply@grademaster.com");
         emailService.sendEmail(mail);
 
