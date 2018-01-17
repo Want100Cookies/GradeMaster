@@ -18,7 +18,7 @@
                     <table cellpadding="0" cellspacing="0" border="0" width="100%">
                         <tr>
                             <td class="mui-panel" style="background-color: #545D76;">
-                                <div class="mui--text-display-1" style="color: #FFF;">
+                                <div class="mui--text-light mui--text-display1 mui--text-center">
                                     Grade Master
                                 </div>
                             </td>
@@ -30,11 +30,16 @@
                                 <div class="mui--text-headline">
                                     <div th:text="${title}"></div>
                                 </div>
+                                <div th:text="${message}"></div>
+
                                 <p>&nbsp;</p>
-                                <div class="mui--divider-bottom" th:text="${message}"></div>
-                                <p>&nbsp;</p>
-                                <div class="mui--text-center">
-                                    <a href="http://localhost:8080/" class="mui-btn mui-btn--primary">Click here to open Grade Master</a>
+                                <div th:if="${buttonText != null}">
+                                    <div th:if="${buttonLink != null}">
+                                        <p>&nbsp;</p>
+                                        <table class="mui-btn" border="0" cellspacing="0" cellpadding="0"><tr><td>
+                                            <a th:href="${buttonLink}" class="mui--text-light" style="background-color: #545D76;" th:text="${buttonText}"></a>
+                                        </td></tr></table>
+                                    </div>
                                 </div>
                             </td>
                         </tr>

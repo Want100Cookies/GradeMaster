@@ -6,6 +6,8 @@ public class Email {
     private String to;
     private String subject;
     private String body;
+    private String link;
+    private String linkText;
 
     public Email(){}
 
@@ -14,6 +16,15 @@ public class Email {
         this.to = to;
         this.subject = subject;
         this.body = body;
+    }
+
+    public Email(String from, String to, String subject, String body, String link, String linkText) {
+        this.from = from;
+        this.to = to;
+        this.subject = subject;
+        this.body = body;
+        this.link = link;
+        this.linkText = linkText;
     }
 
     public String getFrom() {
@@ -48,13 +59,31 @@ public class Email {
         this.body = body;
     }
 
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public String getLinkText() {
+        return linkText;
+    }
+
+    public void setLinkText(String linkText) {
+        this.linkText = linkText;
+    }
+
     @Override
     public String toString() {
-        return "Mail{" +
+        return "Email{" +
                 "from='" + from + '\'' +
                 ", to='" + to + '\'' +
                 ", subject='" + subject + '\'' +
                 ", body='" + body + '\'' +
+                ", link='" + link + '\'' +
+                ", linkText='" + linkText + '\'' +
                 '}';
     }
 }

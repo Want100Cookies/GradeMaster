@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+
 @Component
 public class NotificationReceiver {
 
@@ -22,7 +24,7 @@ public class NotificationReceiver {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @JmsListener(destination = "NotificationQueue")
-    public void sendNotificationEmail(Long notificationId) {
+    public void sendNotificationEmail(Long notificationId) throws IOException {
         Notification notification = notificationRepository.findById(notificationId);
 
         Email mail = new Email();
@@ -31,6 +33,11 @@ public class NotificationReceiver {
         mail.setBody(notification.getMessage());
         mail.setSubject(notification.getTitle());
         mail.setTo(notification.getUser().getEmail());
+
+        if (notification.getLink() != null && notification.getLinkText() != null) {
+            mail.setLinkText(notification.getLinkText());
+            mail.setLink("http://localhost:8080" + notification.getLink());
+        }
 
         emailService.sendEmail(mail);
 

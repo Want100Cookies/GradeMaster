@@ -27,13 +27,23 @@ public class Notification {
     @JsonIgnore
     private User user;
 
+    private String link;
+    private String linkText;
+
     public Notification() {
     }
 
-    public Notification(String title, String message, boolean seen, User user) {
+    public Notification(String title, String message, User user, String link, String linkText) {
         this.title = title;
         this.message = message;
-        this.seen = seen;
+        this.user = user;
+        this.link = link;
+        this.linkText = linkText;
+    }
+
+    public Notification(String title, String message, User user) {
+        this.title = title;
+        this.message = message;
         this.user = user;
     }
 
@@ -77,12 +87,32 @@ public class Notification {
         this.user = user;
     }
 
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public String getLinkText() {
+        return linkText;
+    }
+
+    public void setLinkText(String linkText) {
+        this.linkText = linkText;
+    }
+
     @Override
     public String toString() {
         return "Notification{" +
                 "id=" + id +
+                ", title='" + title + '\'' +
                 ", message='" + message + '\'' +
-                ", seen='" + seen + '\'' +
+                ", seen=" + seen +
+                ", user=" + user +
+                ", link='" + link + '\'' +
+                ", linkText='" + linkText + '\'' +
                 '}';
     }
 }
