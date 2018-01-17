@@ -11,5 +11,7 @@ public interface CourseService {
 
     Course save(Course course);
 
+    long count();
+
     void delete(Long id);
 }

@@ -1,7 +1,9 @@
 package com.datbois.grademaster.service.impl;
 
+import com.datbois.grademaster.model.Group;
 import com.datbois.grademaster.model.User;
 import com.datbois.grademaster.model.UserDetails;
+import com.datbois.grademaster.repository.GroupRepository;
 import com.datbois.grademaster.repository.UserRepository;
 import com.datbois.grademaster.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 @Service
@@ -18,6 +21,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private GroupRepository groupRepository;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -54,6 +60,14 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public void delete(Long id) {
+        User user = userRepository.findOne(id);
+        Set<Group> groups = user.getGroups();
+        for (Group group : groups) {
+            Set<User> users = group.getUsers();
+            users.remove(user);
+            group.setUsers(users);
+            groupRepository.save(group);
+        }
         userRepository.delete(id);
     }
 

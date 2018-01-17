@@ -1,14 +1,14 @@
 package com.datbois.grademaster;
 
 import com.datbois.grademaster.model.Course;
-import com.datbois.grademaster.model.Group;
+import com.datbois.grademaster.model.Education;
 import com.datbois.grademaster.model.User;
 import com.datbois.grademaster.service.CourseService;
+import com.datbois.grademaster.service.EducationService;
 import com.datbois.grademaster.service.GroupService;
 import com.datbois.grademaster.service.UserService;
 import io.restassured.http.ContentType;
 import org.junit.Test;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
@@ -30,8 +30,11 @@ public class CourseControllerTests extends OAuthTests {
     @Autowired
     private GroupService groupService;
 
+    @Autowired
+    private EducationService educationService;
+
     @Test
-    public void userCanViewAllGroups() {
+    public void userCanViewAllCourses() {
         String token = obtainAccessToken("john.doe@student.stenden.com", "password");
 
         given()
@@ -64,8 +67,11 @@ public class CourseControllerTests extends OAuthTests {
     public void adminCanCreateCourse() {
         String token = obtainAccessToken("admin@stenden.com", "password");
 
-        Map<String, String> data = new HashMap<>();
+        Education education = educationService.findById(1L);
+
+        Map<String, Object> data = new HashMap<>();
         data.put("name", "Course Name");
+        data.put("education", education);
 
         Integer id =
                 given()
@@ -85,6 +91,7 @@ public class CourseControllerTests extends OAuthTests {
         Course testCourse = courseService.findById(new Long(id));
 
         assertThat(testCourse.getName(), is(data.get("name")));
+        assertThat(testCourse.getEducation(), notNullValue());
     }
 
     @Test

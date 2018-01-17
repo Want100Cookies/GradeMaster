@@ -56,7 +56,7 @@ public class AuthController {
     public void verifyEmail(@RequestBody Map<String, String> request) {
         User user = userService.findByEmail(request.get("email"));
 
-        if (user.getEmailVerifyToken() == null) {
+        if (user.getEmailVerifyToken() == null && !user.isVerified()) {
             throw new ForbiddenException("Email is already verified");
         }
 
