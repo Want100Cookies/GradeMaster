@@ -43,7 +43,6 @@ public class User extends BaseModel {
     @JsonIgnore
     private String retardToken;
 
-    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinTable(
             joinColumns = @JoinColumn(name = "userId", referencedColumnName = "id"),
