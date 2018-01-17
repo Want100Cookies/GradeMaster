@@ -103,7 +103,7 @@ Add users to this group
 ### (DELETE)
 Delete this user from the group
 
-## /api/{v1}/grade/user/{id}
+## /api/{v1}/grade/users/{id}
 ### (POST)
 Set grades for group members
 

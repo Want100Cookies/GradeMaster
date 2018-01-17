@@ -16,7 +16,8 @@ public class GroupGrade extends BaseModel {
 
     private String comment;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "groupGrade")
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "groupGrade")
     private Group group;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
