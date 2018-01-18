@@ -35,6 +35,8 @@ Verify your email address
 ## /api/{v1}/users
 ### (GET)
 Get all users
+
+Add `?role={role}` to your url to filter on role.
 ### (POST)
 Make new user
 ```

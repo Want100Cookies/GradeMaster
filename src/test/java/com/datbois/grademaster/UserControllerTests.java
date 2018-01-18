@@ -45,6 +45,20 @@ public class UserControllerTests extends OAuthTests {
     }
 
     @Test
+    public void adminCanViewAllStudents() {
+        String token = this.obtainAccessToken("admin@stenden.com", "password");
+
+        given()
+                .auth()
+                .oauth2(token)
+                .when()
+                .get("/api/v1/users?role=student")
+                .then()
+                .contentType(ContentType.JSON)
+                .body("size()", is(1));
+    }
+
+    @Test
     public void teacherCanViewAllUsers() {
         String token = this.obtainAccessToken("jane.doe@stenden.com", "password");
         long count = userService.count();
