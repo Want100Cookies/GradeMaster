@@ -16,21 +16,15 @@ app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService) {
         })
     };
 
-    function DialogController($scope, $mdDialog) {
+    function DialogController($scope, $mdDialog, GroupService) {
         $scope.vm = {
             formData: {
                 groupName: '',
-                period: [],
                 startYear: '',
                 endYear: '',
-                course: {
-                    id: ''
-                },
                 users: [
     
                 ]
-    
-            
             },
         };
 
@@ -43,7 +37,10 @@ app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService) {
         };
 
         $scope.create = function() {
-            console.log($scope.vm.formData);
+            if ($scope.vm.formData.groupName != null && $scope.vm.formData.startYear != null && $scope.vm.formData.startYear)  {
+                GroupService.createGroup($scope.vm.formData);
+                $mdDialog.cancel();
+            }
         }
 
         $scope.usersChange = (val) => {
