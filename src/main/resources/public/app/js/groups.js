@@ -19,7 +19,8 @@ app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService) {
 
         
         },
-    }
+    };
+
     $scope.showAddGroup = function (ev) {
         $mdDialog.show({
             controller: DialogController,
@@ -39,5 +40,10 @@ app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService) {
         $scope.cancel = function () {
             $mdDialog.cancel();
         };
-    }
+
+        $scope.usersChange = (val) => {
+            console.log("USER CHANGE", val);
+            // TODO Set users in formdata (use ng-model i guess)
+        };
+    };
 });
