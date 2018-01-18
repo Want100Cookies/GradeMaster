@@ -9,23 +9,28 @@ var app = angular.module('gmApp', [
     'ui.router'
 ]);
 
-app.controller('LayoutController', function ($scope, $mdSidenav) {
+app.controller('LayoutController', function ($scope, $mdSidenav, $window, $cookies) {
     $scope.openSideNav = function () {
         $mdSidenav('left').open();
     };
     $scope.closeSideNav = function () {
         $mdSidenav('left').close();
     };
+    $scope.logout = function () {
+        angular.forEach($cookies.getAll(), function (v, k) {
+            $cookies.remove(k);
+        });
+        $window.location.reload();
+    }
 });
 
-app.config(function ($stateProvider, $urlRouterProvider) {
-
+app.config(function ($stateProvider) {
     $stateProvider
         .state('root', {
             url: '',
             templateUrl: '/app/pages/app.html',
             resolve: {
-                'auth': function(AuthService){
+                'auth': function (AuthService) {
                     return AuthService.authenticate();
                 },
             }
@@ -53,7 +58,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             url: '/home',
             templateUrl: '/app/pages/app.html',
             resolve: {
-                'auth': function(AuthService){
+                'auth': function (AuthService) {
                     return AuthService.authenticate();
                 },
             }
@@ -62,7 +67,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             url: '/dashboard',
             templateUrl: '/app/pages/dashboard.html',
             resolve: {
-                'auth': function(AuthService){
+                'auth': function (AuthService) {
                     return AuthService.authenticate();
                 },
             }
@@ -71,7 +76,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             url: '/groups',
             templateUrl: '/app/pages/groups.html',
             resolve: {
-                'auth': function(AuthService){
+                'auth': function (AuthService) {
                     return AuthService.authenticate();
                 },
             }
@@ -80,7 +85,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             url: '/grades',
             templateUrl: '/app/pages/grades.html',
             resolve: {
-                'auth': function(AuthService){
+                'auth': function (AuthService) {
                     return AuthService.authenticate();
                 },
             }
