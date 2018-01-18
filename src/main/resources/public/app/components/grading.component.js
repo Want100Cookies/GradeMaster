@@ -57,7 +57,7 @@ function gradingController($stateParams, $http, $cookies, $mdDialog, $state) {
                     })
                 }
 
-                $http.post("http://localhost:8080/api/v1/grades", data, {
+                $http.post("http://localhost:8080/api/v1/grades/users/" + ctrl.self.id, data, {
                     headers: {
                         "Authorization": "Bearer " + accessToken
                     }

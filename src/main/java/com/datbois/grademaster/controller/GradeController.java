@@ -79,13 +79,9 @@ public class GradeController {
      * @return Inserted grades
      * @endpoint (POST) /api/v1/grade/users/{userId}
      */
-//    @RequestMapping(value = "/grades/users/{userId}", method = RequestMethod.POST)
-//    @PreAuthorize("hasAnyAuthority('TEACHER_ROLE','ADMIN_ROLE') or isCurrentUser(#userId)")
-//    public ResponseEntity createGrade(@PathVariable Long userId, @RequestBody Grade[] grades){
-    @RequestMapping(value = "/grades", method = RequestMethod.POST)
-    public ResponseEntity createGrade(@RequestBody Grade[] grades) {
-
-
+    @RequestMapping(value = "/grades/users/{userId}", method = RequestMethod.POST)
+    @PreAuthorize("hasAnyAuthority('TEACHER_ROLE','ADMIN_ROLE') or isCurrentUser(#userId)")
+    public ResponseEntity createGrade(@PathVariable Long userId, @RequestBody Grade[] grades) {
         List<Map<String, Object>> response = new ArrayList<>();
 
         for (Grade grade : grades) {
