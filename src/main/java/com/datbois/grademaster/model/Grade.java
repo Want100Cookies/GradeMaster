@@ -8,6 +8,11 @@ import javax.validation.constraints.Null;
 import java.util.Set;
 
 @Entity
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"from_user_id","to_user_id","group_id"})
+        }
+)
 public class Grade extends BaseModel{
 
     @Id

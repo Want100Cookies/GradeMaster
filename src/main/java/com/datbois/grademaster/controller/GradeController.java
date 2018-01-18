@@ -30,13 +30,40 @@ public class GradeController{
     UserService userService;
 
     /**
+     * Get final grade for a student in a particular group.
+     * Only if logged in as student or teacher.
+     * @endpoint (GET) /grades/groups/{groupId}/users/{userId}
+     * @return final grade
+     */
+    @RequestMapping(value = "/grades/groups/{groupId}/users/{userId}", method = RequestMethod.GET)
+    @PreAuthorize("hasAnyAuthority('TEACHER_ROLE','ADMIN_ROLE') or isCurrentUser(#userId)")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity getFinalGrade(@PathVariable Long groupId, @PathVariable Long userId){
+        Map<String, Object> finalGrade = new HashMap<>();
+
+        Group exists = groupService.findById(groupId);
+        for(User user : exists.getUsers()){
+            if(user.getId() == userId){
+                for(Grade grade : exists.getGrades()){
+                    for(Role role : grade.getFromUser().getRoles()){
+                        if(role.getCode().contains("TEACHER_ROLE")){
+                            finalGrade.put("grade", grade.getGrade());
+                        }
+                    }
+                }
+            }
+        }
+        return new ResponseEntity<>(finalGrade, HttpStatus.OK);
+    }
+
+    /**
      * Insert grades for all group members.
      * Only if logged in as student, teacher or admin.
      * @endpoint (POST) /api/v1/grade/users/{userId}
      * @return Inserted grades
      */
     @RequestMapping(value = "/grades/users/{userId}", method = RequestMethod.POST)
-    @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE') or isCurrentUser(#userId)")
+    @PreAuthorize("hasAnyAuthority('TEACHER_ROLE','ADMIN_ROLE') or isCurrentUser(#userId)")
     public ResponseEntity createGrade(@PathVariable Long userId, @RequestBody Grade[] grades){
 
         List<Map<String, Object>> response = new ArrayList<>();
@@ -63,7 +90,7 @@ public class GradeController{
      * @responseStatus OK
      */
     @RequestMapping(value = "/grades/groups/{groupId}", method = RequestMethod.PATCH)
-    @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE')")
+    @PreAuthorize("hasAnyAuthority('TEACHER_ROLE','ADMIN_ROLE')")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity insertGroupGrade(@PathVariable Long groupId, @RequestBody GroupGrade groupGrade){
         Group exists = groupService.findById(groupId);
@@ -81,7 +108,7 @@ public class GradeController{
      * @responseStatus OK
      */
     @RequestMapping(value = "/grades/groups/{groupId}", method = RequestMethod.GET)
-    @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE')")
+    @PreAuthorize("hasAnyAuthority('TEACHER_ROLE','ADMIN_ROLE')")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity getAllGradesForAGroup(@PathVariable Long groupId){
         Group exists = groupService.findById(groupId);

@@ -49,16 +49,19 @@ INSERT INTO `group_periods` (`group_id`, `period`) VALUES
 
 INSERT INTO `user_groups` (`user_id`, `group_id`) VALUES
   (1, 1),
+  (2, 1),
   (1, 2),
+  (2, 2),
   (2, 3),
-  (3, 3);
+  (3, 3),
+  (1, 3);
 
 INSERT INTO `grade` (`id`, `grade`, `motivation`, `from_user_id`, `group_id`, `to_user_id`) VALUES
   (1, 8, "motivation", 1, 1, 1),
-  (2, 7, "motivation1", 2, 3, 2),
-  (3, 5, "motivation2", 3, 3, 2),
-  (4, 2, "motivation3", 3, 3, 3),
-  (5, 2, "motivation4", 2, 3, 3);
+  (2, 8, "final grade", 2, 1, 1),
+  (3, 8.1, "final grade", 2, 2, 1),
+  (4, 8.2, "final grade", 2, 3, 1),
+  (5, 2, "delete this", 1, 3, 1);
 
 INSERT INTO `notification`(`id`, `title`, `message`, `seen`, `user_id`) VALUES
  (1, "Test", "You have pending grades!", 0, 1),

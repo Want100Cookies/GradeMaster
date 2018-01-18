@@ -1,9 +1,6 @@
 package com.datbois.grademaster;
 
-import com.datbois.grademaster.model.Grade;
-import com.datbois.grademaster.model.Group;
-import com.datbois.grademaster.model.GroupGrade;
-import com.datbois.grademaster.model.User;
+import com.datbois.grademaster.model.*;
 import com.datbois.grademaster.service.GradeService;
 import com.datbois.grademaster.service.GroupService;
 import com.datbois.grademaster.service.UserService;
@@ -23,6 +20,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
 
@@ -35,6 +33,44 @@ public class GradeControllerTests extends OAuthTests {
 
     @Autowired
     GroupService groupService;
+
+    @Test
+    public void StudentCanGetFinalGradeForGroup(){
+        String token = this.obtainAccessToken("john.doe@student.stenden.com", "password");
+
+        Long id = 1L;
+
+        Grade finalGrade = null;
+
+        Group group = groupService.findById(id);
+        User user = userService.findById(id);
+
+        for(User u : group.getUsers()){
+            if (u.getId() == user.getId()){
+                for(Grade grade : group.getGrades()){
+                    for(Role role : grade.getFromUser().getRoles()){
+                        if(role.getCode().contains("TEACHER_ROLE")){
+                            finalGrade = grade;
+                        }
+                    }
+                }
+            }
+        }
+
+        HashMap<String, Object> result = given()
+                .auth()
+                .oauth2(token)
+                .when()
+                .get("/api/v1/grades/groups/"+id+"/users/"+id)
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .path("$");
+
+
+        System.out.println(result);
+        assertThat(result.get("grade"), is((float)finalGrade.getGrade()));
+    }
 
     @Test
     public void TeacherCanGetAllGradesFromAGroup(){
@@ -80,7 +116,7 @@ public class GradeControllerTests extends OAuthTests {
 
         User fromUser = userService.findById(1L);
         User toUser = userService.findById(1L);
-        Group group = groupService.findById(1L);
+        Group group = groupService.findById(2L);
 
         Map<String, Object> gradeData = new HashMap<>();
         gradeData.put("grade", 3.0f);
@@ -118,10 +154,10 @@ public class GradeControllerTests extends OAuthTests {
                 .auth()
                 .oauth2(token)
                 .when()
-                .delete("/api/v1/grades/groups/1")
+                .delete("/api/v1/grades/groups/3")
                 .then()
                 .statusCode(HttpStatus.ACCEPTED.value());
 
-        assertThat(gradeService.findById(1L), Matchers.is(nullValue()));
+        assertThat(gradeService.findById(5L), Matchers.is(nullValue()));
     }
 }
