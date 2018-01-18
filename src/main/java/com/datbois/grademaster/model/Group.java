@@ -26,11 +26,10 @@ public class Group extends BaseModel {
     private Course course;
 
     @ManyToMany(mappedBy = "groups", fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
-    @JsonIgnore
     private Set<User> users;
 
     @OneToOne(fetch = FetchType.LAZY)
-    public GroupGrade groupGrade;
+    private GroupGrade groupGrade;
 
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "group")
