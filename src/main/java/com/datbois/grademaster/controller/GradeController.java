@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.Null;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +33,9 @@ public class GradeController {
 
     @Autowired
     private CsvGeneratorUtil csvGenerator;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * Get final grade for a student in a particular group.
@@ -73,6 +77,13 @@ public class GradeController {
         List<Map<String, Object>> response = new ArrayList<>();
 
         for(Grade grade : grades){
+            if(grade.getMotivation() == ""){
+                for(Role role : userService.findById(grade.getFromUser().getId()).getRoles()){
+                    if(role.getCode().contains("STUDENT_ROLE")){
+                        grade.setGrade(null);
+                    }
+                }
+            }
             gradeService.save(grade);
             Map<String, Object> data = new HashMap<>();
             data.put("grade", grade.getGrade());

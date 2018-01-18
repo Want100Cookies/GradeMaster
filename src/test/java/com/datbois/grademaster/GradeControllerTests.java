@@ -23,9 +23,7 @@ import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.verify;
 
@@ -42,6 +40,72 @@ public class GradeControllerTests extends OAuthTests {
 
     @MockBean
     private EmailService emailService;
+
+    @Test
+    public void StudentInsertGradeWithoutMotivationDoesNotCount(){
+        String token = this.obtainAccessToken("john.doe@student.stenden.com", "password");
+
+        User fromUser = userService.findById(1L);
+        User toUser = userService.findById(1L);
+        Group group = groupService.findById(2L);
+
+        Map<String, Object> gradeData = new HashMap<>();
+        gradeData.put("grade", 3.0f);
+        gradeData.put("motivation", "");
+        gradeData.put("fromUser", fromUser);
+        gradeData.put("toUser", toUser);
+        gradeData.put("group", group);
+
+        List<Map<String, Object>> grades = new ArrayList<>();
+        grades.add(gradeData);
+
+        ArrayList<Map<String, Object>> result = given()
+                .auth()
+                .oauth2(token)
+                .contentType(ContentType.JSON)
+                .body(grades)
+                .post("/api/v1/grades/users/1")
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .path("$");
+
+        assertThat(result.get(0).get("grade"), Matchers.is(nullValue()));
+    }
+
+    @Test
+    public void TeacherInsertGradeWithoutMotivation(){
+        String token = this.obtainAccessToken("jane.doe@stenden.com", "password");
+
+        gradeService.delete(2L);
+
+        User fromUser = userService.findById(2L);
+        User toUser = userService.findById(1L);
+        Group group = groupService.findById(1L);
+
+        Map<String, Object> gradeData = new HashMap<>();
+        gradeData.put("grade", 3.0f);
+        gradeData.put("motivation", "");
+        gradeData.put("fromUser", fromUser);
+        gradeData.put("toUser", toUser);
+        gradeData.put("group", group);
+
+        List<Map<String, Object>> grades = new ArrayList<>();
+        grades.add(gradeData);
+
+        ArrayList<Map<String, Object>> result = given()
+                .auth()
+                .oauth2(token)
+                .contentType(ContentType.JSON)
+                .body(grades)
+                .post("/api/v1/grades/users/1")
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .path("$");
+
+        assertThat(result.get(0).get("grade"), Matchers.is(notNullValue()));
+    }
 
     @Test
     public void StudentCanGetFinalGradeForGroup(){
@@ -78,7 +142,7 @@ public class GradeControllerTests extends OAuthTests {
 
 
         System.out.println(result);
-        assertThat(result.get("grade"), Matchers.is((float)finalGrade.getGrade()));
+        assertThat(result.get("grade"), Matchers.is(Float.parseFloat(finalGrade.getGrade().toString())));
     }
 
     @Test
@@ -123,6 +187,8 @@ public class GradeControllerTests extends OAuthTests {
     @Test
     public void StudentCanInsertGrade() {
         String token = this.obtainAccessToken("john.doe@student.stenden.com", "password");
+
+        gradeService.delete(3L);
 
         User fromUser = userService.findById(1L);
         User toUser = userService.findById(1L);

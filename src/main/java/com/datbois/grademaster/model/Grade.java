@@ -1,5 +1,6 @@
 package com.datbois.grademaster.model;
 
+import com.sun.istack.internal.Nullable;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.persistence.*;
@@ -19,7 +20,8 @@ public class Grade extends BaseModel{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private double grade;
+    @Nullable
+    private Double grade;
 
     private String motivation;
 
@@ -36,7 +38,7 @@ public class Grade extends BaseModel{
 
     }
 
-    public Grade(double grade, String motivation, User fromUser, User toUser, Group group){
+    public Grade(Double grade, String motivation, User fromUser, User toUser, Group group){
         this.grade = grade;
         this.motivation = motivation;
         this.fromUser = fromUser;
@@ -52,11 +54,11 @@ public class Grade extends BaseModel{
         this.id = id;
     }
 
-    public double getGrade() {
+    public Double getGrade() {
         return grade;
     }
 
-    public void setGrade(double grade) {
+    public void setGrade(Double grade) {
         this.grade = grade;
     }
 

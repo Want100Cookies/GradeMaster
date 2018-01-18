@@ -49,12 +49,10 @@ INSERT INTO `group_periods` (`group_id`, `period`) VALUES
 
 INSERT INTO `user_groups` (`user_id`, `group_id`) VALUES
   (1, 1),
-  (2, 1),
   (2, 2),
   (1, 2),
   (2, 3),
-  (3, 3),
-  (1, 3);
+  (3, 3);
 
 INSERT INTO `grade` (`id`, `grade`, `motivation`, `from_user_id`, `group_id`, `to_user_id`) VALUES
   (1, 8, "motivation", 1, 1, 1),
