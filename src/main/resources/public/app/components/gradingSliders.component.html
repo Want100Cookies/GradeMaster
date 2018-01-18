@@ -1,15 +1,17 @@
 <md-list>
-    <md-list-item layout="row" layout-margin ng-repeat="student in $ctrl.students">
-        <div flex="noshrink">
-            {{student.name}}
+    <md-list-item class="no-left-margin no-right-margin" layout="row" layout-margin
+                  ng-repeat="student in $ctrl.students">
+        <div flex="noshrink" class="no-left-margin">
+            <div class="md-headline">{{student.name}}</div>
+            <div class="md-caption">{{student.referenceId}}</div>
         </div>
         <div flex="noshrink">
-            <b><i>{{student.grade|number:1}}</i></b>
+            <div class="md-title">{{student.grade|number:1}}</div>
         </div>
         <md-slider flex="grow" min="01.0" max="10.0" step="0.1" ng-model="student.grade"
                    ng-change="$ctrl.calculate(student)"
                    aria-label="Grade slider"></md-slider>
-        <div flex="none">
+        <div flex="none" class="no-right-margin">
             <md-button ng-click="student.lock = !student.lock" class="md-icon-button" aria-label="Lock button">
                 <md-icon md-svg-src="/app/icons/lock{{student.lock ? '' : '_open'}}.svg"
                          aria-hidden="true"></md-icon>
@@ -17,7 +19,9 @@
             </md-button>
         </div>
     </md-list-item>
+    <div class="md-caption">
         <i>Total: </i>
         <b>{{$ctrl.calculateCurrent()|number:2}}</b>
+    </div>
     </md-list-item>
 </md-list>

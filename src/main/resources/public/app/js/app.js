@@ -3,7 +3,6 @@ var app = angular.module('gmApp', [
     'ngMaterial',
     'ngMessages',
     'ngAnimate',
-    'ngRoute',
     'ngResource',
     'ngCookies',
     'ui.router'
@@ -81,9 +80,9 @@ app.config(function ($stateProvider) {
                 },
             }
         })
-        .state('app.grades', {
-            url: '/grades',
-            templateUrl: '/app/pages/grades.html',
+        .state('app.grading', {
+            url: '/groups/:groupId/grading',
+            component: 'grading',
             resolve: {
                 'auth': function (AuthService) {
                     return AuthService.authenticate();
