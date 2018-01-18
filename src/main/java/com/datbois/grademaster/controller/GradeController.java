@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1")
-public class GradeController{
+public class GradeController {
 
     @Autowired
     GradeService gradeService;
@@ -64,13 +65,14 @@ public class GradeController{
      */
     @RequestMapping(value = "/grades/groups/{groupId}", method = RequestMethod.PATCH)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE')")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity insertGroupGrade(@PathVariable Long groupId, @RequestBody GroupGrade groupGrade){
-        Group exists = groupService.findById(groupId);
-        exists.setGroupGrade(groupGrade);
-        groupGradeService.save(groupGrade);
-        groupService.save(exists);
-        return new ResponseEntity<>(groupGrade, HttpStatus.OK);
+    public GroupGrade insertGroupGrade(Authentication authentication, @PathVariable Long groupId, @RequestBody GroupGrade groupGrade) {
+        User user = ((UserDetails) authentication.getPrincipal()).getUser();
+        Group group = groupService.findById(groupId);
+
+        groupGrade.setTeacher(user);
+        groupGrade.setGroup(group);
+
+        return groupGradeService.save(groupGrade);
     }
 
     /**

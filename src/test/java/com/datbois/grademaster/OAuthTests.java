@@ -47,6 +47,4 @@ public abstract class OAuthTests {
 
         return response.jsonPath().getString("access_token");
     }
-
-
 }
