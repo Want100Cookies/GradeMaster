@@ -145,7 +145,8 @@ public class GroupController {
     public Group setGroupUsers(@PathVariable Long groupId, @RequestBody Set<User> users) {
         Group group = groupService.findById(groupId);
         if (group == null) throw new InvalidParameterException("Group id not found");
-        return groupService.save(groupService.setUsers(group, users));
+        group.setUsers(users);
+        return groupService.save(group);
     }
 
 }
