@@ -6,6 +6,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
+import java.text.SimpleDateFormat;
 import java.util.Set;
 
 @Entity

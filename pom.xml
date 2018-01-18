@@ -123,6 +123,12 @@
             <version>0.9.4</version>
         </dependency>
 
+        <!-- Used for PDF generation -->
+        <dependency>
+            <groupId>org.xhtmlrenderer</groupId>
+            <artifactId>flying-saucer-pdf</artifactId>
+            <version>9.1.9</version>
+        </dependency>
     </dependencies>
 
     <build>

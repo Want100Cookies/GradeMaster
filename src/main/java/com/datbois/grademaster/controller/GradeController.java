@@ -3,6 +3,8 @@ package com.datbois.grademaster.controller;
 import com.datbois.grademaster.model.*;
 import com.datbois.grademaster.service.*;
 import com.datbois.grademaster.util.CsvGeneratorUtil;
+import com.datbois.grademaster.util.PdfGeneratorUtil;
+import com.lowagie.text.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +37,9 @@ public class GradeController {
     private CsvGeneratorUtil csvGenerator;
 
     @Autowired
+    private PdfGeneratorUtil pdfGenerator;
+
+    @Autowired
     private UserService userService;
 
     /**
@@ -63,7 +68,7 @@ public class GradeController {
         }
         return new ResponseEntity<>(finalGrade, HttpStatus.OK);
     }
-
+  
     /**
      * Insert grades for all group members.
      * Only if logged in as student, teacher or admin.
@@ -171,7 +176,7 @@ public class GradeController {
         }
     }
 
-    @RequestMapping(value = "/grades/groups/{groupId}/exports/csv", method = RequestMethod.GET)
+    @RequestMapping(value = "/grades/groups/{groupId}/export.csv", method = RequestMethod.GET)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE') and isInGroup(#groupId)")
     public void exportGradesCsv(HttpServletResponse response, @PathVariable Long groupId) throws IOException {
         Group group = groupService.findById(groupId);
@@ -189,6 +194,19 @@ public class GradeController {
             }
         }
 
+        response.flushBuffer();
+    }
+
+    @RequestMapping(value = "/grades/groups/{groupId}/export.pdf", method = RequestMethod.GET)
+    @PreAuthorize("hasAnyAuthority('TEACHER_ROLE') and isInGroup(#groupId)")
+    public void exportGradesPdf(HttpServletResponse response, @PathVariable Long groupId) throws IOException, DocumentException {
+        response.addHeader("Content-disposition", "inline;filename=grade.pdf");
+        response.addHeader("Content-type", "application/pdf");
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("group", groupService.findById(groupId));
+
+        pdfGenerator.renderPdf("grades", params, response.getOutputStream());
         response.flushBuffer();
     }
 }

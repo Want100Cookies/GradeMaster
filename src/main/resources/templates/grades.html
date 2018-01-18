@@ -1,0 +1,64 @@
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"/>
+    <style>
+        * {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        td {
+            font-weight: lighter;
+        }
+    </style>
+</head>
+<body>
+<h1>Grades for group '<span th:text="${group.getGroupName()}"></span>'</h1>
+
+<table cellspacing="10">
+    <tr>
+        <td>Eduction:</td>
+        <td th:text="${group.getCourse().getEducation().getName()}"></td>
+    </tr>
+    <tr>
+        <td>Course:</td>
+        <td th:text="${group.getCourse().getName()}"></td>
+    </tr>
+    <tr>
+        <td>Group name:</td>
+        <td th:text="${group.getGroupName()}"></td>
+    </tr>
+    <tr>
+        <td>Year:</td>
+        <td>
+            <span th:text="${group.getStartYear()}"></span>
+            -
+            <span th:text="${group.getEndYear()}"></span>
+        </td>
+    </tr>
+    <tr>
+        <td>Periods</td>
+        <td th:text="${#strings.arrayJoin(group.getPeriod(), ', ')}"></td>
+    </tr>
+</table>
+
+<table cellspacing="10">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Student number</th>
+        <th>Grade</th>
+        <th>Motivation</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="grade : ${group.getGrades()}">
+        <td th:text="${grade.getToUser().getName()}"></td>
+        <td th:text="${grade.getToUser().getReferenceId()}"></td>
+        <td th:text="${grade.getGrade()}"></td>
+        <td th:text="${grade.getMotivation()}"></td>
+    </tr>
+    </tbody>
+</table>
+<p><small>Export generated at <span th:text="${new java.text.SimpleDateFormat('yyyy-MM-dd HH:mm:ss').format(new java.util.Date())}"></span></small></p>
+</body>
+</html>
