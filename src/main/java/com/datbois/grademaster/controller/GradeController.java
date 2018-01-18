@@ -42,6 +42,30 @@ public class GradeController {
     @Autowired
     private UserService userService;
 
+    @RequestMapping(value = "/grades/status/groups/{groupId}", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity getGradingStatus(@PathVariable Long groupId){
+        Map<String, Status> status = new HashMap<>();
+
+        Status current;
+
+        Group group = groupService.findById(groupId);
+
+        if(group != null){
+            current = Status.Open;
+            if(group.getGroupGrade() != null){
+                current = Status.Pending;
+
+                if(group.getStudents().size() == group.getGradesFromTeacherToStudent().size()){
+                    current = Status.Closed;
+                }
+            }
+            status.put("status", current);
+        }
+
+        return new ResponseEntity<>(status, HttpStatus.OK);
+    }
+
     /**
      * Get final grade for a student in a particular group.
      * Only if logged in as student or teacher.

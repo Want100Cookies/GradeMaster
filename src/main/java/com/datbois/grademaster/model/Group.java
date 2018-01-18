@@ -3,6 +3,8 @@ package com.datbois.grademaster.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -119,6 +121,34 @@ public class Group extends BaseModel {
 
     public void setGrades(List<Grade> grades) {
         this.grades = grades;
+    }
+
+    public Set<User> getStudents(){
+        Set<User> students = new HashSet<>();
+
+        for(User user : this.users){
+            for(Role role : user.getRoles()){
+                if(role.getCode().contains("STUDENT_ROLE")){
+                    students.add(user);
+                }
+            }
+        }
+
+        return students;
+    }
+
+    public List<Grade> getGradesFromTeacherToStudent(){
+        List<Grade> grades = new ArrayList<>();
+
+        for(Grade grade : this.getGrades()){
+            for(Role role : grade.getFromUser().getRoles()){
+                if(role.getCode().contains("TEACHER_ROLE")){
+                    grades.add(grade);
+                }
+            }
+        }
+
+        return grades;
     }
 
     @Override
