@@ -1,10 +1,8 @@
 <md-card>
     <md-card-header>
-        <md-card-title>
-            <div class="md-display">
-                Grading
-            </div>
-        </md-card-title>
+        <div class="md-display-1">
+            Grading
+        </div>
     </md-card-header>
     <md-card-content>
         <div class="md-caption">
@@ -14,6 +12,7 @@
         <grading-sliders students="$ctrl.students" group-grade="$ctrl.groupGrade"></grading-sliders>
     </md-card-content>
     <md-card-actions align="end">
-        <md-button class="md-primary md-raised formPage">Save</md-button>
+        <md-progress-circular class="spinner" md-mode="indeterminate" ng-show="$ctrl.loading"></md-progress-circular>
+        <md-button ng-click="$ctrl.save()" class="md-primary md-raised formPage">Save</md-button>
     </md-card-actions>
 </md-card>
