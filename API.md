@@ -35,6 +35,8 @@ Verify your email address
 ## /api/{v1}/users
 ### (GET)
 Get all users
+
+Add `?role={role}` to your url to filter on role.
 ### (POST)
 Make new user
 ```
@@ -103,7 +105,7 @@ Add users to this group
 ### (DELETE)
 Delete this user from the group
 
-## /api/{v1}/grade/user/{id}
+## /api/{v1}/grade/users/{id}
 ### (POST)
 Set grades for group members
 

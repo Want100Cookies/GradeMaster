@@ -1,8 +1,7 @@
 package com.datbois.grademaster.service.impl;
 
-import com.datbois.grademaster.model.Group;
-import com.datbois.grademaster.model.User;
-import com.datbois.grademaster.model.UserDetails;
+import com.datbois.grademaster.model.*;
+import com.datbois.grademaster.repository.GradeRepository;
 import com.datbois.grademaster.repository.GroupRepository;
 import com.datbois.grademaster.repository.UserRepository;
 import com.datbois.grademaster.service.UserService;
@@ -26,6 +25,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     private GroupRepository groupRepository;
 
     @Autowired
+    private GradeRepository gradeRepository;
+
+    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
@@ -41,6 +43,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     public List<User> findAll() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public List<User> findByRole(Role role) {
+        return userRepository.findAllByRolesContaining(role);
     }
 
     @Override
@@ -67,6 +74,14 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             users.remove(user);
             group.setUsers(users);
             groupRepository.save(group);
+        }
+        List<Grade> gradesReceived = user.getGradesReceived();
+        for (Grade grade : gradesReceived) {
+            gradeRepository.delete(grade.getId());
+        }
+        List<Grade> gradesDistributed = user.getGradeDistributed();
+        for (Grade grade : gradesDistributed) {
+            gradeRepository.delete(grade.getId());
         }
         userRepository.delete(id);
     }

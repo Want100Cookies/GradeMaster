@@ -1,21 +1,30 @@
 package com.datbois.grademaster;
 
+import com.datbois.grademaster.model.Grade;
 import com.datbois.grademaster.model.Group;
+import com.datbois.grademaster.model.GroupGrade;
 import com.datbois.grademaster.model.User;
 import com.datbois.grademaster.service.GradeService;
 import com.datbois.grademaster.service.GroupService;
 import com.datbois.grademaster.service.UserService;
 import io.restassured.http.ContentType;
 import org.hamcrest.Matchers;
+import org.json.JSONArray;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+
+import java.util.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.nullValue;
+
 
 public class GradeControllerTests extends OAuthTests {
     @Autowired
@@ -26,6 +35,20 @@ public class GradeControllerTests extends OAuthTests {
 
     @Autowired
     GroupService groupService;
+
+    @Test
+    public void TeacherCanGetAllGradesFromAGroup(){
+        String token = this.obtainAccessToken("jane.doe@stenden.com", "password");
+
+        given()
+                .auth()
+                .oauth2(token)
+                .when()
+                .get("/api/v1/grades/groups/3")
+                .then()
+                .contentType(ContentType.JSON)
+                .body("size()", greaterThan(0));
+    }
 
     @Test
     public void TeacherCanInsertGroupGrade() {
@@ -41,7 +64,7 @@ public class GradeControllerTests extends OAuthTests {
                 .contentType(ContentType.JSON)
                 .body(gradeData)
                 .when()
-                .patch("/api/v1/grade/group/1")
+                .patch("/api/v1/grades/groups/1")
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .extract()
@@ -66,21 +89,39 @@ public class GradeControllerTests extends OAuthTests {
         gradeData.put("toUser", toUser);
         gradeData.put("group", group);
 
-        HashMap<String, Object> result = given()
+        List<Map<String, Object>> grades = new ArrayList<>();
+        grades.add(gradeData);
+
+        ArrayList<Map<String, Object>> result = given()
                 .auth()
                 .oauth2(token)
                 .contentType(ContentType.JSON)
-                .body(gradeData)
-                .post("/api/v1/grade")
+                .body(grades)
+                .post("/api/v1/grades/users/1")
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .extract()
                 .path("$");
 
-        assertThat(result.get("grade"), Matchers.is(gradeData.get("grade")));
-        assertThat(result.get("motivation"), Matchers.is(gradeData.get("motivation")));
-        assertThat(Long.parseLong(result.get("fromUser").toString()), Matchers.is(fromUser.getId()));
-        assertThat(Long.parseLong(result.get("toUser").toString()), Matchers.is(toUser.getId()));
-        assertThat(Long.parseLong(result.get("group").toString()), Matchers.is(group.getId()));
+        assertThat(result.get(0).get("grade"), Matchers.is(gradeData.get("grade")));
+        assertThat(result.get(0).get("motivation"), Matchers.is(gradeData.get("motivation")));
+        assertThat(Long.parseLong(result.get(0).get("fromUser").toString()), Matchers.is(fromUser.getId()));
+        assertThat(Long.parseLong(result.get(0).get("toUser").toString()), Matchers.is(toUser.getId()));
+        assertThat(Long.parseLong(result.get(0).get("group").toString()), Matchers.is(group.getId()));
+    }
+
+    @Test
+    public void DeleteGrades() {
+        String token = this.obtainAccessToken("admin@stenden.com", "password");
+
+        given()
+                .auth()
+                .oauth2(token)
+                .when()
+                .delete("/api/v1/grades/groups/1")
+                .then()
+                .statusCode(HttpStatus.ACCEPTED.value());
+
+        assertThat(gradeService.findById(1L), Matchers.is(nullValue()));
     }
 }
