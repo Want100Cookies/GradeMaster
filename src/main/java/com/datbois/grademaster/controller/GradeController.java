@@ -85,7 +85,7 @@ public class GradeController {
             if(grade.getMotivation() == ""){
                 for(Role role : userService.findById(grade.getFromUser().getId()).getRoles()){
                     if(role.getCode().contains("STUDENT_ROLE")){
-                        grade.setGrade(null);
+                        grade.setValid(false);
                     }
                 }
             }
@@ -96,6 +96,7 @@ public class GradeController {
             data.put("fromUser", grade.getFromUser().getId());
             data.put("toUser", grade.getToUser().getId());
             data.put("group", grade.getGroup().getId());
+            data.put("valid", grade.isValid());
             response.add(data);
         }
 

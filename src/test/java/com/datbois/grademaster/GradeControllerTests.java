@@ -70,7 +70,7 @@ public class GradeControllerTests extends OAuthTests {
                 .extract()
                 .path("$");
 
-        assertThat(result.get(0).get("grade"), Matchers.is(nullValue()));
+        assertThat(result.get(0).get("valid"), Matchers.is(false));
     }
 
     @Test
@@ -104,7 +104,7 @@ public class GradeControllerTests extends OAuthTests {
                 .extract()
                 .path("$");
 
-        assertThat(result.get(0).get("grade"), Matchers.is(notNullValue()));
+        assertThat(result.get(0).get("valid"), Matchers.is(true));
     }
 
     @Test
