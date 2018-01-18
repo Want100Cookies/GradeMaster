@@ -86,8 +86,7 @@ public class GradeControllerTests extends OAuthTests {
 
         User fromUser = userService.findById(1L);
         User toUser = userService.findById(1L);
-        Group group = groupService.findById(1L);
-        gradeService.delete(1L);
+        Group group = groupService.findById(2L);
 
         Map<String, Object> gradeData = new HashMap<>();
         gradeData.put("grade", 3.0f);

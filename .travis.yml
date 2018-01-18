@@ -4,8 +4,11 @@ jdk:
 sudo: required
 services:
   - docker
+  - mysql
 before_script:
-  - sudo /etc/init.d/mysql stop
-  - docker-compose up -d mysql activemq
+  - mysql -u root -e "CREATE DATABASE grademaster;"
+  - mysql -u root -e "CREATE USER 'dbuser'@'localhost' IDENTIFIED BY 'dbpassword';"
+  - mysql -u root -e "GRANT ALL ON grademaster.* TO 'dbuser'@'localhost';"
+  - docker-compose up -d activemq
 notifications:
   email: false
