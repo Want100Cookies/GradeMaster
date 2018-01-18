@@ -4,22 +4,6 @@ app.controller('GroupsCtrl', function ($scope) {
 
 app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService) {
     $scope.status = '  ';
-    $scope.vm = {
-        formData: {
-            groupName: '',
-            period: [],
-            startYear: '',
-            endYear: '',
-            course: {
-                id: ''
-            },
-            SelectedStudents: [
-
-            ]
-
-        
-        },
-    };
 
     $scope.showAddGroup = function (ev) {
         $mdDialog.show({
@@ -33,6 +17,23 @@ app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService) {
     };
 
     function DialogController($scope, $mdDialog) {
+        $scope.vm = {
+            formData: {
+                groupName: '',
+                period: [],
+                startYear: '',
+                endYear: '',
+                course: {
+                    id: ''
+                },
+                users: [
+    
+                ]
+    
+            
+            },
+        };
+
         $scope.hide = function () {
             $mdDialog.hide();
         };
@@ -41,8 +42,12 @@ app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService) {
             $mdDialog.cancel();
         };
 
+        $scope.create = function() {
+            console.log($scope.vm.formData);
+        }
+
         $scope.usersChange = (val) => {
-            console.log("USER CHANGE", val);
+            $scope.vm.formData.users = val;
             // TODO Set users in formdata (use ng-model i guess)
         };
     };
