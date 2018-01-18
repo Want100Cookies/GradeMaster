@@ -1,7 +1,10 @@
 package com.datbois.grademaster.controller;
 
+import com.datbois.grademaster.configuration.DomainProperties;
 import com.datbois.grademaster.exception.ForbiddenException;
+import com.datbois.grademaster.model.Email;
 import com.datbois.grademaster.model.User;
+import com.datbois.grademaster.service.EmailService;
 import com.datbois.grademaster.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +20,12 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private DomainProperties domainProperties;
+
     @RequestMapping(value = "/auth/retard", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void requestPasswordChange(@RequestBody Map<String, String> request) {
@@ -27,7 +36,15 @@ public class AuthController {
             userService.save(user);
         }
 
-        // Send email
+        Email verificationMail = new Email(
+                user.getEmail(),
+                "Reset your password",
+                "Someone has requested a password change for your email. You can click on the following button to reset it. If you did not request a password change you can ignore this email.",
+                domainProperties.getBase() + String.format("/#!/reset?token=%s", user.getRetardToken()),
+                "Reset"
+        );
+
+        emailService.sendToEmailQueue(verificationMail);
     }
 
     @RequestMapping(value = "/auth/retard", method = RequestMethod.PATCH)

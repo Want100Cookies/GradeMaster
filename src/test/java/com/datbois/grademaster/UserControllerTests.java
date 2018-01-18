@@ -1,12 +1,16 @@
 package com.datbois.grademaster;
 
+import com.datbois.grademaster.model.Email;
 import com.datbois.grademaster.model.Role;
 import com.datbois.grademaster.model.User;
+import com.datbois.grademaster.service.EmailService;
 import com.datbois.grademaster.service.RoleService;
 import com.datbois.grademaster.service.UserService;
 import io.restassured.http.ContentType;
 import org.junit.Test;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -17,6 +21,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.mockito.Mockito.verify;
 
 public class UserControllerTests extends OAuthTests {
 
@@ -28,6 +33,9 @@ public class UserControllerTests extends OAuthTests {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+    @MockBean
+    private EmailService emailService;
 
     @Test
     public void adminCanViewAllUsers() {
@@ -42,6 +50,20 @@ public class UserControllerTests extends OAuthTests {
                 .then()
                 .contentType(ContentType.JSON)
                 .body("size()", is((int) count));
+    }
+
+    @Test
+    public void adminCanViewAllStudents() {
+        String token = this.obtainAccessToken("admin@stenden.com", "password");
+
+        given()
+                .auth()
+                .oauth2(token)
+                .when()
+                .get("/api/v1/users?role=student")
+                .then()
+                .contentType(ContentType.JSON)
+                .body("size()", is(1));
     }
 
     @Test
@@ -162,6 +184,7 @@ public class UserControllerTests extends OAuthTests {
         assertThat("Email", userData.get("email"), equalTo(testUser.getEmail()));
         assertThat("Role", testUser.getRoles().iterator().next().getCode(), equalTo(role.getCode()));
         assertThat("Password", userData.get("password"), not(testUser.getPassword()));
+        verify(emailService).sendToEmailQueue(ArgumentMatchers.any(Email.class));
     }
 
     @Test
@@ -186,6 +209,7 @@ public class UserControllerTests extends OAuthTests {
         Role role = roleService.findByName("Teacher");
 
         assertThat("Role", testUser.getRoles().iterator().next().getCode(), equalTo(role.getCode()));
+        verify(emailService).sendToEmailQueue(ArgumentMatchers.any(Email.class));
     }
 
     @Test

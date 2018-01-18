@@ -3,7 +3,6 @@ package com.datbois.grademaster.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 public class GroupGrade extends BaseModel {
@@ -20,12 +19,17 @@ public class GroupGrade extends BaseModel {
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "groupGrade")
     private Group group;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User teacher;
+
     public GroupGrade() {
     }
 
-    public GroupGrade(double grade, String comment) {
+    public GroupGrade(double grade, String comment, Group group, User teacher) {
         this.grade = grade;
         this.comment = comment;
+        this.group = group;
+        this.teacher = teacher;
     }
 
     public Long getId() {
@@ -52,12 +56,30 @@ public class GroupGrade extends BaseModel {
         this.comment = comment;
     }
 
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
+    public User getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(User teacher) {
+        this.teacher = teacher;
+    }
+
     @Override
     public String toString() {
         return "GroupGrade{" +
                 "id=" + id +
-                ", grade='" + grade + '\'' +
-                ", comment=" + comment +
+                ", grade=" + grade +
+                ", comment='" + comment + '\'' +
+                ", group=" + group +
+                ", teacher=" + teacher +
                 '}';
     }
 }

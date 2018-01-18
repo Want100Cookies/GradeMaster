@@ -1,7 +1,7 @@
-INSERT INTO `user` (`id`, `email`, `name`, `password`, `verified`) VALUES
-  (1, "john.doe@student.stenden.com", "John Doe", "$2a$04$FYZXxiv7A74rX33gfs2m/.AGqhQ/unlJCB2nHLRiuHCVlECcyLyb6", 1),
-  (2, "jane.doe@stenden.com", "Jane Doe", "$2a$04$FYZXxiv7A74rX33gfs2m/.AGqhQ/unlJCB2nHLRiuHCVlECcyLyb6", 1),
-  (3, "admin@stenden.com", "Administrator", "$2a$04$FYZXxiv7A74rX33gfs2m/.AGqhQ/unlJCB2nHLRiuHCVlECcyLyb6", 1);
+INSERT INTO `user` (`id`, `email`, `name`, `password`, `verified`, `reference_id`) VALUES
+  (1, "john.doe@student.stenden.com", "John Doe", "$2a$04$FYZXxiv7A74rX33gfs2m/.AGqhQ/unlJCB2nHLRiuHCVlECcyLyb6", 1, '123456'),
+  (2, "jane.doe@stenden.com", "Jane Doe", "$2a$04$FYZXxiv7A74rX33gfs2m/.AGqhQ/unlJCB2nHLRiuHCVlECcyLyb6", 1, '654321'),
+  (3, "admin@stenden.com", "Administrator", "$2a$04$FYZXxiv7A74rX33gfs2m/.AGqhQ/unlJCB2nHLRiuHCVlECcyLyb6", 1, '987555');
 
 INSERT INTO `role` (`id`, `code`, `label`) VALUES
   (1, "STUDENT_ROLE", "Student"),
@@ -22,10 +22,10 @@ INSERT INTO `course` (`id`, `name`, `education_id`) VALUES
   (2, "EthHack", 1),
   (3, "Minor", 2);
 
-INSERT INTO `group_grade` (`id`,`grade`,`comment`) VALUES
-  (1, 6, "comment"),
-  (2, 7, "comment"),
-  (3, 8, "comment");
+INSERT INTO `group_grade` (`id`,`grade`,`comment`, `teacher_id`) VALUES
+  (1, 6, "comment", 2),
+  (2, 7, "comment", 2),
+  (3, 8, "comment", 2);
 
 INSERT INTO `group` (`id`, `course_id`, `group_name`, `start_year`, `end_year`, `group_grade_id`) VALUES
   (1, 1, "Musketiers", 2017, 2018, 1),

@@ -36,7 +36,12 @@ public class GroupController {
     public List<Group> getGroups(Authentication authentication) {
         User user = ((UserDetails) authentication.getPrincipal()).getUser();
         Set<Role> roles = user.getRoles();
-        if (roles.stream().filter(role -> role.getCode().equalsIgnoreCase("ADMIN_ROLE")).findFirst().orElse(null) != null) {
+        if (roles.stream()
+                .filter(role ->
+                        role.getCode().equalsIgnoreCase("ADMIN_ROLE")
+                )
+                .findFirst()
+                .orElse(null) != null) {
             return groupService.findAll();
         }
         return new ArrayList<>(user.getGroups());
@@ -78,7 +83,7 @@ public class GroupController {
      * Only admin || teacher in group.
      *
      * @param groupId id of the group
-     * @param group group object to be updated to
+     * @param group   group object to be updated to
      * @return group
      * @throws Exception
      * @endpoint (PATCH) /api/v1/groups/{groupId}
@@ -140,7 +145,8 @@ public class GroupController {
     public Group setGroupUsers(@PathVariable Long groupId, @RequestBody Set<User> users) {
         Group group = groupService.findById(groupId);
         if (group == null) throw new InvalidParameterException("Group id not found");
-        return groupService.save(groupService.setUsers(group, users));
+        group.setUsers(users);
+        return groupService.save(group);
     }
 
 }

@@ -2,12 +2,16 @@ package com.datbois.grademaster.controller;
 
 import com.datbois.grademaster.model.*;
 import com.datbois.grademaster.service.*;
+import com.datbois.grademaster.util.CsvGeneratorUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,19 +19,19 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1")
-public class GradeController{
+public class GradeController {
 
     @Autowired
-    GradeService gradeService;
+    private GradeService gradeService;
 
     @Autowired
-    GroupService groupService;
+    private GroupService groupService;
 
     @Autowired
-    GroupGradeService groupGradeService;
+    private GroupGradeService groupGradeService;
 
     @Autowired
-    UserService userService;
+    private CsvGeneratorUtil csvGenerator;
 
     /**
      * Get final grade for a student in a particular group.
@@ -90,14 +94,15 @@ public class GradeController{
      * @responseStatus OK
      */
     @RequestMapping(value = "/grades/groups/{groupId}", method = RequestMethod.PATCH)
-    @PreAuthorize("hasAnyAuthority('TEACHER_ROLE','ADMIN_ROLE')")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity insertGroupGrade(@PathVariable Long groupId, @RequestBody GroupGrade groupGrade){
-        Group exists = groupService.findById(groupId);
-        exists.setGroupGrade(groupGrade);
-        groupGradeService.save(groupGrade);
-        groupService.save(exists);
-        return new ResponseEntity<>(groupGrade, HttpStatus.OK);
+    @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE')")
+    public GroupGrade insertGroupGrade(Authentication authentication, @PathVariable Long groupId, @RequestBody GroupGrade groupGrade) {
+        User user = ((UserDetails) authentication.getPrincipal()).getUser();
+        Group group = groupService.findById(groupId);
+
+        groupGrade.setTeacher(user);
+        groupGrade.setGroup(group);
+
+        return groupGradeService.save(groupGrade);
     }
 
     /**
@@ -153,5 +158,26 @@ public class GradeController{
                 }
             }
         }
+    }
+
+    @RequestMapping(value = "/grades/groups/{groupId}/exports/csv", method = RequestMethod.GET)
+    @PreAuthorize("hasAnyAuthority('TEACHER_ROLE') and isInGroup(#groupId)")
+    public void exportGradesCsv(HttpServletResponse response, @PathVariable Long groupId) throws IOException {
+        Group group = groupService.findById(groupId);
+
+        response.addHeader("Content-disposition", "attachment;filename=grade.csv");
+        response.addHeader("Content-type", "text/csv");
+
+        for (Grade grade : group.getGrades()) {
+            if (grade.getToUser().getReferenceId() != null) {
+                List<String> line = new ArrayList<>();
+                line.add(grade.getToUser().getReferenceId());
+                line.add(Double.toString(grade.getGrade()));
+
+                csvGenerator.writeLine(response.getWriter(), line, '\t');
+            }
+        }
+
+        response.flushBuffer();
     }
 }
