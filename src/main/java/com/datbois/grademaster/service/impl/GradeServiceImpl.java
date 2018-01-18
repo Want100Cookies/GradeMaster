@@ -4,8 +4,8 @@ import com.datbois.grademaster.model.Grade;
 import com.datbois.grademaster.model.Group;
 import com.datbois.grademaster.model.Notification;
 import com.datbois.grademaster.repository.GradeRepository;
-import com.datbois.grademaster.repository.GroupRepository;
 import com.datbois.grademaster.service.GradeService;
+import com.datbois.grademaster.service.GroupService;
 import com.datbois.grademaster.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,13 +20,13 @@ public class GradeServiceImpl implements GradeService {
     private NotificationService notificationService;
 
     @Autowired
-    private GroupRepository groupRepository;
+    private GroupService groupService;
 
     @Override
     public Grade save(Grade grade) {
         grade = gradeRepository.save(grade);
 
-        Group group = groupRepository.findOne(grade.getGroup().getId());
+        Group group = groupService.findById(grade.getGroup().getId());
         if (allGroupMembersHaveGraded(group)) {
             sendNotificationToTeacher(group);
         }
