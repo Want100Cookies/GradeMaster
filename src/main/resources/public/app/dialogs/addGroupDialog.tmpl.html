@@ -38,10 +38,7 @@
                 </div>
                 <h1 class="md-headline" style="text-align: left;">Add students</h1>
                 </br>
-                <md-content class="md-padding autocomplete" ng-controller="ChipCtrl as ctrl"layout="column">
-                    <md-contact-chips ng-model="ctrl.SelectedStudents" md-contacts="ctrl.Search($query)"
-                    md-contact-name="name" md-contact-email="email" placeholder="Find user"></md-contact-chips>
-                </md-content>
+                <user-chips-input></user-chips-input>
             </form>
         </md-content>
         <md-dialog-actions layout="row">
