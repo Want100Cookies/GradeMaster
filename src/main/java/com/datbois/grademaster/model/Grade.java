@@ -9,13 +9,18 @@ import java.text.SimpleDateFormat;
 import java.util.Set;
 
 @Entity
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"from_user_id","to_user_id","group_id"})
+        }
+)
 public class Grade extends BaseModel{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private double grade;
+    private Double grade;
 
     private String motivation;
 
@@ -28,11 +33,13 @@ public class Grade extends BaseModel{
     @ManyToOne(fetch = FetchType.LAZY)
     public Group group;
 
+    private boolean valid = true;
+
     public Grade(){
 
     }
 
-    public Grade(double grade, String motivation, User fromUser, User toUser, Group group){
+    public Grade(Double grade, String motivation, User fromUser, User toUser, Group group){
         this.grade = grade;
         this.motivation = motivation;
         this.fromUser = fromUser;
@@ -48,11 +55,11 @@ public class Grade extends BaseModel{
         this.id = id;
     }
 
-    public double getGrade() {
+    public Double getGrade() {
         return grade;
     }
 
-    public void setGrade(double grade) {
+    public void setGrade(Double grade) {
         this.grade = grade;
     }
 
@@ -94,6 +101,14 @@ public class Grade extends BaseModel{
 
     public void removeToUser(){
         toUser = null;
+    }
+
+    public boolean isValid() {
+        return valid;
+    }
+
+    public void setValid(boolean valid) {
+        this.valid = valid;
     }
 
     @Override

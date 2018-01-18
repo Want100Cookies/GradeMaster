@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.Null;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,6 +39,36 @@ public class GradeController {
     @Autowired
     private PdfGeneratorUtil pdfGenerator;
 
+    @Autowired
+    private UserService userService;
+
+    /**
+     * Get final grade for a student in a particular group.
+     * Only if logged in as student or teacher.
+     * @endpoint (GET) /grades/groups/{groupId}/users/{userId}
+     * @return final grade
+     */
+    @RequestMapping(value = "/grades/groups/{groupId}/users/{userId}", method = RequestMethod.GET)
+    @PreAuthorize("hasAnyAuthority('TEACHER_ROLE','ADMIN_ROLE') or isCurrentUser(#userId)")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity getFinalGrade(@PathVariable Long groupId, @PathVariable Long userId){
+        Map<String, Object> finalGrade = new HashMap<>();
+
+        Group exists = groupService.findById(groupId);
+        for(User user : exists.getUsers()){
+            if(user.getId() == userId){
+                for(Grade grade : exists.getGrades()){
+                    for(Role role : grade.getFromUser().getRoles()){
+                        if(role.getCode().contains("TEACHER_ROLE")){
+                            finalGrade.put("grade", grade.getGrade());
+                        }
+                    }
+                }
+            }
+        }
+        return new ResponseEntity<>(finalGrade, HttpStatus.OK);
+    }
+  
     /**
      * Insert grades for all group members.
      * Only if logged in as student, teacher or admin.
@@ -45,12 +76,19 @@ public class GradeController {
      * @return Inserted grades
      */
     @RequestMapping(value = "/grades/users/{userId}", method = RequestMethod.POST)
-    @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE') or isCurrentUser(#userId)")
+    @PreAuthorize("hasAnyAuthority('TEACHER_ROLE','ADMIN_ROLE') or isCurrentUser(#userId)")
     public ResponseEntity createGrade(@PathVariable Long userId, @RequestBody Grade[] grades){
 
         List<Map<String, Object>> response = new ArrayList<>();
 
         for(Grade grade : grades){
+            if(grade.getMotivation() == ""){
+                for(Role role : userService.findById(grade.getFromUser().getId()).getRoles()){
+                    if(role.getCode().contains("STUDENT_ROLE")){
+                        grade.setValid(false);
+                    }
+                }
+            }
             gradeService.save(grade);
             Map<String, Object> data = new HashMap<>();
             data.put("grade", grade.getGrade());
@@ -58,6 +96,7 @@ public class GradeController {
             data.put("fromUser", grade.getFromUser().getId());
             data.put("toUser", grade.getToUser().getId());
             data.put("group", grade.getGroup().getId());
+            data.put("valid", grade.isValid());
             response.add(data);
         }
 
@@ -91,7 +130,7 @@ public class GradeController {
      * @responseStatus OK
      */
     @RequestMapping(value = "/grades/groups/{groupId}", method = RequestMethod.GET)
-    @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE')")
+    @PreAuthorize("hasAnyAuthority('TEACHER_ROLE','ADMIN_ROLE')")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity getAllGradesForAGroup(@PathVariable Long groupId){
         Group exists = groupService.findById(groupId);
