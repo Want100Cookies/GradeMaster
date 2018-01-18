@@ -87,6 +87,7 @@ public class GradeControllerTests extends OAuthTests {
         User fromUser = userService.findById(1L);
         User toUser = userService.findById(1L);
         Group group = groupService.findById(1L);
+        gradeService.delete(1L);
 
         Map<String, Object> gradeData = new HashMap<>();
         gradeData.put("grade", 3.0f);
@@ -114,6 +115,7 @@ public class GradeControllerTests extends OAuthTests {
         assertThat(Long.parseLong(result.get(0).get("fromUser").toString()), Matchers.is(fromUser.getId()));
         assertThat(Long.parseLong(result.get(0).get("toUser").toString()), Matchers.is(toUser.getId()));
         assertThat(Long.parseLong(result.get(0).get("group").toString()), Matchers.is(group.getId()));
+        verify(emailService).sendToEmailQueue(ArgumentMatchers.any(Email.class));
     }
 
     @Test
