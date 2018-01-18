@@ -11,14 +11,14 @@
                 <div layout="row" layout-align="left">
                     <span ng-class="status" class="md-title" flex="">{{groupStatus}}</span>
                     <span class="md-title" flex="">{{groupGrade}}</span>
-                    <span class="md-title" flex="">{{groupStudentGrade}}</span>
+                    <span class="md-title" flex="">{{studentGrade}}</span>
                 </div> 
             </md-card-title-text>
         </md-card-title>
         <md-card-content>
             <div layout="row">
-                <div class="md-caption" flex="85">
-                    
+                <div class="md-caption" flex="85" ng-repeat="member in groupMembers">
+                    {{member.name}}
                 </div>     
                 <md-button href="#!/home/grades" class="groupGradeBtn" flex="15">GRADE</md-button>
             </div>

@@ -9,7 +9,6 @@ app.controller('StudentGroupsCtrl', function($scope, UserService, StudentGroupsS
         $scope.userDetails = response.data;
         StudentGroupsService.getStudentGroups($scope.userDetails.id).then(function(response){
             $scope.groupsDetails = response.data;
-            console.log($scope.groupsDetails);
         });
     });
 });
