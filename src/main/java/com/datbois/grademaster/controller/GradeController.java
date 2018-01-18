@@ -2,12 +2,18 @@ package com.datbois.grademaster.controller;
 
 import com.datbois.grademaster.model.*;
 import com.datbois.grademaster.service.*;
+import com.datbois.grademaster.util.CsvGeneratorUtil;
+import com.datbois.grademaster.util.PdfGeneratorUtil;
+import com.lowagie.text.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,19 +21,22 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1")
-public class GradeController{
+public class GradeController {
 
     @Autowired
-    GradeService gradeService;
+    private GradeService gradeService;
 
     @Autowired
-    GroupService groupService;
+    private GroupService groupService;
 
     @Autowired
-    GroupGradeService groupGradeService;
+    private GroupGradeService groupGradeService;
 
     @Autowired
-    UserService userService;
+    private CsvGeneratorUtil csvGenerator;
+
+    @Autowired
+    private PdfGeneratorUtil pdfGenerator;
 
     /**
      * Insert grades for all group members.
@@ -64,13 +73,14 @@ public class GradeController{
      */
     @RequestMapping(value = "/grades/groups/{groupId}", method = RequestMethod.PATCH)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE')")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity insertGroupGrade(@PathVariable Long groupId, @RequestBody GroupGrade groupGrade){
-        Group exists = groupService.findById(groupId);
-        exists.setGroupGrade(groupGrade);
-        groupGradeService.save(groupGrade);
-        groupService.save(exists);
-        return new ResponseEntity<>(groupGrade, HttpStatus.OK);
+    public GroupGrade insertGroupGrade(Authentication authentication, @PathVariable Long groupId, @RequestBody GroupGrade groupGrade) {
+        User user = ((UserDetails) authentication.getPrincipal()).getUser();
+        Group group = groupService.findById(groupId);
+
+        groupGrade.setTeacher(user);
+        groupGrade.setGroup(group);
+
+        return groupGradeService.save(groupGrade);
     }
 
     /**
@@ -126,5 +136,39 @@ public class GradeController{
                 }
             }
         }
+    }
+
+    @RequestMapping(value = "/grades/groups/{groupId}/export.csv", method = RequestMethod.GET)
+    @PreAuthorize("hasAnyAuthority('TEACHER_ROLE') and isInGroup(#groupId)")
+    public void exportGradesCsv(HttpServletResponse response, @PathVariable Long groupId) throws IOException {
+        Group group = groupService.findById(groupId);
+
+        response.addHeader("Content-disposition", "attachment;filename=grade.csv");
+        response.addHeader("Content-type", "text/csv");
+
+        for (Grade grade : group.getGrades()) {
+            if (grade.getToUser().getReferenceId() != null) {
+                List<String> line = new ArrayList<>();
+                line.add(grade.getToUser().getReferenceId());
+                line.add(Double.toString(grade.getGrade()));
+
+                csvGenerator.writeLine(response.getWriter(), line, '\t');
+            }
+        }
+
+        response.flushBuffer();
+    }
+
+    @RequestMapping(value = "/grades/groups/{groupId}/export.pdf", method = RequestMethod.GET)
+    @PreAuthorize("hasAnyAuthority('TEACHER_ROLE') and isInGroup(#groupId)")
+    public void exportGradesPdf(HttpServletResponse response, @PathVariable Long groupId) throws IOException, DocumentException {
+        response.addHeader("Content-disposition", "inline;filename=grade.pdf");
+        response.addHeader("Content-type", "application/pdf");
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("group", groupService.findById(groupId));
+
+        pdfGenerator.renderPdf("grades", params, response.getOutputStream());
+        response.flushBuffer();
     }
 }

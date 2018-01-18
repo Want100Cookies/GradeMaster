@@ -414,7 +414,7 @@ public class GroupControllerTests extends OAuthTests {
     public void teacherCantDeleteOtherGroup() {
         String token = obtainAccessToken("jane.doe@stenden.com", "password");
 
-        Group g = groupService.findById(2L);
+        Group g = groupService.findById(1L);
 
         given()
                 .auth()
@@ -592,7 +592,7 @@ public class GroupControllerTests extends OAuthTests {
     public void teacherCantChangeUsersInOtherGroup() {
         String token = obtainAccessToken("jane.doe@stenden.com", "password");
 
-        Group g = groupService.findById(2L);
+        Group g = groupService.findById(1L);
 
         Set<User> users = new HashSet<>(Arrays.asList(userService.findById(1L), userService.findById(2L), userService.findById(3L)));
 

@@ -10,5 +10,8 @@
     "update-deps": "npm update",
     "prestart": "npm install",
     "start": "http-server -a localhost -p 4200 -c-1 ./"
+  },
+  "dependencies": {
+    "muicss": "^0.9.35"
   }
 }
