@@ -17,7 +17,7 @@ app.factory('StudentGroupsService', function($http, $cookies){
             });
         },
 
-        getAllGroupMembers : function(groupId){
+        getGroupMembers : function(groupId){
             var accessToken = $cookies.get("access_token");
             var req = {
                 method: 'GET',
@@ -27,7 +27,7 @@ app.factory('StudentGroupsService', function($http, $cookies){
                 }
             }
             return $http(req).then(function(data){
-                console.log("Succesful getAllGroupMembers API Call", data);
+                console.log("Succesful getGroupMembers API Call", data);
                 return data;
             }).catch(function(data){
                 console.log("ERROR", data);

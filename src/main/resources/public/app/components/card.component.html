@@ -1,0 +1,28 @@
+<div ng-init="init()">
+<md-card>
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">{{name}}</span>
+                <div layout="row" layout-align="left"> 
+                    <span class="md-subhead" flex="">Status</span>
+                    <span class="md-subhead" flex="">Group grade</span>
+                    <span class="md-subhead" flex="">Your grade</span>
+                </div>
+                <div layout="row" layout-align="left">
+                    <span ng-class="status" class="md-title" flex="">{{groupStatus}}</span>
+                    <span class="md-title" flex="">{{groupGrade}}</span>
+                    <span class="md-title" flex="">{{groupStudentGrade}}</span>
+                </div> 
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+            <div layout="row">
+                <div class="md-caption" flex="85">
+                    
+                </div>     
+                <md-button href="#!/home/grades" class="groupGradeBtn" flex="15">GRADE</md-button>
+            </div>
+            <md-divider></md-divider>
+        </md-card-content>
+    </md-card>
+</div>
