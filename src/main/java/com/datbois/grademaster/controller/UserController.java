@@ -44,7 +44,11 @@ public class UserController {
      */
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE')")
-    public List<User> users() {
+    public List<User> users(@RequestParam(required = false) String role) {
+        if (role != null) {
+            return userService.findByRole(roleService.findByName(role));
+        }
+
         return userService.findAll();
     }
 

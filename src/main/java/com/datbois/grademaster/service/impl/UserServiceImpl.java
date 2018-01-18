@@ -1,9 +1,6 @@
 package com.datbois.grademaster.service.impl;
 
-import com.datbois.grademaster.model.Grade;
-import com.datbois.grademaster.model.Group;
-import com.datbois.grademaster.model.User;
-import com.datbois.grademaster.model.UserDetails;
+import com.datbois.grademaster.model.*;
 import com.datbois.grademaster.repository.GradeRepository;
 import com.datbois.grademaster.repository.GroupRepository;
 import com.datbois.grademaster.repository.UserRepository;
@@ -49,6 +46,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
+    public List<User> findByRole(Role role) {
+        return userRepository.findAllByRolesContaining(role);
+    }
+
+    @Override
     public User findByEmail(String email) {
         return userRepository.findByEmailContainingIgnoreCase(email);
     }
@@ -74,11 +76,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             groupRepository.save(group);
         }
         List<Grade> gradesReceived = user.getGradesReceived();
-        for(Grade grade : gradesReceived){
+        for (Grade grade : gradesReceived) {
             gradeRepository.delete(grade.getId());
         }
         List<Grade> gradesDistributed = user.getGradeDistributed();
-        for(Grade grade : gradesDistributed){
+        for (Grade grade : gradesDistributed) {
             gradeRepository.delete(grade.getId());
         }
         userRepository.delete(id);
