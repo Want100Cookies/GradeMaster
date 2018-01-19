@@ -12,6 +12,7 @@ app.factory('API', function ($cookies, $http, $httpParamSerializer) {
     const BASE_URL = `http://localhost:8080`;
     const API = `api/v1`;
     const OAUTH_KEY = `Z3JhZGVtYXN0ZXItY2xpZW50OmdyYWRlbWFzdGVyLXNlY3JldA==`;
+    const DEBUG = true;
 
     /**
      * DEFAULT REQUESTS
@@ -131,7 +132,15 @@ app.factory('API', function ($cookies, $http, $httpParamSerializer) {
      * @returns {Response}
      */
     this.request = (req) => {
-        console.log(req);
+        if (DEBUG) {
+            return $http(req).then((resp) => {
+                console.log(resp);
+                return resp;
+            }).catch((error) => {
+                console.error(error);
+                return error;
+            });
+        }
         return $http(req);
     };
 

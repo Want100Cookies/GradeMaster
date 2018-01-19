@@ -14,7 +14,7 @@ app.controller('LoginCtrl', function (API, $scope, $state) {
     }
     $scope.login = function (username, password) {
         API.auth({user: {username, password}}).then((resp) => {
-            $state.transitionTo('app.dashboard')
+            $state.transitionTo('app.dashboard');
         }).catch((resp) => {
             $scope.valid = "Invalid credentials.";
         });
