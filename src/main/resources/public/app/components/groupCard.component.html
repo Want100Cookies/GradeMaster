@@ -1,0 +1,40 @@
+<div ng-init="init()">
+<md-card>
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">{{$ctrl.name}}</span>
+                <div layout="row" layout-align="left"> 
+                    <span class="md-subhead" flex="">Status</span>
+                    <span class="md-subhead" flex="">Group grade</span>
+                    <span class="md-subhead" flex="">Your grade</span>
+                </div>
+                <div layout="row" layout-align="left">
+                    <div ng-class="groupStatus" class="md-title" ng-repeat="status in groupsStatuses" flex>
+                        {{status}}
+                    </div>
+                    <div ng-class="groupGradeStatus" class="md-title" ng-repeat="grade in groupGrades" flex>
+                        {{grade}}
+                    </div>
+                    <!-- <span ng-class="groupGradeStatus" class="md-title" flex>{{ctrl.groupGrade}}</span> -->
+                    <div ng-class="finalGradeStatus" class="md-title" flex ng-repeat="grade in finalGrades">
+                        {{grade}}
+                    </div>                 
+                </div> 
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+            <div layout="row" class="relativeDiv">
+                <div class="md-caption" ng-repeat="member in groupMembers">
+                    <div ng-if="!$last">
+                        {{member.name}}, &nbsp;
+                    </div>
+                    <div ng-if="$last">
+                        {{member.name}}
+                    </div>        
+                </div> 
+                <md-button ng-disabled="groupStatus != 'pending'" href="#!/home/grades" class="groupGradeBtn">GRADE</md-button>
+            </div><br>
+            <md-divider></md-divider>
+        </md-card-content>
+    </md-card>
+</div>

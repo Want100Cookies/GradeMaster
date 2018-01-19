@@ -3,12 +3,12 @@ app.factory('UserService', function (API) {
         getSelf: () => {
             return API.get({
                 path: `users/self`
-            })
+            });
         },
         getAllUsers: function () {
             return API.get({
                 path: `users`
             });
-        },
+        }
     }
 });
