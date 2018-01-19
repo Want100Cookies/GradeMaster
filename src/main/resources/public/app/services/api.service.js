@@ -32,7 +32,7 @@ app.factory('API', function ($cookies, $http, $httpParamSerializer) {
 
     /**
      * Auth user
-     * @param {*} user user with username and password
+     * @param {*} user object with username and password
      * @returns {Response}
      */
     this.auth = ({
@@ -43,8 +43,10 @@ app.factory('API', function ($cookies, $http, $httpParamSerializer) {
             scope: 'read write'
         }
         let req = Object.assign({}, AUTH_REQUEST);
-        req.data = $httpParamSerializer(user);
-        return this.post(req).then((resp) => {
+        return this.post({
+            data: $httpParamSerializer(user),
+            req
+        }).then((resp) => {
             $cookies.put("access_token", resp.data.access_token);
             return resp;
         });
@@ -80,6 +82,7 @@ app.factory('API', function ($cookies, $http, $httpParamSerializer) {
     }) => {
         const METHOD = `POST`;
         req.method = METHOD;
+        req.url = `${req.url}${path}`;
         req.data = data;
         return this.request(req);
     };
@@ -98,6 +101,7 @@ app.factory('API', function ($cookies, $http, $httpParamSerializer) {
     }) => {
         const METHOD = `PATCH`;
         req.method = METHOD;
+        req.url = `${req.url}${path}`;
         req.data = data;
         return this.request(req);
     };
@@ -116,6 +120,7 @@ app.factory('API', function ($cookies, $http, $httpParamSerializer) {
     }) => {
         const METHOD = `PATCH`;
         req.method = METHOD;
+        req.url = `${req.url}${path}`;
         req.data = data;
         return this.request(req);
     };
@@ -126,6 +131,7 @@ app.factory('API', function ($cookies, $http, $httpParamSerializer) {
      * @returns {Response}
      */
     this.request = (req) => {
+        console.log(req);
         return $http(req);
     };
 

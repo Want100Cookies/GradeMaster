@@ -13,7 +13,7 @@ app.controller('LoginCtrl', function (API, $scope, $state) {
         $state.transitionTo('register')
     }
     $scope.login = function (username, password) {
-        API.auth({username, password}).then((resp) => {
+        API.auth({user: {username, password}}).then((resp) => {
             $state.transitionTo('app.dashboard')
         }).catch((resp) => {
             $scope.valid = "Invalid credentials.";
