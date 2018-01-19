@@ -52,11 +52,7 @@ h1 {
     left: 50%;
     transform: translate(-50%, -50%);
 }
-
-.no-left-margin {
-    margin-left: 0;
-}
-
-.no-right-margin {
-    margin-right: 0;
+.dialogTitle {
+    margin: 0;
+    text-align: left;
 }

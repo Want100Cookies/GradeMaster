@@ -1,0 +1,65 @@
+<md-dialog aria-label="Add group" style="width: 800px;">
+    <form ng-cloak>
+        <md-toolbar id="override-login-toolbar">
+            <div class="md-toolbar-tools">
+                <h2>Add group</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon md-svg-src="app/icons/close.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-content style="padding: 10px;">
+            <form name="GroupForm">
+                <h1 class="md-title dialogTitle">Supply group information</h1>
+                </br>
+                <md-input-container class="md-block">
+                    <label>Group name</label>
+                    <input type="text" name="groupName" ng-model="vm.formData.groupName" placeholder="" required="" />
+                    <div ng-messages="GroupForm.groupName.$error" role="alert" multiple="">
+                        <div class="my-message" ng-message="required">You must supply a group name.</div>
+                    </div>
+                </md-input-container>
+                <div layout="row" style="width: 100%;">
+                    <md-input-container class="md-block" style="width: 50%;">
+                        <label>Start year</label>
+                        <input type="text" name="startYear" ng-model="vm.formData.startYear" placeholder="" required="" />
+                        <div ng-messages="GroupForm.startYear.$error" role="alert" multiple="">
+                            <div class="my-message" ng-message="required">You must supply a starting year.</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container class="md-block" style="width: 50%;">
+                        <label>End year</label>
+                        <input type="text" name="endYear" ng-model="vm.formData.endYear" placeholder="" required="" />
+                        <div ng-messages="GroupForm.EndYear.$error" role="alert" multiple="">
+                            <div class="my-message" ng-message="required">You must supply a ending year.</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <div layout="row" style="width: 100%;">
+                    <md-input-container class="md-block" style="width: 50%;">
+                        <md-select ng-model="education">
+                            <md-option ng-repeat="state in states" value="">
+                              
+                            </md-option>
+                          </md-select>
+                    </md-input-container>
+                    <md-input-container class="md-block" style="width: 50%;">
+                        <md-select ng-model="vm.formData.courses">
+                            <md-option ng-repeat="state in states" value="">
+                              
+                            </md-option>
+                          </md-select>
+                    </md-input-container>
+                </div>
+                <h1 class="md-title dialogTitle">Add students</h1>
+                </br>
+                <user-chips-input></user-chips-input>
+        </md-content>
+        <md-dialog-actions layout="row">
+            <md-button class="md-raised md-primary pull-right formPage" md-autofocus ng-click="create()">
+                Create group
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>
