@@ -9,7 +9,7 @@ app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService, Gr
     }
     $scope.getGroups = () => {
         return GroupService.getGroups().then((response) => {
-            console.log(response);
+            
         });
     }
     $scope.showAddGroup = (ev) => {
@@ -30,9 +30,10 @@ app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService, Gr
         EducationService.getEducations().then((response) => {
             $scope.educationOptions = response.data;
         })
-        $scope.$watch('chosenEducation', function () {
+        $scope.$watch('chosenEducation', () => {
+            $scope.courseOptions = null;
             if ($scope.chosenEducation !== null) {
-                EducationService.getCoursesByEducation($scope.chosenEducation).then(function (response) {
+                EducationService.getCoursesByEducation($scope.chosenEducation).then( (response) => {
                     $scope.courseOptions = response.data;
                 })
             }
@@ -58,15 +59,15 @@ app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService, Gr
       
         $scope.toastPosition = angular.extend({},last);
       
-        $scope.getToastPosition = function() {
+        $scope.getToastPosition = () => {
           sanitizePosition();
       
           return Object.keys($scope.toastPosition)
-            .filter(function(pos) { return $scope.toastPosition[pos]; })
+            .filter((pos) => { return $scope.toastPosition[pos]; })
             .join(' ');
         };
       
-        function sanitizePosition() {
+          sanitizePosition = () => {
           var current = $scope.toastPosition;
       
           if ( current.bottom && last.top ) current.top = false;

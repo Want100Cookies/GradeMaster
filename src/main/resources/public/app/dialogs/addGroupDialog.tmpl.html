@@ -22,14 +22,14 @@
                 <div layout="row" style="width: 100%;">
                     <md-input-container class="md-block" style="width: 50%; margin: 0;">
                         <label>Start year</label>
-                        <input type="text" name="startYear" ng-model="vm.formData.startYear" required />
+                        <input type="number" name="startYear" ng-model="vm.formData.startYear" required />
                         <div ng-messages="GroupForm.startYear.$error" role="alert" multiple="">
                             <div class="my-message" ng-message="required">You must supply a starting year.</div>
                         </div>
                     </md-input-container>
                     <md-input-container class="md-block" style="width: 50%; margin: 0;">
                         <label>End year</label>
-                        <input type="text" name="endYear" ng-model="vm.formData.endYear" required />
+                        <input type="number" name="endYear" ng-model="vm.formData.endYear" required />
                         <div ng-messages="GroupForm.EndYear.$error" role="alert" multiple="">
                             <div class="my-message" ng-message="required">You must supply a ending year.</div>
                         </div>
