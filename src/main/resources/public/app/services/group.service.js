@@ -11,6 +11,11 @@ app.factory('GroupService', function (API, $state) {
             path: `groups`
         })
     }
+    this.getGroupsByUserId = (userId) => {
+        return API.get({
+            path: 'users/'+ userId +'/groups'
+        });
+    },
     this.createGrades = (students, user, group) => {
         let data = [];
         for (let i = 0; i < students.length; i++) {
@@ -53,6 +58,6 @@ app.factory('GroupService', function (API, $state) {
             path: 'groups/'+ groupId +'/users'
         });
     };
-    
+
     return this;
 });

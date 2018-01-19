@@ -2,11 +2,11 @@ app.controller('GroupsCtrl', function ($scope) {
 
 });
 
-app.controller('StudentGroupsCtrl', function($scope, UserService, StudentGroupsService){
+app.controller('StudentGroupsCtrl', function ($scope, UserService, StudentGroupsService) {
 
-    UserService.getSelf().then(function(response){
+    UserService.getSelf().then(function (response) {
         $scope.userDetails = response.data;
-        StudentGroupsService.getStudentGroups($scope.userDetails.id).then(function(response){
+        StudentGroupsService.getStudentGroups($scope.userDetails.id).then(function (response) {
             $scope.groupsDetails = response.data;
         });
     });
@@ -19,10 +19,12 @@ app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService, Gr
         $scope.getGroups();
     }
     $scope.getGroups = () => {
-        return GroupService.getGroups().then((response) => {
-            $scope.teacherGroupList = response.data;
-            console.log(response.data);
+        UserService.getSelf().then((response) => {
+                return GroupService.getGroupsByUserId(response.data.id).then((response) => {
+                    $scope.teacherGroupList = response.data;
+                });
         });
+
     }
     $scope.showAddGroup = (ev) => {
         $mdDialog.show({
@@ -39,14 +41,14 @@ app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService, Gr
         $scope.chosenEducation = null;
         $scope.courseOptions = [];
         $scope.educationOptions = [];
-      
+
         EducationService.getEducations().then((response) => {
             $scope.educationOptions = response.data;
         })
         $scope.$watch('chosenEducation', () => {
             $scope.courseOptions = null;
             if ($scope.chosenEducation !== null) {
-                EducationService.getCoursesByEducation($scope.chosenEducation).then( (response) => {
+                EducationService.getCoursesByEducation($scope.chosenEducation).then((response) => {
                     $scope.courseOptions = response.data;
                 })
             }
@@ -66,17 +68,17 @@ app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService, Gr
         $scope.showSimpleToast = () => {
             $mdToast.show(
                 $mdToast.simple()
-                    .textContent('Created Group!')
-                    .hideDelay(3000)
+                .textContent('Created Group!')
+                .hideDelay(3000)
             );
         };
         $scope.cancel = () => {
             $mdDialog.cancel();
         };
         $scope.create = () => {
-            if (Object.keys($scope.vm.formData.period).length !== 0 && $scope.vm.formData.users.length !== 0
-                && $scope.vm.formData.groupName != null && $scope.vm.formData.startYear != null && $scope.vm.formData.endYear != null
-                && $scope.vm.formData.course != null) {
+            if (Object.keys($scope.vm.formData.period).length !== 0 && $scope.vm.formData.users.length !== 0 &&
+                $scope.vm.formData.groupName != null && $scope.vm.formData.startYear != null && $scope.vm.formData.endYear != null &&
+                $scope.vm.formData.course != null) {
                 GroupService.createGroup($scope.vm.formData);
                 $scope.showSimpleToast();
                 $scope.cancel();
@@ -87,4 +89,3 @@ app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService, Gr
         };
     };
 });
-
