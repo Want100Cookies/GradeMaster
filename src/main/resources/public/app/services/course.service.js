@@ -1,58 +1,19 @@
-app.factory('CourseService', function ($cookies, $q, $resource, $http, $state) {
+app.factory('CourseService', function (API) {
     return {
-        getCourse: courseId => {
-            const accessToken = $cookies.get("access_token");
-            let deferred = $q.defer();
-
-            $http
-                .get("http://localhost:8080/api/v1/courses/" + courseId, {
-                    headers: {
-                        "Authorization": "Bearer " + accessToken
-                    }
-                })
-                .then(response => {
-                    deferred.resolve(response.data);
-                }, error => {
-                    deferred.reject(error);
-                });
-
-            return deferred.promise;
+        getCourse: (courseId) => {
+            return API.get({
+                path: `courses/${courseId}`
+            });
         },
-        getGroupsByCourse: courseId => {
-            const accessToken = $cookies.get("access_token");
-            let deferred = $q.defer();
-
-            $http
-                .get("http://localhost:8080/api/v1/courses/" + courseId + "/groups", {
-                    headers: {
-                        "Authorization": "Bearer " + accessToken
-                    }
-                })
-                .then(response => {
-                    deferred.resolve(response.data);
-                }, error => {
-                    deferred.reject(error);
-                });
-
-            return deferred.promise;
+        getGroupsByCourse: (courseId) => {
+            return API.get({
+                path: `courses/${courseId}/groups`
+            })
         },
         deleteCourse: course => {
-            const accessToken = $cookies.get("access_token");
-            let deferred = $q.defer();
-
-            $http
-                .delete("http://localhost:8080/api/v1/courses/" + course.id, {
-                    headers: {
-                        "Authorization": "Bearer " + accessToken
-                    }
-                })
-                .then(() => {
-                    deferred.resolve();
-                }, error => {
-                    deferred.reject(error);
-                });
-
-            return deferred.promise;
+            return API.delete({
+                path: `courses/${course.id}`
+            });
         },
     }
 });

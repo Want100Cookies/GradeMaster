@@ -7,16 +7,16 @@ function courseController($stateParams, $mdDialog, $state, CourseService) {
     ctrl.$onInit = () => {
         CourseService
             .getCourse($stateParams.courseId)
-            .then(course => {
-                ctrl.course = course;
+            .then(response => {
+                ctrl.course = response.data;
             }, () => {
                 $state.transitionTo('app.dashboard'); // Todo: make 404
             });
 
         CourseService
             .getGroupsByCourse($stateParams.courseId)
-            .then(groups => {
-                ctrl.groups = groups;
+            .then(response => {
+                ctrl.groups = response.data;
             }, () => {
                 $state.transitionTo('app.dashboard'); // Todo: make 404
             });

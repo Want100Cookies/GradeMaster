@@ -9,8 +9,9 @@ var app = angular.module('gmApp', [
 ]);
 
 app.controller('LayoutController', function ($scope, $mdSidenav, $window, $cookies, AuthService) {
-    $scope.isAdmin = AuthService.hasRoles("ROLE_ADMIN");
-    console.log(AuthService.authenticate());
+    AuthService.hasRoles("ADMIN_ROLE").then((hasRole) => {
+        $scope.isAdmin = hasRole;
+    });
     $scope.openSideNav = function () {
         $mdSidenav('left').open();
     };
@@ -104,7 +105,7 @@ app.config(function ($stateProvider) {
             url: '/grades',
             templateProvider: function (AuthService) {
                 return AuthService.hasRoles('ADMIN_ROLE', 'TEACHER_ROLE').then((hasRole) => {
-                    if(hasRole){
+                    if (hasRole) {
                         return '<div ng-include="\'/app/pages/teacher-grades.html\'"></div>';
                     } else {
                         return '<div ng-include="\'/app/pages/grades.html\'"></div>';

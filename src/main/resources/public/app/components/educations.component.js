@@ -6,10 +6,9 @@ function educationsController($stateParams, $mdDialog, $state, EducationService)
     ctrl.$onInit = () => {
         EducationService
             .getEducations()
-            .then(educations => {
-                ctrl.educations = educations;
+            .then(response => {
+                ctrl.educations = response.data;
             }, () => {
-                $state.transitionTo('app.dashboard');
             });
     };
 
@@ -60,8 +59,8 @@ function educationsController($stateParams, $mdDialog, $state, EducationService)
             .then(name => {
                 EducationService
                     .createEducation(name)
-                    .then(education => {
-                        ctrl.educations.push(education);
+                    .then(response => {
+                        ctrl.educations.push(response.data);
                     }, () => {
                     });
             });

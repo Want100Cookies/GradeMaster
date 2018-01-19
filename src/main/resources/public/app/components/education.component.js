@@ -7,18 +7,17 @@ function educationController($stateParams, $mdDialog, $state, EducationService) 
     ctrl.$onInit = () => {
         EducationService
             .getEducation($stateParams.educationId)
-            .then(education => {
-                ctrl.education = education;
+            .then(response => {
+                ctrl.education = response.data;
+                console.log(ctrl.education);
             }, () => {
-                $state.transitionTo('app.dashboard'); // Todo: make 404
             });
 
         EducationService
             .getCoursesByEducation($stateParams.educationId)
-            .then(courses => {
-                ctrl.courses = courses;
+            .then(response => {
+                ctrl.courses = response.data;
             }, () => {
-                $state.transitionTo('app.dashboard'); // Todo: make 404
             });
     };
 
