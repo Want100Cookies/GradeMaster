@@ -1,23 +1,31 @@
-<md-list>
-    <md-list-item layout="row" layout-margin ng-repeat="student in $ctrl.students">
-        <div flex="noshrink">
-            {{student.name}}
-        </div>
-        <div flex="noshrink">
-            <b><i>{{student.grade|number:1}}</i></b>
-        </div>
-        <md-slider flex="grow" min="01.0" max="10.0" step="0.1" ng-model="student.grade"
-                   ng-change="$ctrl.calculate(student)"
-                   aria-label="Grade slider"></md-slider>
-        <div flex="none">
+<table layout-fill>
+    <tr ng-repeat="student in $ctrl.students | orderBy:'id'">
+        <td>
+            <div class="md-headline">{{student.name}}</div>
+            <div class="md-caption">{{student.referenceId}}</div>
+        </td>
+        <td>
+            <div class="md-display-1">{{student.grade.grade|number:1}}</div>
+        </td>
+        <td style="width: 60%;">
+            <md-slider flex="grow" min="01.0" max="10.0" step="0.1" ng-model="student.grade.grade"
+                       ng-change="$ctrl.calculate(student)"
+                       aria-label="Grade slider"></md-slider>
+        </td>
+        <td>
             <md-button ng-click="student.lock = !student.lock" class="md-icon-button" aria-label="Lock button">
                 <md-icon md-svg-src="/app/icons/lock{{student.lock ? '' : '_open'}}.svg"
                          aria-hidden="true"></md-icon>
                 <div class="md-ripple-container"></div>
             </md-button>
-        </div>
-    </md-list-item>
-        <i>Total: </i>
-        <b>{{$ctrl.calculateCurrent()|number:2}}</b>
-    </md-list-item>
-</md-list>
+            <md-button ng-click="$ctrl.addMotivation(student)" class="md-icon-button" aria-label="Motivation button">
+                <md-icon md-svg-src="/app/icons/chat_bubble{{student.grade.motivation.length ? '' : '_empty'}}.svg"
+                         aria-hidden="true"></md-icon>
+            </md-button>
+        </td>
+    </tr>
+</table>
+<div class="md-caption">
+    <i>Total: </i>
+    <b>{{$ctrl.calculateCurrent()|number:2}}</b>
+</div>

@@ -6,6 +6,7 @@ import com.datbois.grademaster.model.*;
 import com.datbois.grademaster.service.EmailService;
 import com.datbois.grademaster.service.RoleService;
 import com.datbois.grademaster.service.UserService;
+import org.apache.commons.lang3.text.WordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -98,6 +99,7 @@ public class UserController {
         // Set email to unverified and generate random string for the verification email
         user.setVerified(false);
         user.setEmailVerifyToken(UUID.randomUUID().toString());
+        user.setName(WordUtils.capitalize(user.getEmail().replace('.', ' ').split("@")[0]));
 
         // Determine what roles need to be assigned
         Set<Role> roles = new HashSet<>();
