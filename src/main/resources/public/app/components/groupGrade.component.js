@@ -24,7 +24,7 @@ function groupGradeController($stateParams, $mdDialog, $state, GroupService, Gra
         GradeService
             .createGroupGrade(ctrl.group)
             .then((groupGrade) => {
-                $state.transitionTo("app.dashboard"); // Todo: transition to teacher group overview
+                $state.transitionTo("app.groups");
             });
     };
 }
