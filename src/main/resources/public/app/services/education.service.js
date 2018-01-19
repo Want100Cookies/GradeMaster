@@ -1,41 +1,17 @@
-app.factory('EducationService', function ($cookies, $q, $resource, $http, $state) {
-    return {
-        getCoursesByEducation: (education) => {
-            const accessToken = $cookies.get("access_token");
+app.factory('EducationService', function (API) {
 
-            let deferred = $q.defer();
+    this.getCoursesByEducation = (education) => {
+        const educationId = 1; // TODO use education's id. 
+        return API.get({
+            path: `educations/${educationId}/courses`
+        });
+    };
+  
+    this.getEducations = () => {
+        return API.get({
+            path: `educations`  
+        });
+     };
 
-            $http
-                .get("http://localhost:8080/api/v1/educations/"+education+"/courses", {
-                    headers: {
-                        "Authorization": "Bearer " + accessToken
-                    }
-                })
-                .then(response => {
-                    deferred.resolve(response.data);
-                }, error => {
-                    deferred.reject(error);
-                });
-
-            return deferred.promise;
-        },
-        getEducations: () => {
-            const accessToken = $cookies.get("access_token");
-            let deferred = $q.defer();
-
-            $http
-                .get("http://localhost:8080/api/v1/educations", {
-                    headers: {
-                        "Authorization": "Bearer " + accessToken
-                    }
-                })
-                .then(response => {
-                    deferred.resolve(response.data);
-                }, error => {
-                    deferred.reject(error);
-                });
-
-            return deferred.promise;
-        },
-    }
+    return this;
 });
