@@ -17,10 +17,10 @@
         </md-card-title>
         <md-card-content>
             <div layout="row">
-                <div class="md-caption" flex="85" ng-repeat="member in groupMembers">
+                <div class="md-caption" ng-repeat="member in groupMembers">
                     {{member.name}}
                 </div>     
-                <md-button href="#!/home/grades" class="groupGradeBtn" flex="15">GRADE</md-button>
+                <md-button href="#!/home/grades" layout-align="end right" class="groupGradeBtn">GRADE</md-button>
             </div>
             <md-divider></md-divider>
         </md-card-content>

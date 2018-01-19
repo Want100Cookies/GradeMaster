@@ -6,6 +6,7 @@ function GroupCardCtrl($scope, StudentGroupsService){
         $scope.groupStatus = "TEST";
         $scope.groupGrade = $scope.$ctrl.group.groupGrade.grade;
         $scope.studentGrade = "MOET NOG";
+        $scope.status = "pending";
 
         StudentGroupsService.getGroupMembers($scope.$ctrl.group.id).then(function(response){
             $scope.groupMembers = response.data;
