@@ -48,7 +48,7 @@ app.config(function ($stateProvider) {
             controller: 'VerifyCtrl'
         })
         .state('app', {
-            url: '/home',
+            url: '',
             templateUrl: '/app/pages/app.html',
             resolve: {
                 'auth': (AuthService) => {
