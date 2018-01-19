@@ -1,40 +1,31 @@
-app.factory('AuthService', function ($cookies, $q, $location, $resource, $http, $httpParamSerializer, $state) {
+app.factory('AuthService', function ($cookies, $q, $location, $resource, $http, $httpParamSerializer, $state, UserService) {
     return {
         authenticate: function () {
-            const accessToken = $cookies.get("access_token");
-            const req = {
-                method: 'GET',
-                url: 'http://localhost:8080/api/v1/users/self',
-                headers: {
-                    "Authorization": "Bearer " + accessToken
-                }
-            };
-            return $http(req).then(function (data) {
-                return true;
-            }).catch(function (data) {
-                $state.transitionTo('login')
-            });
+            console.log(UserService.getSelf());
+            return UserService
+                .getSelf()
+                .then(() => {
+                    return true;
+                })
+                .catch(() => {
+                    $state.transitionTo('login');
+                    return false;
+                });
         },
         hasRoles: (...roles) => {
-            const accessToken = $cookies.get("access_token");
-            const req = { 
-                method: 'GET',
-                url: 'http://localhost:8080/api/v1/users/self',
-                headers: {
-                    "Authorization": "Bearer " + accessToken
-                }
-            };
-            return $http(req).then(function (response) {
-                for(const role of roles) {
-                    for(const respRole of response.data.roles) {
-                        if(respRole.code === role) return true;
+            return UserService
+                .getSelf()
+                .then(user => {
+                    for (const role of roles) {
+                        for (const respRole of user.roles) {
+                            if (respRole.code === role) return true;
+                        }
                     }
-                }
-                return false;
-            }).catch(function (response) {
-                console.log(response);
-                return false;
-            });
+                    return false;
+                })
+                .catch(() => {
+                    return false;
+                });
         }
     }
 });

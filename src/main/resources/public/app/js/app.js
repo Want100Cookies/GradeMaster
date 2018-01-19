@@ -8,7 +8,9 @@ var app = angular.module('gmApp', [
     'ui.router'
 ]);
 
-app.controller('LayoutController', function ($scope, $mdSidenav, $window, $cookies) {
+app.controller('LayoutController', function ($scope, $mdSidenav, $window, $cookies, AuthService) {
+    $scope.isAdmin = AuthService.hasRoles("ROLE_ADMIN");
+    console.log(AuthService.authenticate());
     $scope.openSideNav = function () {
         $mdSidenav('left').open();
     };
@@ -20,7 +22,7 @@ app.controller('LayoutController', function ($scope, $mdSidenav, $window, $cooki
             $cookies.remove(k);
         });
         $window.location.reload();
-    }
+    };
 });
 
 app.config(function ($stateProvider) {
@@ -29,7 +31,7 @@ app.config(function ($stateProvider) {
             url: '',
             templateUrl: '/app/pages/app.html',
             resolve: {
-                'auth': function (AuthService) {
+                'auth': (AuthService) => {
                     return AuthService.authenticate();
                 },
             }
@@ -57,7 +59,7 @@ app.config(function ($stateProvider) {
             url: '/home',
             templateUrl: '/app/pages/app.html',
             resolve: {
-                'auth': function (AuthService) {
+                'auth': (AuthService) => {
                     return AuthService.authenticate();
                 },
             }
@@ -66,7 +68,7 @@ app.config(function ($stateProvider) {
             url: '/dashboard',
             templateUrl: '/app/pages/dashboard.html',
             resolve: {
-                'auth': function (AuthService) {
+                'auth': (AuthService) => {
                     return AuthService.authenticate();
                 },
             }
@@ -75,7 +77,7 @@ app.config(function ($stateProvider) {
             url: '/groups',
             templateProvider: function (AuthService) {
                 return AuthService.hasRoles('ADMIN_ROLE', 'TEACHER_ROLE').then((hasRole) => {
-                    if(hasRole){
+                    if (hasRole) {
                         return '<div ng-include="\'/app/pages/teacher-groups.html\'"></div>';
                     } else {
                         return '<div ng-include="\'/app/pages/groups.html\'"></div>';
@@ -83,7 +85,7 @@ app.config(function ($stateProvider) {
                 })
             },
             resolve: {
-                'auth': function (AuthService) {
+                'auth': (AuthService) => {
                     return AuthService.authenticate();
                 },
             },
@@ -93,7 +95,7 @@ app.config(function ($stateProvider) {
             url: '/groups/:groupId/grading',
             component: 'grading',
             resolve: {
-                'auth': function (AuthService) {
+                'auth': (AuthService) => {
                     return AuthService.authenticate();
                 },
             },
@@ -103,7 +105,7 @@ app.config(function ($stateProvider) {
             templateProvider: function (AuthService) {
                 return AuthService.hasRoles('ADMIN_ROLE', 'TEACHER_ROLE').then((hasRole) => {
                     //console.log(response);
-                    if(hasRole){
+                    if (hasRole) {
                         return '<div ng-include="\'/app/pages/teacher-grades.html\'"></div>';
                     } else {
                         return '<div ng-include="\'/app/pages/grades.html\'"></div>';
@@ -111,7 +113,7 @@ app.config(function ($stateProvider) {
                 })
             },
             resolve: {
-                'auth': function (AuthService) {
+                'auth': (AuthService) => {
                     return AuthService.authenticate();
                 },
             },
@@ -121,7 +123,7 @@ app.config(function ($stateProvider) {
             url: '/educations',
             component: 'educations',
             resolve: {
-                'auth': function (AuthService) {
+                'auth': (AuthService) => {
                     return AuthService.authenticate();
                 },
             },
@@ -130,7 +132,7 @@ app.config(function ($stateProvider) {
             url: '/educations/:educationId',
             component: 'education',
             resolve: {
-                'auth': function (AuthService) {
+                'auth': (AuthService) => {
                     return AuthService.authenticate();
                 },
             },
@@ -139,7 +141,7 @@ app.config(function ($stateProvider) {
             url: '/courses/:courseId',
             component: 'course',
             resolve: {
-                'auth': function (AuthService) {
+                'auth': (AuthService) => {
                     return AuthService.authenticate();
                 },
             },
