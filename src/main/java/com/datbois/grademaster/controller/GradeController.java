@@ -1,7 +1,10 @@
 package com.datbois.grademaster.controller;
 
 import com.datbois.grademaster.model.*;
-import com.datbois.grademaster.service.*;
+import com.datbois.grademaster.service.GradeService;
+import com.datbois.grademaster.service.GroupGradeService;
+import com.datbois.grademaster.service.GroupService;
+import com.datbois.grademaster.service.UserService;
 import com.datbois.grademaster.util.CsvGeneratorUtil;
 import com.datbois.grademaster.util.PdfGeneratorUtil;
 import com.lowagie.text.DocumentException;
@@ -13,7 +16,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.Null;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,21 +47,22 @@ public class GradeController {
     /**
      * Get final grade for a student in a particular group.
      * Only if logged in as student or teacher.
-     * @endpoint (GET) /grades/groups/{groupId}/users/{userId}
+     *
      * @return final grade
+     * @endpoint (GET) /grades/groups/{groupId}/users/{userId}
      */
     @RequestMapping(value = "/grades/groups/{groupId}/users/{userId}", method = RequestMethod.GET)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE','ADMIN_ROLE') or isCurrentUser(#userId)")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity getFinalGrade(@PathVariable Long groupId, @PathVariable Long userId){
+    public ResponseEntity getFinalGrade(@PathVariable Long groupId, @PathVariable Long userId) {
         Map<String, Object> finalGrade = new HashMap<>();
 
         Group exists = groupService.findById(groupId);
-        for(User user : exists.getUsers()){
-            if(user.getId() == userId){
-                for(Grade grade : exists.getGrades()){
-                    for(Role role : grade.getFromUser().getRoles()){
-                        if(role.getCode().contains("TEACHER_ROLE")){
+        for (User user : exists.getUsers()) {
+            if (user.getId() == userId) {
+                for (Grade grade : exists.getGrades()) {
+                    for (Role role : grade.getFromUser().getRoles()) {
+                        if (role.getCode().contains("TEACHER_ROLE")) {
                             finalGrade.put("grade", grade.getGrade());
                         }
                     }
@@ -68,23 +71,23 @@ public class GradeController {
         }
         return new ResponseEntity<>(finalGrade, HttpStatus.OK);
     }
-  
+
     /**
      * Insert grades for all group members.
      * Only if logged in as student, teacher or admin.
-     * @endpoint (POST) /api/v1/grade/users/{userId}
+     *
      * @return Inserted grades
+     * @endpoint (POST) /api/v1/grade/users/{userId}
      */
     @RequestMapping(value = "/grades/users/{userId}", method = RequestMethod.POST)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE','ADMIN_ROLE') or isCurrentUser(#userId)")
-    public ResponseEntity createGrade(@PathVariable Long userId, @RequestBody Grade[] grades){
-
+    public ResponseEntity createGrade(@PathVariable Long userId, @RequestBody Grade[] grades) {
         List<Map<String, Object>> response = new ArrayList<>();
 
-        for(Grade grade : grades){
-            if(grade.getMotivation() == ""){
-                for(Role role : userService.findById(grade.getFromUser().getId()).getRoles()){
-                    if(role.getCode().contains("STUDENT_ROLE")){
+        for (Grade grade : grades) {
+            if (grade.getMotivation() == "") {
+                for (Role role : userService.findById(grade.getFromUser().getId()).getRoles()) {
+                    if (role.getCode().contains("STUDENT_ROLE")) {
                         grade.setValid(false);
                     }
                 }
@@ -106,8 +109,9 @@ public class GradeController {
     /**
      * Insert group grade for a group.
      * Only possible if logged in as teacher or admin.
-     * @endpoint (PATCH) /api/v1/grade/group/{groupId}
+     *
      * @return Inserted group grade
+     * @endpoint (PATCH) /api/v1/grade/group/{groupId}
      * @responseStatus OK
      */
     @RequestMapping(value = "/grades/groups/{groupId}", method = RequestMethod.PATCH)
@@ -125,14 +129,15 @@ public class GradeController {
     /**
      * Get group grade and all grades assigned and received by users of this particular group.
      * Only possible if logged in as teacher and admin.
-     * @endpoint (GET) /api/v1/grade/group/{groupId}
+     *
      * @return Group grades and grades assigned and received by users
+     * @endpoint (GET) /api/v1/grade/group/{groupId}
      * @responseStatus OK
      */
     @RequestMapping(value = "/grades/groups/{groupId}", method = RequestMethod.GET)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE','ADMIN_ROLE')")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity getAllGradesForAGroup(@PathVariable Long groupId){
+    public ResponseEntity getAllGradesForAGroup(@PathVariable Long groupId) {
         Group exists = groupService.findById(groupId);
 
         Map<Object, Object> response = new HashMap<>();
@@ -141,10 +146,10 @@ public class GradeController {
 
         Map<Object, Object> users = new HashMap<>();
 
-        for(User user : exists.getUsers()){
+        for (User user : exists.getUsers()) {
             List<Object[]> grades = new ArrayList<>();
-            for(Grade grade : user.getGradesReceived()){
-                if(exists.getId().equals(grade.getGroup().getId())){
+            for (Grade grade : user.getGradesReceived()) {
+                if (exists.getId().equals(grade.getGroup().getId())) {
                     grades.add(new Object[]{grade.getGrade(), grade.getMotivation()});
                 }
             }
@@ -159,18 +164,19 @@ public class GradeController {
     /**
      * Delete grades given by students only for this particular group.
      * Only possible if logged in as teacher or admin.
+     *
      * @endpoint (DELETE) /api/v1/grade/group/{groupId}
      * @responseStatus ACCEPTED
      */
     @RequestMapping(value = "/grades/groups/{groupId}", method = RequestMethod.DELETE)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE')")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void removeGrades(@PathVariable Long groupId){
+    public void removeGrades(@PathVariable Long groupId) {
         Group exists = groupService.findById(groupId);
 
-        for(Grade grade : exists.getGrades()){
-            for(Role role : grade.getFromUser().getRoles()){
-                if(role.getCode().contains("STUDENT_ROLE")){
+        for (Grade grade : exists.getGrades()) {
+            for (Role role : grade.getFromUser().getRoles()) {
+                if (role.getCode().contains("STUDENT_ROLE")) {
                     gradeService.delete(grade.getId());
                 }
             }
