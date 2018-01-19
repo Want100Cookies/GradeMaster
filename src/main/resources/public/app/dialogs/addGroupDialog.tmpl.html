@@ -44,7 +44,7 @@
                         </md-select>
                     </md-input-container>
                     <md-input-container class="md-block" style="width: 50%; margin: 0;">
-                        <md-select md-container-class="mySelect" ng-disabled="(!chosenEducation)" ng-model="vm.formData.course" aria-label="Select course">
+                        <md-select md-container-class="mySelect" ng-disabled="(!chosenEducation)" ng-model="vm.formData.course.id" aria-label="Select course">
                             <md-option ng-repeat="course in courseOptions" value="{{course.id}}" placeholder="Course">
                                 {{course.name}}
                             </md-option>
