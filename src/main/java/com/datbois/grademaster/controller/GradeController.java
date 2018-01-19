@@ -165,7 +165,12 @@ public class GradeController {
         groupGrade.setTeacher(user);
         groupGrade.setGroup(group);
 
-        return groupGradeService.save(groupGrade);
+        groupGrade = groupGradeService.save(groupGrade);
+
+        group.setGroupGrade(groupGrade);
+        groupService.save(group);
+
+        return groupGrade;
     }
 
     /**

@@ -24,13 +24,17 @@ public class GroupGradeServiceImpl implements GroupGradeService {
     @Override
     public GroupGrade save(GroupGrade groupGrade) {
         for (User user : groupGrade.getGroup().getUsers()) {
-            notificationService.save(new Notification(
-                    String.format(TITLE, groupGrade.getGroup().getGroupName()),
-                    String.format(BODY, groupGrade.getGroup().getGroupName(), "teacher"),
-                    user,
-                    "/",
-                    "Click here to launch Grade Master"
-            ));
+            if (user.getRoles().stream()
+                    .filter(role -> role.getCode().equalsIgnoreCase("STUDENT_ROLE"))
+                    .findFirst().orElse(null) != null) {
+                notificationService.save(new Notification(
+                        String.format(TITLE, groupGrade.getGroup().getGroupName()),
+                        String.format(BODY, groupGrade.getGroup().getGroupName(), "teacher"),
+                        user,
+                        "/",
+                        "Click here to launch Grade Master"
+                ));
+            }
         }
 
         return groupGradeRepository.save(groupGrade);

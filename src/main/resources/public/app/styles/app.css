@@ -52,7 +52,13 @@ h1 {
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
 .dialogTitle {
     margin: 0;
     text-align: left;
+}
+
+.wrapWords {
+    word-break: keep-all;
+    word-wrap: normal;
 }

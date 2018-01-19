@@ -1,4 +1,4 @@
-function gradingController($stateParams, $mdDialog, $state, UserService, GroupService) {
+function gradingController($stateParams, $mdDialog, $state, UserService, GroupService, GradeService) {
     let ctrl = this;
 
     ctrl.groupGrade = 0;
@@ -43,7 +43,7 @@ function gradingController($stateParams, $mdDialog, $state, UserService, GroupSe
             .then(() => {
                 ctrl.loading = true;
 
-                GroupService.createGrades(ctrl.students, ctrl.self, ctrl.group).then(() => {
+                GradeService.createGrades(ctrl.students, ctrl.self, ctrl.group).then(() => {
                     $state.transitionTo("app.groups");
                 }, () => {
                     ctrl.loading = false;

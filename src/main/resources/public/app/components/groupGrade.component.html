@@ -1,0 +1,61 @@
+<md-card>
+    <md-card-title>
+        <md-card-title-text>
+            <span class="md-headline">Add group grade</span>
+        </md-card-title-text>
+    </md-card-title>
+    <md-card-content>
+        <div layout="row">
+            <div flex="30">
+                <div class="md-caption">Group name</div>
+                <div class="md-display-1">{{$ctrl.group.groupName}}</div>
+            </div>
+        </div>
+        <div flex="30">
+            <div class="md-caption">Group members</div>
+            <div class="headline wrapWords">
+                <span class="" ng-repeat="member in $ctrl.group.users">
+                    <span ng-if="!$last">
+                        {{member.name}}, &nbsp;
+                    </span>
+                    <span ng-if="$last">
+                        {{member.name}}
+                    </span>
+                </span>
+            </div>
+        </div>
+        <br>
+        <md-divider></md-divider>
+        <br>
+        <form name="groupGradeForm">
+            <div layout="row">
+                <md-slider flex="80" min="01.0" max="10.0" step="0.1" ng-model="$ctrl.group.groupGrade.grade" aria-label="Grade slider" style="margin-left: 25px;"></md-slider>
+                <div flex="20" style="margin-left: 20px;">
+                    <div class="md-caption">Group grade</div>
+                    <div class="md-display-1">{{$ctrl.group.groupGrade.grade|number:1}}</div>
+                </div>
+            </div>
+            <md-input-container flex="45" class="md-block" style="margin: 0;">
+                <label>Comment</label>
+                <input type="text" name="comment" ng-model="$ctrl.group.groupGrade.comment" />
+            </md-input-container>
+            <div layout="row">
+                <div style="margin-top: 15px;">
+                    <md-datepicker flex="30" ng-model="$ctrl.group.groupGrade.deadline.date" md-placeholder="Deadline date" md-open-on-focus required>
+                    </md-datepicker>
+                </div>
+                <div>
+                    <md-input-container style="margin-left: 5px; "flex="70">
+                        <label>Deadline time</label>
+                        <md-tooltip md-direction="top">Format: hh:mm</md-tooltip>
+                        <input type="text" ng-pattern="/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/" name="time" ng-model="$ctrl.group.groupGrade.deadline.time"
+                        />
+                    </md-input-container>
+                </div>
+            </div>
+        </form>
+    </md-card-content>
+    <md-card-action align="right">
+        <md-button ng-click="$ctrl.save()" class="md-primary md-raised formPage">Save</md-button>
+    </md-card-action>
+</md-card>
