@@ -41,6 +41,11 @@ app.factory('GroupService', function (API, $state) {
             data: group
         });
     };
-
+    
+    this.getGradingStatus = (groupId) => {
+        return API.get({
+            path: 'grades/status/groups/' + groupId
+        });
+    };
     return this;
 });

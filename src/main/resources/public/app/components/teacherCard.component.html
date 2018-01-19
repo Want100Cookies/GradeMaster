@@ -1,0 +1,35 @@
+<div ng-init="init()">
+    <md-card>
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">Groepje</span>
+                    <div layout="row" layout-align="left"> 
+                        <span class="md-subhead" flex="">Status</span>
+                        <span class="md-subhead" flex="">Group grade</span>
+                    </div>
+                    <div layout="row" layout-align="left">
+                        <div ng-class="groupStatus" class="md-title" flex>
+                            Groepstatus
+                        </div>
+                        <div ng-class="groupGradeStatus" class="md-title" flex>
+                            <span>{{groupGrade}}</span>
+                        </div>      
+                    </div> 
+                </md-card-title-text>
+            </md-card-title>
+            <md-card-content>
+                <div layout="row" class="relativeDiv">
+                    <div class="md-caption">
+                        <div ng-if="!$last">
+                            Hoi, &nbsp;
+                        </div>
+                        <div ng-if="$last">
+                            Hoi
+                        </div>        
+                    </div> 
+                    <md-button ng-disabled="groupStatus != 'pending'" href="#!/home/grades" class="groupGradeBtn">GRADE</md-button>
+                </div><br>
+                <md-divider></md-divider>
+            </md-card-content>
+        </md-card>
+    </div>
