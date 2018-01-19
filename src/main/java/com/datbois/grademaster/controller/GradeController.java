@@ -42,7 +42,19 @@ public class GradeController {
     @Autowired
     private UserService userService;
 
+    /**
+     * Get grading status.
+     * Only available if in group.
+     *
+     * OPEN: Group exists but no group grade has been set.
+     * PENDING: Group exists and group grade is set, students can start grading.
+     * CLOSED: All students have received a grade from teacher, grading closed.
+     *
+     * @endpoint (GET) /grades/status/groups/{groupId}
+     * @return grading status
+     */
     @RequestMapping(value = "/grades/status/groups/{groupId}", method = RequestMethod.GET)
+    @PreAuthorize("isInGroup(#groupId)")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity getGradingStatus(@PathVariable Long groupId){
         Map<String, Status> status = new HashMap<>();
@@ -95,35 +107,39 @@ public class GradeController {
   
     /**
      * Insert grades for all group members.
-     * Only if logged in as student, teacher or admin.
+     * Only if user is in group, teacher or admin.
      * @endpoint (POST) /api/v1/grade/users/{userId}
      * @return Inserted grades
      */
-    @RequestMapping(value = "/grades/users/{userId}", method = RequestMethod.POST)
-    @PreAuthorize("hasAnyAuthority('TEACHER_ROLE','ADMIN_ROLE') or isCurrentUser(#userId)")
-    public ResponseEntity createGrade(@PathVariable Long userId, @RequestBody Grade[] grades){
+    @RequestMapping(value = "/grades/groups/{groupId}", method = RequestMethod.POST)
+    @PreAuthorize("hasAnyAuthority('TEACHER_ROLE','ADMIN_ROLE') or isInGroup(#groupId)")
+    public ResponseEntity createGrade(@PathVariable Long groupId, @RequestBody Grade[] grades) {
 
         List<Map<String, Object>> response = new ArrayList<>();
 
-        for(Grade grade : grades){
-            if(grade.getMotivation() == ""){
-                for(Role role : userService.findById(grade.getFromUser().getId()).getRoles()){
-                    if(role.getCode().contains("STUDENT_ROLE")){
-                        grade.setValid(false);
+        Group group = groupService.findById(groupId);
+
+        for (Grade grade : grades) {
+            if(group.isInGroup(grade.getFromUser().getId()) && group.isInGroup(grade.getToUser().getId())){
+                if (grade.getMotivation() == "") {
+                    for (Role role : userService.findById(grade.getFromUser().getId()).getRoles()) {
+                        if (role.getCode().contains("STUDENT_ROLE")) {
+                            grade.setValid(false);
+                        }
                     }
                 }
+                grade.setGroup(group);
+                gradeService.save(grade);
+                Map<String, Object> data = new HashMap<>();
+                data.put("grade", grade.getGrade());
+                data.put("motivation", grade.getMotivation());
+                data.put("fromUser", grade.getFromUser().getId());
+                data.put("toUser", grade.getToUser().getId());
+                data.put("group", group.getId());
+                data.put("valid", grade.isValid());
+                response.add(data);
             }
-            gradeService.save(grade);
-            Map<String, Object> data = new HashMap<>();
-            data.put("grade", grade.getGrade());
-            data.put("motivation", grade.getMotivation());
-            data.put("fromUser", grade.getFromUser().getId());
-            data.put("toUser", grade.getToUser().getId());
-            data.put("group", grade.getGroup().getId());
-            data.put("valid", grade.isValid());
-            response.add(data);
         }
-
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

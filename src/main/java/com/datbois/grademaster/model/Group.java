@@ -151,6 +151,18 @@ public class Group extends BaseModel {
         return grades;
     }
 
+    public boolean isInGroup(Long id){
+        boolean is = false;
+
+        for(User user : this.users){
+            if(user.getId() == id){
+                is = true;
+            }
+        }
+
+        return is;
+    }
+
     @Override
     public String toString() {
         return "Group{" +
