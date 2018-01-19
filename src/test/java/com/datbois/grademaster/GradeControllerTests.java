@@ -49,20 +49,20 @@ public class GradeControllerTests extends OAuthTests {
                 .auth()
                 .oauth2(token)
                 .contentType(ContentType.JSON)
-                .get("/api/v1/grades/status/groups/4")
+                .get("/api/v1/grades/status/groups/3")
                 .then()
-                .body("status", is(Status.Open.name()));
+                .body("status", is(Status.Pending.name()));
     }
 
     @Test
     public void StudentInsertGradeWithoutMotivationDoesNotCount(){
         String token = this.obtainAccessToken("john.doe@student.stenden.com", "password");
 
-        gradeService.delete(6L);
+//        gradeService.delete(5L);
 
         User fromUser = userService.findById(1L);
         User toUser = userService.findById(1L);
-        Group group = groupService.findById(4L);
+        Group group = groupService.findById(2L);
 
         Map<String, Object> gradeData = new HashMap<>();
         gradeData.put("grade", 3.0f);
@@ -91,11 +91,11 @@ public class GradeControllerTests extends OAuthTests {
     public void TeacherInsertGradeWithoutMotivation(){
         String token = this.obtainAccessToken("jane.doe@stenden.com", "password");
 
-        gradeService.delete(7L);
+        gradeService.delete(3L);
 
         User fromUser = userService.findById(2L);
         User toUser = userService.findById(1L);
-        Group group = groupService.findById(4L);
+        Group group = groupService.findById(2L);
 
         Map<String, Object> gradeData = new HashMap<>();
         gradeData.put("grade", 3.0f);
@@ -125,7 +125,7 @@ public class GradeControllerTests extends OAuthTests {
         String token = this.obtainAccessToken("john.doe@student.stenden.com", "password");
 
         Long uId = 1L;
-        Long gId = 4L;
+        Long gId = 2L;
 
         Grade finalGrade = null;
 
@@ -187,7 +187,7 @@ public class GradeControllerTests extends OAuthTests {
                 .contentType(ContentType.JSON)
                 .body(gradeData)
                 .when()
-                .patch("/api/v1/grades/groups/4")
+                .patch("/api/v1/grades/groups/3")
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .extract()
@@ -195,18 +195,17 @@ public class GradeControllerTests extends OAuthTests {
 
         assertThat(result.get("grade"), Matchers.is(gradeData.get("grade")));
         assertThat(result.get("comment"), Matchers.is(gradeData.get("comment")));
-//        verify(emailService).sendToEmailQueue(ArgumentMatchers.any(Email.class));
     }
 
     @Test
     public void StudentCanInsertGrade() {
         String token = this.obtainAccessToken("john.doe@student.stenden.com", "password");
 
-        gradeService.delete(6L);
+        gradeService.delete(3L);
 
         User fromUser = userService.findById(1L);
         User toUser = userService.findById(1L);
-        Group group = groupService.findById(4L);
+        Group group = groupService.findById(2L);
 
         Map<String, Object> gradeData = new HashMap<>();
         gradeData.put("grade", 3.0f);
@@ -233,7 +232,7 @@ public class GradeControllerTests extends OAuthTests {
         assertThat(Long.parseLong(result.get(0).get("fromUser").toString()), Matchers.is(fromUser.getId()));
         assertThat(Long.parseLong(result.get(0).get("toUser").toString()), Matchers.is(toUser.getId()));
         assertThat(Long.parseLong(result.get(0).get("group").toString()), Matchers.is(group.getId()));
-//        verify(emailService).sendToEmailQueue(ArgumentMatchers.any(Email.class));
+        verify(emailService).sendToEmailQueue(ArgumentMatchers.any(Email.class));
     }
 
     @Test

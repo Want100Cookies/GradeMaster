@@ -70,7 +70,7 @@ public class GradeController {
             if(group.getGroupGrade() != null){
                 current = Status.Pending;
 
-                if(group.getStudents().size() == group.getGradesFromTeacherToStudent().size()){
+                if(groupService.getStudents(groupId).size() == groupService.getGradesFromTeacherToStudent(groupId).size()){
                     current = Status.Closed;
                 }
             }
@@ -124,7 +124,7 @@ public class GradeController {
         Group group = groupService.findById(groupId);
 
         for (Grade grade : grades) {
-            if(group.isInGroup(grade.getFromUser().getId()) && group.isInGroup(grade.getToUser().getId())){
+            if(groupService.userIsInGroup(grade.getFromUser().getId(), groupId) && groupService.userIsInGroup(grade.getToUser().getId(), groupId)){
                 if (grade.getMotivation() == "") {
                     for (Role role : userService.findById(grade.getFromUser().getId()).getRoles()) {
                         if (role.getCode().contains("STUDENT_ROLE")) {

@@ -30,8 +30,7 @@ INSERT INTO `group_grade` (`id`,`grade`,`comment`, `teacher_id`) VALUES
 INSERT INTO `group` (`id`, `course_id`, `group_name`, `start_year`, `end_year`, `group_grade_id`) VALUES
   (1, 1, "Musketiers", 2017, 2018, 1),
   (2, 2, "Hackerman", 2017, 2018, 2),
-  (3, 3, "Madam", 2016, 2017, 3),
-  (4, 3, "GradeTestGroup", 2016, 2017, NULL);
+  (3, 3, "Madam", 2016, 2017, 3);
 
 INSERT INTO `group_periods` (`group_id`, `period`) VALUES
   (1, "Q1"),
@@ -45,18 +44,14 @@ INSERT INTO `user_groups` (`user_id`, `group_id`) VALUES
   (2, 2),
   (1, 2),
   (2, 3),
-  (3, 3),
-  (1, 4),
-  (2, 4);
+  (3, 3);
 
 INSERT INTO `grade` (`id`, `grade`, `motivation`, `from_user_id`, `group_id`, `to_user_id`, `valid`) VALUES
   (1, 8, "motivation", 1, 1, 1, TRUE),
   (2, 8, "final grade", 2, 1, 1, TRUE),
   (3, 8.1, "final grade", 2, 2, 1, TRUE),
   (4, 8.2, "final grade", 2, 3, 1, TRUE),
-  (5, 2, "delete this", 1, 3, 1, TRUE),
-  (6, 7.3, "grade", 1, 4, 1, TRUE),
-  (7, 6.4, "final grade", 2, 4, 1, TRUE);
+  (5, 2, "delete this", 1, 3, 1, TRUE);
 
 INSERT INTO `notification`(`id`, `title`, `message`, `seen`, `user_id`) VALUES
  (1, "Test", "You have pending grades!", 0, 1),

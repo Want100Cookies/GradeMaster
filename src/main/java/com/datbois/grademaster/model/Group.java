@@ -123,46 +123,6 @@ public class Group extends BaseModel {
         this.grades = grades;
     }
 
-    public Set<User> getStudents(){
-        Set<User> students = new HashSet<>();
-
-        for(User user : this.users){
-            for(Role role : user.getRoles()){
-                if(role.getCode().contains("STUDENT_ROLE")){
-                    students.add(user);
-                }
-            }
-        }
-
-        return students;
-    }
-
-    public List<Grade> getGradesFromTeacherToStudent(){
-        List<Grade> grades = new ArrayList<>();
-
-        for(Grade grade : this.getGrades()){
-            for(Role role : grade.getFromUser().getRoles()){
-                if(role.getCode().contains("TEACHER_ROLE")){
-                    grades.add(grade);
-                }
-            }
-        }
-
-        return grades;
-    }
-
-    public boolean isInGroup(Long id){
-        boolean is = false;
-
-        for(User user : this.users){
-            if(user.getId() == id){
-                is = true;
-            }
-        }
-
-        return is;
-    }
-
     @Override
     public String toString() {
         return "Group{" +
