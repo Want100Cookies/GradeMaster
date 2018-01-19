@@ -97,7 +97,7 @@ app.config(function ($stateProvider) {
                     return AuthService.authenticate();
                 },
             },
-        });
+        })
         .state('app.grades', {
             url: '/grades',
             templateProvider: function (UserService) {
