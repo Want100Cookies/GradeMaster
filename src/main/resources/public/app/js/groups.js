@@ -50,59 +50,23 @@ app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService, Gr
                 periods: []
             },
         };
-        var last = {
-            bottom: false,
-            top: true,
-            left: false,
-            right: true
-          };
-      
-        $scope.toastPosition = angular.extend({},last);
-      
-        $scope.getToastPosition = () => {
-          sanitizePosition();
-      
-          return Object.keys($scope.toastPosition)
-            .filter((pos) => { return $scope.toastPosition[pos]; })
-            .join(' ');
-        };
-      
-          sanitizePosition = () => {
-          var current = $scope.toastPosition;
-      
-          if ( current.bottom && last.top ) current.top = false;
-          if ( current.top && last.bottom ) current.bottom = false;
-          if ( current.right && last.left ) current.left = false;
-          if ( current.left && last.right ) current.right = false;
-      
-          last = angular.extend({},current);
-        }
-
         $scope.showSimpleToast = () => {
-            var pinTo = $scope.getToastPosition();
             $mdToast.show(
                 $mdToast.simple()
-                    .textContent('Simple Toast!')
-                    .position(pinTo)
+                    .textContent('Created Group!')
                     .hideDelay(3000)
             );
         };
-
-        $scope.hide = () => {
-            $mdDialog.hide();
-        };
-
         $scope.cancel = () => {
             $mdDialog.cancel();
         };
-
         $scope.create = () => {
             if (Object.keys($scope.vm.formData.periods).length !== 0 && $scope.vm.formData.users.length !== 0
                 && $scope.vm.formData.groupName != null && $scope.vm.formData.startYear != null && $scope.vm.formData.endYear != null
                 && $scope.vm.formData.course != null) {
                 GroupService.createGroup($scope.vm.formData);
                 $scope.showSimpleToast();
-                $mdDialog.cancel();
+                $scope.cancel();
             }
         }
         $scope.usersChange = (val) => {

@@ -68,3 +68,9 @@ md-input-container.md-input-focused:not(.md-input-has-value) md-select .md-selec
 .mySelect md-option {
     color: #555C78 !important;
 }
+md-toast {
+    width: 150px;
+    top: 10px;
+    left: 10px;
+    right: 0;
+}
