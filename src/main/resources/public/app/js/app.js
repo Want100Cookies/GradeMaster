@@ -28,15 +28,6 @@ app.controller('LayoutController', function ($scope, $mdSidenav, $window, $cooki
 
 app.config(function ($stateProvider) {
     $stateProvider
-        .state('root', {
-            url: '',
-            templateUrl: '/app/pages/app.html',
-            resolve: {
-                'auth': (AuthService) => {
-                    return AuthService.authenticate();
-                },
-            }
-        })
         .state('login', {
             url: '/login',
             templateUrl: '/app/pages/login.html',
@@ -140,6 +131,15 @@ app.config(function ($stateProvider) {
         .state('app.course', {
             url: '/courses/:courseId',
             component: 'course',
+            resolve: {
+                'auth': (AuthService) => {
+                    return AuthService.authenticate();
+                },
+            },
+        })
+        .state('app.groupGrade', {
+            url: '/groups/:groupId/group-grade',
+            component: 'groupGrade',
             resolve: {
                 'auth': (AuthService) => {
                     return AuthService.authenticate();
