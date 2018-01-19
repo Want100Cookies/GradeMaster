@@ -4,6 +4,11 @@ app.factory('UserService', function (API) {
             return API.get({
                 path: `users`
             });
+        },
+        getUser: function () {
+            return API.get({
+                path: `users/self`
+            })
         }
     }
 });
