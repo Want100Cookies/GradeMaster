@@ -39,6 +39,7 @@ app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService) {
 
                 ],
                 course: {},
+                periods: []
             },
         };
 
@@ -51,15 +52,15 @@ app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService) {
         };
 
         $scope.create = function () {
-            if ($scope.vm.formData.groupName != null && $scope.vm.formData.startYear != null && $scope.vm.formData.startYear
-            && $scope.vm.formData.course) {
+            if (Object.keys($scope.vm.formData.periods).length !== 0 && $scope.vm.formData.users.length !== 0
+            && $scope.vm.formData.groupName != null && $scope.vm.formData.startYear != null && $scope.vm.formData.endYear != null
+            && $scope.vm.formData.course != null) {
                 GroupService.createGroup($scope.vm.formData);
                 $mdDialog.cancel();
             }
         }
-
         $scope.usersChange = (val) => {
             $scope.vm.formData.users = val;
         };
-    };
+    }
 });
