@@ -123,7 +123,7 @@ app.factory('API', function ($cookies, $http, $httpParamSerializer) {
         data = {},
         req = Object.assign({}, this.getRequest())
     }) => {
-        const METHOD = `PATCH`;
+        const METHOD = `DELETE`;
         req.method = METHOD;
         req.url = `${req.url}${path}`;
         req.data = data;
