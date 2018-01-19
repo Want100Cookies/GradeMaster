@@ -16,7 +16,7 @@ app.factory('GroupService', function ($cookies, $q, $location, $resource, $http,
                 $state.transitionTo('app.dashboard')
             });
         },
-        createGroup: (students, user, group) => {
+        createGrades: (students, user, group) => {
             const accessToken = $cookies.get("access_token");
 
             let data = [];
@@ -40,6 +40,36 @@ app.factory('GroupService', function ($cookies, $q, $location, $resource, $http,
             }).then(response => {
                 console.log("Succesful API Call", response);
                 return response.data;
+            });
+        },
+        createGroup: function (groupData) {
+            const data = {
+                "groupName": groupData.groupName,
+                "startYear": groupData.startYear,
+                "endYear": groupData.endYear,
+                "users": groupData.users,
+                "course": {
+                    "id": 1
+                },
+                "period": [
+                    "Q1",
+                    "Q2"
+                ],
+            };
+            const accessToken = $cookies.get("access_token");
+            const req = {
+                method: 'POST',
+                url: 'http://localhost:8080/api/v1/groups',
+                headers: {
+                    "Authorization": "Bearer " + accessToken,
+                    "Content-type": "application/json"
+                },
+                data
+            };
+            $http(req).then(function (data) {
+                console.log(data);
+            }).catch(function (data) {
+                console.log(data);
             });
         }
     }
