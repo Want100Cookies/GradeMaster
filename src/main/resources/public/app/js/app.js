@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 var app = angular.module('gmApp', [
     'ngMaterial',
     'ngMessages',
@@ -73,9 +73,9 @@ app.config(function ($stateProvider) {
         })
         .state('app.groups', {
             url: '/groups',
-            templateProvider: function (UserService) {
-                return UserService.getRole().then(function (response) {
-                    if(response === 'Admin' || response === 'Teacher'){
+            templateProvider: function (AuthService) {
+                return AuthService.hasRoles('ADMIN_ROLE', 'TEACHER_ROLE').then((hasRole) => {
+                    if(hasRole){
                         return '<div ng-include="\'/app/pages/teacher-groups.html\'"></div>';
                     } else {
                         return '<div ng-include="\'/app/pages/groups.html\'"></div>';
@@ -100,9 +100,10 @@ app.config(function ($stateProvider) {
         })
         .state('app.grades', {
             url: '/grades',
-            templateProvider: function (UserService) {
-                return UserService.getRole().then(function (response) {
-                    if(response === 'Admin' || response === 'Teacher'){
+            templateProvider: function (AuthService) {
+                return AuthService.hasRoles('ADMIN_ROLE', 'TEACHER_ROLE').then((hasRole) => {
+                    //console.log(response);
+                    if(hasRole){
                         return '<div ng-include="\'/app/pages/teacher-grades.html\'"></div>';
                     } else {
                         return '<div ng-include="\'/app/pages/grades.html\'"></div>';
