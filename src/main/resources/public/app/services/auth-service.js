@@ -11,7 +11,6 @@ app.factory('AuthService', function($cookies, $q, $location, $resource, $http, $
             }
             return $http(req).then(function(data){
                 return true;
-                console.log(data);
             }).catch(function(data){
                 $state.transitionTo('login')
             });

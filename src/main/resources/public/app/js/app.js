@@ -73,12 +73,21 @@ app.config(function ($stateProvider) {
         })
         .state('app.groups', {
             url: '/groups',
-            templateUrl: '/app/pages/groups.html',
+            templateProvider: function (UserService) {
+                return UserService.getRole().then(function (response) {
+                    if(response === 'Admin' || response === 'Teacher'){
+                        return '<div ng-include="\'/app/pages/teacher-groups.html\'"></div>';
+                    } else {
+                        return '<div ng-include="\'/app/pages/groups.html\'"></div>';
+                    }
+                })
+            },
             resolve: {
                 'auth': function (AuthService) {
                     return AuthService.authenticate();
                 },
-            }
+            },
+            controller: 'GroupsCtrl'
         })
         .state('app.grading', {
             url: '/groups/:groupId/grading',
@@ -87,6 +96,24 @@ app.config(function ($stateProvider) {
                 'auth': function (AuthService) {
                     return AuthService.authenticate();
                 },
-            }
+            },
+        });
+        .state('app.grades', {
+            url: '/grades',
+            templateProvider: function (UserService) {
+                return UserService.getRole().then(function (response) {
+                    if(response === 'Admin' || response === 'Teacher'){
+                        return '<div ng-include="\'/app/pages/teacher-grades.html\'"></div>';
+                    } else {
+                        return '<div ng-include="\'/app/pages/grades.html\'"></div>';
+                    }
+                })
+            },
+            resolve: {
+                'auth': function (AuthService) {
+                    return AuthService.authenticate();
+                },
+            },
+            controller: 'GradesCtrl'
         });
 });
