@@ -36,6 +36,22 @@
                         </div>
                     </md-input-container>
                 </div>
+                <div layout="row" style="width: 100%;">
+                    <md-input-container class="md-block" style="width: 50%;">
+                        <md-select ng-model="education">
+                            <md-option ng-repeat="state in states" value="">
+                              
+                            </md-option>
+                          </md-select>
+                    </md-input-container>
+                    <md-input-container class="md-block" style="width: 50%;">
+                        <md-select ng-model="vm.formData.courses">
+                            <md-option ng-repeat="state in states" value="">
+                              
+                            </md-option>
+                          </md-select>
+                    </md-input-container>
+                </div>
                 <h1 class="md-title dialogTitle">Add students</h1>
                 </br>
                 <user-chips-input></user-chips-input>

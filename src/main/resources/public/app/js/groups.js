@@ -17,6 +17,7 @@ app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService) {
     };
 
     function DialogController($scope, $mdDialog, GroupService) {
+        $scope.education = ''
         $scope.vm = {
             formData: {
                 groupName: '',
@@ -24,7 +25,8 @@ app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService) {
                 endYear: '',
                 users: [
     
-                ]
+                ],
+                course: {},
             },
         };
 
@@ -45,7 +47,6 @@ app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService) {
 
         $scope.usersChange = (val) => {
             $scope.vm.formData.users = val;
-            // TODO Set users in formdata (use ng-model i guess)
         };
     };
 });
