@@ -1,9 +1,7 @@
 INSERT INTO `user` (`id`, `email`, `name`, `password`, `verified`, `reference_id`) VALUES
   (1, "john.doe@student.stenden.com", "John Doe", "$2a$04$FYZXxiv7A74rX33gfs2m/.AGqhQ/unlJCB2nHLRiuHCVlECcyLyb6", 1, '123456'),
   (2, "jane.doe@stenden.com", "Jane Doe", "$2a$04$FYZXxiv7A74rX33gfs2m/.AGqhQ/unlJCB2nHLRiuHCVlECcyLyb6", 1, '654321'),
-  (3, "admin@stenden.com", "Administrator", "$2a$04$FYZXxiv7A74rX33gfs2m/.AGqhQ/unlJCB2nHLRiuHCVlECcyLyb6", 1, '987555'),
-  (4, "danny.hooijer@student.stenden.com", "Danny Hooijer", "$2a$04$FYZXxiv7A74rX33gfs2m/.AGqhQ/unlJCB2nHLRiuHCVlECcyLyb6", 1, '449652');
-
+ 
 INSERT INTO `role` (`id`, `code`, `label`) VALUES
   (1, "STUDENT_ROLE", "Student"),
   (2, "TEACHER_ROLE", "Teacher"),
@@ -31,8 +29,6 @@ INSERT INTO `group_grade` (`id`,`grade`,`comment`, `teacher_id`) VALUES
 INSERT INTO `group` (`id`, `course_id`, `group_name`, `start_year`, `end_year`, `group_grade_id`) VALUES
   (1, 1, "Musketiers", 2017, 2018, 1),
   (2, 2, "Hackerman", 2017, 2018, 2),
-  (3, 3, "Madam", 2016, 2017, 3),
-  (4, 1, "Uganda Knuckles", 2001, 2031, NULL );
 
 INSERT INTO `group_periods` (`group_id`, `period`) VALUES
   (1, "Q1"),
@@ -43,10 +39,6 @@ INSERT INTO `group_periods` (`group_id`, `period`) VALUES
 
 INSERT INTO `user_groups` (`user_id`, `group_id`) VALUES
   (1, 1),
-  (1, 4),
-  (4, 4),
-  (4, 1),
-  (2, 1),
   (2, 2),
   (1, 2),
   (2, 3),
