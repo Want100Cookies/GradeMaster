@@ -1,19 +1,20 @@
-function gradingController($stateParams, $http, $cookies, $mdDialog, $state) {
+function gradingController($stateParams, $mdDialog, $state, UserService, GroupService) {
     let ctrl = this;
 
     ctrl.groupGrade = 0;
+    ctrl.group = {};
     ctrl.students = [];
     ctrl.self = {};
     ctrl.loading = true;
 
-    let accessToken = $cookies.get("access_token");
-    $http.get("http://localhost:8080/api/v1/groups/" + $stateParams.groupId, {
-        headers: {
-            "Authorization": "Bearer " + accessToken
-        }
-    }).then(response => {
-        ctrl.groupGrade = response.data.groupGrade.grade;
-        ctrl.students = response.data.users.filter(user => {
+    UserService.getUser().then(user => {
+        ctrl.self = user;
+    });
+
+    GroupService.getGroup($stateParams.groupId).then(group => {
+        ctrl.group = group;
+        ctrl.groupGrade = group.groupGrade.grade;
+        ctrl.students = group.users.filter(user => {
             return user.roles.filter(role => {
                 return role.code === "STUDENT_ROLE"
             }).length === 1;
@@ -28,14 +29,6 @@ function gradingController($stateParams, $http, $cookies, $mdDialog, $state) {
         ctrl.loading = false;
     });
 
-    $http.get("http://localhost:8080/api/v1/users/self", {
-        headers: {
-            "Authorization": "Bearer " + accessToken
-        }
-    }).then(response => {
-        ctrl.self = response.data;
-    });
-
     ctrl.save = () => {
         let confirm = $mdDialog.confirm()
             .title("Are you sure?")
@@ -46,22 +39,8 @@ function gradingController($stateParams, $http, $cookies, $mdDialog, $state) {
         $mdDialog.show(confirm)
             .then(() => {
                 ctrl.loading = true;
-                let data = [];
-                for (let i = 0; i < ctrl.students.length; i++) {
-                    data.push({
-                        fromUser: {id: ctrl.self.id},
-                        toUser: {id: ctrl.students[i].id},
-                        group: {id: $stateParams.groupId},
-                        grade: ctrl.students[i].grade.grade,
-                        motivation: ctrl.students[i].grade.motivation
-                    })
-                }
 
-                $http.post("http://localhost:8080/api/v1/grades/users/" + ctrl.self.id, data, {
-                    headers: {
-                        "Authorization": "Bearer " + accessToken
-                    }
-                }).then(() => {
+                GroupService.createGroup(ctrl.students, ctrl.self, ctrl.group).then(() => {
                     $state.transitionTo("app.groups");
                 }, () => {
                     ctrl.loading = false;
@@ -70,7 +49,7 @@ function gradingController($stateParams, $http, $cookies, $mdDialog, $state) {
                         .title("Error")
                         .textContent("There was an error processing your request.")
                         .ok("Okay"));
-                })
+                });
             });
     };
 }
