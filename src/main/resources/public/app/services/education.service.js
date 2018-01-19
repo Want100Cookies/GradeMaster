@@ -5,7 +5,13 @@ app.factory('EducationService', function (API) {
         return API.get({
             path: `educations/${educationId}/courses`
         });
-    }
+    };
+  
+    this.getEducations = () => {
+        return API.get({
+            path: `educations`  
+        });
+     };
 
     return this;
 });
