@@ -16,15 +16,27 @@ app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService) {
         })
     };
 
-    function DialogController($scope, $mdDialog, GroupService) {
-        $scope.education = ''
+    function DialogController($scope, $mdDialog, GroupService, EducationService) {
+        $scope.chosenEducation = null;
+        $scope.courseOptions = [];
+        $scope.educationOptions = [];
+        EducationService.getEducations().then(function (response) {
+            $scope.educationOptions = response;
+        })
+        $scope.$watch('chosenEducation', function () {
+            if ($scope.chosenEducation !== null) {
+                EducationService.getCoursesByEducation($scope.chosenEducation).then(function (response) {
+                    $scope.courseOptions = response;
+                })
+            }
+        });
         $scope.vm = {
             formData: {
                 groupName: '',
                 startYear: '',
                 endYear: '',
                 users: [
-    
+
                 ],
                 course: {},
             },
@@ -38,8 +50,9 @@ app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService) {
             $mdDialog.cancel();
         };
 
-        $scope.create = function() {
-            if ($scope.vm.formData.groupName != null && $scope.vm.formData.startYear != null && $scope.vm.formData.startYear)  {
+        $scope.create = function () {
+            if ($scope.vm.formData.groupName != null && $scope.vm.formData.startYear != null && $scope.vm.formData.startYear
+            && $scope.vm.formData.course) {
                 GroupService.createGroup($scope.vm.formData);
                 $mdDialog.cancel();
             }
