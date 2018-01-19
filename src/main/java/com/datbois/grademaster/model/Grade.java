@@ -1,20 +1,14 @@
 package com.datbois.grademaster.model;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
-import java.text.SimpleDateFormat;
-import java.util.Set;
 
 @Entity
 @Table(
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"from_user_id","to_user_id","group_id"})
+                @UniqueConstraint(columnNames = {"from_user_id", "to_user_id", "group_id"})
         }
 )
-public class Grade extends BaseModel{
+public class Grade extends BaseModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -35,11 +29,11 @@ public class Grade extends BaseModel{
 
     private boolean valid = true;
 
-    public Grade(){
+    public Grade() {
 
     }
 
-    public Grade(Double grade, String motivation, User fromUser, User toUser, Group group){
+    public Grade(Double grade, String motivation, User fromUser, User toUser, Group group) {
         this.grade = grade;
         this.motivation = motivation;
         this.fromUser = fromUser;
@@ -95,11 +89,11 @@ public class Grade extends BaseModel{
         this.toUser = toUser;
     }
 
-    public void removeFromUser(){
+    public void removeFromUser() {
         fromUser = null;
     }
 
-    public void removeToUser(){
+    public void removeToUser() {
         toUser = null;
     }
 

@@ -1,9 +1,8 @@
-'use strict';
+'use strict'
 var app = angular.module('gmApp', [
     'ngMaterial',
     'ngMessages',
     'ngAnimate',
-    'ngRoute',
     'ngResource',
     'ngCookies',
     'ui.router'
@@ -74,7 +73,15 @@ app.config(function ($stateProvider) {
         })
         .state('app.groups', {
             url: '/groups',
-            templateUrl: '/app/pages/groups.html',
+            templateProvider: function (AuthService) {
+                return AuthService.hasRoles('ADMIN_ROLE', 'TEACHER_ROLE').then((hasRole) => {
+                    if(hasRole){
+                        return '<div ng-include="\'/app/pages/teacher-groups.html\'"></div>';
+                    } else {
+                        return '<div ng-include="\'/app/pages/groups.html\'"></div>';
+                    }
+                })
+            },
             resolve: {
                 'auth': function (AuthService) {
                     return AuthService.authenticate();
@@ -82,13 +89,32 @@ app.config(function ($stateProvider) {
             },
             controller: 'GroupsCtrl'
         })
-        .state('app.grades', {
-            url: '/grades',
-            templateUrl: '/app/pages/grades.html',
+        .state('app.grading', {
+            url: '/groups/:groupId/grading',
+            component: 'grading',
             resolve: {
                 'auth': function (AuthService) {
                     return AuthService.authenticate();
                 },
-            }
+            },
+        })
+        .state('app.grades', {
+            url: '/grades',
+            templateProvider: function (AuthService) {
+                return AuthService.hasRoles('ADMIN_ROLE', 'TEACHER_ROLE').then((hasRole) => {
+                    //console.log(response);
+                    if(hasRole){
+                        return '<div ng-include="\'/app/pages/teacher-grades.html\'"></div>';
+                    } else {
+                        return '<div ng-include="\'/app/pages/grades.html\'"></div>';
+                    }
+                })
+            },
+            resolve: {
+                'auth': function (AuthService) {
+                    return AuthService.authenticate();
+                },
+            },
+            controller: 'GradesCtrl'
         });
 });
