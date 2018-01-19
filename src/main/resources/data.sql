@@ -1,7 +1,8 @@
 INSERT INTO `user` (`id`, `email`, `name`, `password`, `verified`, `reference_id`) VALUES
   (1, "john.doe@student.stenden.com", "John Doe", "$2a$04$FYZXxiv7A74rX33gfs2m/.AGqhQ/unlJCB2nHLRiuHCVlECcyLyb6", 1, '123456'),
   (2, "jane.doe@stenden.com", "Jane Doe", "$2a$04$FYZXxiv7A74rX33gfs2m/.AGqhQ/unlJCB2nHLRiuHCVlECcyLyb6", 1, '654321'),
- 
+  (3, "admin@stenden.com", "Administrator", "$2a$04$FYZXxiv7A74rX33gfs2m/.AGqhQ/unlJCB2nHLRiuHCVlECcyLyb6", 1, '987555');
+   
 INSERT INTO `role` (`id`, `code`, `label`) VALUES
   (1, "STUDENT_ROLE", "Student"),
   (2, "TEACHER_ROLE", "Teacher"),
@@ -57,6 +58,7 @@ INSERT INTO `notification`(`id`, `title`, `message`, `seen`, `user_id`) VALUES
  (3, "Final", "Your final grade has been determined.", 0, 1),
  (4, "Received", "All group ratings received", 0, 2),
  (5, "Test", "Group grade can be made final", 0, 2);
+
 
 
 
