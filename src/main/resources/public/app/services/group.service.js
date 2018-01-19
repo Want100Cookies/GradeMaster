@@ -41,13 +41,13 @@ app.factory('GroupService', function (API, $state) {
             users,
             course,
             period
-        }
-        
+        };
+
         return API.post({
             path: `groups`,
             data
         });
-    }
+    };
 
     return this;
 });
