@@ -21,12 +21,12 @@ app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService) {
         $scope.courseOptions = [];
         $scope.educationOptions = [];
         EducationService.getEducations().then(function (response) {
-            $scope.educationOptions = response;
+            $scope.educationOptions = response.data;
         })
         $scope.$watch('chosenEducation', function () {
             if ($scope.chosenEducation !== null) {
                 EducationService.getCoursesByEducation($scope.chosenEducation).then(function (response) {
-                    $scope.courseOptions = response;
+                    $scope.courseOptions = response.data;
                 })
             }
         });
