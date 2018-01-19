@@ -26,10 +26,9 @@ app.factory('UserService', function ($cookies, $q, $resource, $http, $state) {
                 }
             }
             return $http(req).then(function(data){
-                console.log("Succesful API Call", data);
                 return data;
             }).catch(function(data){
-                console.log("ERROR", data);
+                console.log(data);
             });
         }
     }

@@ -31,7 +31,8 @@ INSERT INTO `group_grade` (`id`,`grade`,`comment`, `teacher_id`) VALUES
 INSERT INTO `group` (`id`, `course_id`, `group_name`, `start_year`, `end_year`, `group_grade_id`) VALUES
   (1, 1, "Musketiers", 2017, 2018, 1),
   (2, 2, "Hackerman", 2017, 2018, 2),
-  (3, 3, "Madam", 2016, 2017, 3);
+  (3, 3, "Madam", 2016, 2017, 3),
+  (4, 1, "Uganda Knuckles", 2001, 2031, NULL );
 
 INSERT INTO `group_periods` (`group_id`, `period`) VALUES
   (1, "Q1"),
@@ -42,6 +43,8 @@ INSERT INTO `group_periods` (`group_id`, `period`) VALUES
 
 INSERT INTO `user_groups` (`user_id`, `group_id`) VALUES
   (1, 1),
+  (1, 4),
+  (4, 4),
   (4, 1),
   (2, 1),
   (2, 2),
