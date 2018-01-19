@@ -1,5 +1,5 @@
 <table layout-fill>
-    <tr ng-repeat="student in $ctrl.students">
+    <tr ng-repeat="student in $ctrl.students | orderBy:'id'">
         <td>
             <div class="md-headline">{{student.name}}</div>
             <div class="md-caption">{{student.referenceId}}</div>
