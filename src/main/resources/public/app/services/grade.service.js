@@ -1,4 +1,4 @@
-app.factory('GradeService', function (API, $state) {
+app.factory('GradeService', function (API) {
 
     this.createGroupGrade = (group) => {
         let deadline = group.groupGrade.deadline.date;
