@@ -1,115 +1,43 @@
-app.factory('EducationService', function ($cookies, $q, $resource, $http) {
-    return {
-        getCoursesByEducation: (educationId) => {
-            const accessToken = $cookies.get("access_token");
+app.factory('EducationService', function (API) {
 
-            let deferred = $q.defer();
+    this.getCoursesByEducation = (education) => {
+        const educationId = 1; // TODO use education's id. 
+        return API.get({
+            path: `educations/${educationId}/courses`
+        });
+    };
+  
+    this.getEducations = () => {
+        return API.get({
+            path: `educations`  
+        });
+     };
+     
+     this.getEducation = (educationId) => {
+       return API.get({
+         path: 'educations'
+       });
+     };
+     
+     this.updateEducation = (education) => {
+       return API.patch({
+         path: `educations/${education.id}`,
+         data: education
+       });
+     };
+     
+     this.deleteEducation = (education) => {
+       return API.delete({
+         path: `educations/${education.id}`
+       });
+     };
+     
+     this.createEducation = (name) => {
+       return API.post({
+         path: 'educations',
+         data: {name: name}
+       });
+     }
 
-            $http
-                .get("http://localhost:8080/api/v1/educations/" + educationId + "/courses", {
-                    headers: {
-                        "Authorization": "Bearer " + accessToken
-                    }
-                })
-                .then(response => {
-                    deferred.resolve(response.data);
-                }, error => {
-                    deferred.reject(error);
-                });
-
-            return deferred.promise;
-        },
-        getEducations: () => {
-            const accessToken = $cookies.get("access_token");
-            let deferred = $q.defer();
-
-            $http
-                .get("http://localhost:8080/api/v1/educations", {
-                    headers: {
-                        "Authorization": "Bearer " + accessToken
-                    }
-                })
-                .then(response => {
-                    deferred.resolve(response.data);
-                }, error => {
-                    deferred.reject(error);
-                });
-
-            return deferred.promise;
-        },
-        getEducation: educationId => {
-            const accessToken = $cookies.get("access_token");
-            let deferred = $q.defer();
-
-            $http
-                .get("http://localhost:8080/api/v1/educations/" + educationId, {
-                    headers: {
-                        "Authorization": "Bearer " + accessToken
-                    }
-                })
-                .then(response => {
-                    deferred.resolve(response.data);
-                }, error => {
-                    deferred.reject(error);
-                });
-
-            return deferred.promise;
-        },
-        updateEducation: education => {
-            const accessToken = $cookies.get("access_token");
-            let deferred = $q.defer();
-
-            $http
-                .patch("http://localhost:8080/api/v1/educations/" + education.id, education, {
-                    headers: {
-                        "Authorization": "Bearer " + accessToken
-                    }
-                })
-                .then(response => {
-                    deferred.resolve(response.data);
-                }, error => {
-                    deferred.reject(error);
-                });
-
-            return deferred.promise;
-        },
-        deleteEducation: education => {
-            const accessToken = $cookies.get("access_token");
-            let deferred = $q.defer();
-
-            $http
-                .delete("http://localhost:8080/api/v1/educations/" + education.id, {
-                    headers: {
-                        "Authorization": "Bearer " + accessToken
-                    }
-                })
-                .then(() => {
-                    deferred.resolve();
-                }, error => {
-                    deferred.reject(error);
-                });
-
-            return deferred.promise;
-        },
-        createEducation: name => {
-            const accessToken = $cookies.get("access_token");
-            let deferred = $q.defer();
-
-            $http
-                .post("http://localhost:8080/api/v1/educations", {
-                    name: name,
-                }, {
-                    headers: {
-                        "Authorization": "Bearer " + accessToken
-                    }
-                })
-                .then(response => {
-                    deferred.resolve(response.data);
-                }, error => {
-                    deferred.reject(error);
-                });
-
-            return deferred.promise;
-        },
-    }
+    return this;
 });

@@ -104,8 +104,7 @@ app.config(function ($stateProvider) {
             url: '/grades',
             templateProvider: function (AuthService) {
                 return AuthService.hasRoles('ADMIN_ROLE', 'TEACHER_ROLE').then((hasRole) => {
-                    //console.log(response);
-                    if (hasRole) {
+                    if(hasRole){
                         return '<div ng-include="\'/app/pages/teacher-grades.html\'"></div>';
                     } else {
                         return '<div ng-include="\'/app/pages/grades.html\'"></div>';
