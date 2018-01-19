@@ -7,6 +7,7 @@ function GroupCardCtrl($scope, StudentGroupsService){
         ctrl.groupGrade = $scope.$ctrl.group.groupGrade.grade;
 
         $scope.status = "pending";
+        $scope.groupGradeStatus = CheckGrade(ctrl.groupGrade);
 
         StudentGroupsService.getGroupMembers($scope.$ctrl.group.id).then(function(response){
             $scope.groupMembers = response.data;
@@ -14,10 +15,22 @@ function GroupCardCtrl($scope, StudentGroupsService){
 
         StudentGroupsService.getFinalGroupGrade($scope.$ctrl.group.id, $scope.$ctrl.user.id).then(function(response){
             $scope.finalGroupGrades = response.data;
+            $scope.finalGradeStatus = CheckGrade($scope.finalGroupGrades.grade);
+
         });
     }
 
-
+    function CheckGrade(grade){
+        if(grade <= 5.4){
+            return "failMark";
+        }
+        else if(grade == 5.5){
+            return "closeMark";
+        }
+        else if(grade > 5.5){
+            return "passMark";
+        }
+    }
 }
 
 app.component('groupCard', {

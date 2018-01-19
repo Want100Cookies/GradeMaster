@@ -10,8 +10,8 @@
                 </div>
                 <div layout="row" layout-align="left">
                     <span ng-class="status" class="md-title" flex>{{$ctrl.groupStatus}}</span>
-                    <span class="md-title" flex>{{$ctrl.groupGrade}}</span>
-                    <div class="md-title" flex ng-repeat="grade in finalGroupGrades">
+                    <span ng-class="groupGradeStatus" class="md-title" flex>{{$ctrl.groupGrade}}</span>
+                    <div ng-class="finalGradeStatus" class="md-title" flex ng-repeat="grade in finalGroupGrades">
                         {{grade}}
                     </div>                 
                 </div> 
