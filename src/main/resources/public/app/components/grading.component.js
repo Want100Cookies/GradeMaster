@@ -7,7 +7,7 @@ function gradingController($stateParams, $mdDialog, $state, UserService, GroupSe
     ctrl.self = {};
     ctrl.loading = true;
 
-    UserService.getUser().then(user => {
+    UserService.getSelf().then(user => {
         ctrl.self = user;
     });
 
