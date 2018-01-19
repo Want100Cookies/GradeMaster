@@ -12,23 +12,27 @@ app.factory('API', function ($cookies, $http, $httpParamSerializer) {
     const BASE_URL = `http://localhost:8080`;
     const API = `api/v1`;
     const OAUTH_KEY = `Z3JhZGVtYXN0ZXItY2xpZW50OmdyYWRlbWFzdGVyLXNlY3JldA==`;
-    const DEBUG = true;
+    const DEBUG = false;
 
     /**
      * DEFAULT REQUESTS
      */
-    const REQUEST = {
-        url: `${BASE_URL}/${API}/`,
-        headers: {
-            'Authorization': `Bearer ${$cookies.get("access_token")}`
+    this.getRequest = () => {
+        return {
+            url: `${BASE_URL}/${API}/`,
+            headers: {
+                'Authorization': `Bearer ${$cookies.get("access_token")}`
+            }
         }
     };
-    const AUTH_REQUEST = {
-        url: `${BASE_URL}/oauth/token`,
-        headers: {
-            'Authorization': `Basic ${OAUTH_KEY}`,
-            'Content-type': `application/x-www-form-urlencoded; charset=utf-8`
-        },
+    this.getAuthRequest = () => {
+        return {
+            url: `${BASE_URL}/oauth/token`,
+            headers: {
+                'Authorization': `Basic ${OAUTH_KEY}`,
+                'Content-type': `application/x-www-form-urlencoded; charset=utf-8`
+            },
+        }
     };
 
     /**
@@ -43,7 +47,7 @@ app.factory('API', function ($cookies, $http, $httpParamSerializer) {
             grant_type: 'password',
             scope: 'read write'
         }
-        let req = Object.assign({}, AUTH_REQUEST);
+        let req = Object.assign({}, this.getAuthRequest());
         return this.post({
             data: $httpParamSerializer(user),
             req
@@ -61,7 +65,7 @@ app.factory('API', function ($cookies, $http, $httpParamSerializer) {
      */
     this.get = ({
         path = ``,
-        req = Object.assign({}, REQUEST)
+        req = Object.assign({}, this.getRequest())
     }) => {
         const METHOD = `GET`;
         req.method = METHOD;
@@ -79,7 +83,7 @@ app.factory('API', function ($cookies, $http, $httpParamSerializer) {
     this.post = ({
         path = ``,
         data = {},
-        req = Object.assign({}, REQUEST)
+        req = Object.assign({}, this.getRequest())
     }) => {
         const METHOD = `POST`;
         req.method = METHOD;
@@ -98,7 +102,7 @@ app.factory('API', function ($cookies, $http, $httpParamSerializer) {
     this.patch = ({
         path = ``,
         data = {},
-        req = Object.assign({}, REQUEST)
+        req = Object.assign({}, this.getRequest())
     }) => {
         const METHOD = `PATCH`;
         req.method = METHOD;
@@ -117,7 +121,7 @@ app.factory('API', function ($cookies, $http, $httpParamSerializer) {
     this.delete = ({
         path = ``,
         data = {},
-        req = Object.assign({}, REQUEST)
+        req = Object.assign({}, this.getRequest())
     }) => {
         const METHOD = `PATCH`;
         req.method = METHOD;
