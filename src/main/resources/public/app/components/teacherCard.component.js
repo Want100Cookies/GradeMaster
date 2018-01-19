@@ -3,10 +3,25 @@ teacherCardCtrl = ($scope, GroupService) => {
 
     $scope.init = () => {
         $scope.groupGrade = "TBD";
-        if ($scope.$ctrl.groupGrade !== null) {
+        $scope.groupStatus = "TBD";
+        $scope.groupName = "Couldn't resolve name";
+        $scope.groupMembers = [];
+        $scope.groupId = $scope.$ctrl.group.id;
+        if ($scope.$ctrl.group.groupGrade !== null) {
+            $scope.groupStatus = "GRADED"
             $scope.groupGrade = $scope.$ctrl.group.groupGrade.grade;
-            console.log($scope.$ctrl.group.groupGrade.grade);
+        } else {
+            $scope.groupStatus = "PENDING"
         }
+        
+        if ($scope.$ctrl.group !== null) {
+            $scope.groupName = $scope.$ctrl.group.groupName;
+        }
+
+        // Service calls
+        GroupService.getGroupMembers($scope.$ctrl.group.id).then((response) => {
+           $scope.groupMembers = response.data;
+        });
     }
 }
 app.component('teacherCard', {

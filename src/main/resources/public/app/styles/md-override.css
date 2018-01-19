@@ -38,7 +38,7 @@ md-input-container:not(.md-input-invalid).md-input-focused label {
 }
 #override-fab {
     background-color: #555C78;
-    position:absolute;
+    position: fixed;
     bottom:0;
     right:0;
     margin-bottom: 30px;

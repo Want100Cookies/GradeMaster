@@ -21,6 +21,7 @@ app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService, Gr
     $scope.getGroups = () => {
         return GroupService.getGroups().then((response) => {
             $scope.teacherGroupList = response.data;
+            console.log(response.data);
         });
     }
     $scope.showAddGroup = (ev) => {

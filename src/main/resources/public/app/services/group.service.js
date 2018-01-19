@@ -47,5 +47,12 @@ app.factory('GroupService', function (API, $state) {
             path: 'grades/status/groups/' + groupId
         });
     };
+
+    this.getGroupMembers = (groupId) => {
+        return API.get({
+            path: 'groups/'+ groupId +'/users'
+        });
+    };
+    
     return this;
 });
