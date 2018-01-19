@@ -15,7 +15,7 @@ app.factory('AuthService', function (API, $state) {
             path: `users/self`
         }).then((resp) => {
             for(const role of roles) {
-                for(const respRole of response.data.roles) {
+                for(const respRole of resp.data.roles) {
                     if(respRole.code === role) return true;
                 }
             }
@@ -26,6 +26,4 @@ app.factory('AuthService', function (API, $state) {
     }
 
     return this;
-
-    
 });
