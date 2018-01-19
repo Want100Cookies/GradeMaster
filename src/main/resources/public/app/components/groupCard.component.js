@@ -27,7 +27,6 @@ function GroupCardCtrl($scope, StudentGroupsService){
         StudentGroupsService.getGradingStatus($scope.$ctrl.group.id).then(function(response){
             $scope.groupsStatuses = response.data;
             $scope.groupStatus = CheckStatus($scope.groupsStatuses.status);
-            console.log($scope.groupStatus);
         });
 
         if(!$scope.$ctrl.group.groupGrade){

@@ -1,66 +1,26 @@
-app.factory('StudentGroupsService', function($http, $cookies){
+app.factory('StudentGroupsService', function($http, $cookies, API){
     return {
         getStudentGroups : function(userId){
-            var accessToken = $cookies.get("access_token");
-            var req = {
-                method: 'GET',
-                url: 'http://localhost:8080/api/v1/users/'+ userId +'/groups',
-                headers: {
-                    "Authorization": "Bearer " + accessToken
-                }
-            }
-            return $http(req).then(function(data){
-                return data;
-            }).catch(function(data){
-                console.log(data);
+            return API.get({
+                path: 'users/'+ userId +'/groups'
             });
         },
 
         getGroupMembers : function(groupId){
-            var accessToken = $cookies.get("access_token");
-            var req = {
-                method: 'GET',
-                url: 'http://localhost:8080/api/v1/groups/'+ groupId +'/users',
-                headers: {
-                    "Authorization": "Bearer " + accessToken
-                }
-            }
-            return $http(req).then(function(data){
-                return data;
-            }).catch(function(data){
-                console.log(data);
+            return API.get({
+                path: 'groups/'+ groupId +'/users'
             });
         },
 
         getFinalGroupGrade : function(groupId, userId){
-            var accessToken = $cookies.get("access_token");
-            var req = {
-                method: 'GET',
-                url: 'http://localhost:8080/api/v1/grades/groups/'+ groupId +'/users/'+ userId,
-                headers: {
-                    "Authorization": "Bearer " + accessToken
-                }
-            }
-            return $http(req).then(function(data){
-                return data;
-            }).catch(function(data){
-                console.log(data);
+            return API.get({
+                path: 'grades/groups/'+ groupId +'/users/'+ userId
             });
         },
 
         getGradingStatus : function(groupId){
-            var accessToken = $cookies.get("access_token");
-            var req = {
-                method: 'GET',
-                url: 'http://localhost:8080/api/v1/grades/status/groups/' + groupId,
-                headers: {
-                    "Authorization": "Bearer " + accessToken
-                }
-            }
-            return $http(req).then(function(data){
-                return data;
-            }).catch(function(data){
-                console.log(data);
+            return API.get({
+                path: 'grades/status/groups/' + groupId
             });
         }
     }
