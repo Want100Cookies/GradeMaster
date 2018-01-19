@@ -115,5 +115,32 @@ app.config(function ($stateProvider) {
                 },
             },
             controller: 'GradesCtrl'
+        })
+        .state('app.educations', {
+            url: '/educations',
+            component: 'educations',
+            resolve: {
+                'auth': function (AuthService) {
+                    return AuthService.authenticate();
+                },
+            },
+        })
+        .state('app.education', {
+            url: '/educations/:educationId',
+            component: 'education',
+            resolve: {
+                'auth': function (AuthService) {
+                    return AuthService.authenticate();
+                },
+            },
+        })
+        .state('app.course', {
+            url: '/courses/:courseId',
+            component: 'course',
+            resolve: {
+                'auth': function (AuthService) {
+                    return AuthService.authenticate();
+                },
+            },
         });
 });
