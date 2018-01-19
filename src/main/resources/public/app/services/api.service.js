@@ -137,11 +137,12 @@ app.factory('API', function ($cookies, $http, $httpParamSerializer) {
      */
     this.request = (req) => {
         if (DEBUG) {
+            console.log(`request`, req);
             return $http(req).then((resp) => {
-                console.log(resp);
+                console.log(`response`, resp);
                 return resp;
             }).catch((error) => {
-                console.error(error);
+                console.error(`error`, error);
                 return error;
             });
         }
