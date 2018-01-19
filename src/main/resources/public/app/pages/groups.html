@@ -1,1 +1,7 @@
-<p>Student groups</p>
+<body ng-app="gmApp" ng-controller="GroupsCtrl">
+    <div flex-xs="" flex-gt-xs="50" style="margin: 0 auto;" ng-controller="StudentGroupsCtrl">
+        <div ng-repeat="group in groupsDetails | orderBy:'id'">
+            <group-card group="group" user="userDetails"></group-card>
+        </div>
+    </div>
+</body>

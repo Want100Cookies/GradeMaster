@@ -2,6 +2,16 @@ app.controller('GroupsCtrl', function ($scope) {
 
 });
 
+app.controller('StudentGroupsCtrl', function($scope, UserService, StudentGroupsService){
+
+    UserService.getSelf().then(function(response){
+        $scope.userDetails = response.data;
+        StudentGroupsService.getStudentGroups($scope.userDetails.id).then(function(response){
+            $scope.groupsDetails = response.data;
+        });
+    });
+});
+
 app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService, GroupService) {
     $scope.status = '  ';
     $scope.onInit = () => {
@@ -27,6 +37,7 @@ app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService, Gr
         $scope.chosenEducation = null;
         $scope.courseOptions = [];
         $scope.educationOptions = [];
+      
         EducationService.getEducations().then((response) => {
             $scope.educationOptions = response.data;
         })
@@ -72,5 +83,6 @@ app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService, Gr
         $scope.usersChange = (val) => {
             $scope.vm.formData.users = val;
         };
-    }
+    };
 });
+

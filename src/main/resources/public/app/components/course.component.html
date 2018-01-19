@@ -1,0 +1,49 @@
+<md-card>
+    <md-card-header>
+        <div class="md-display-1">
+            Course
+        </div>
+    </md-card-header>
+    <md-card-content>
+        <div class="md-caption">
+            Course name
+        </div>
+        <div class="md-headline">{{$ctrl.course.name}}</div>
+
+    </md-card-content>
+    <md-card-actions align="right">
+        <md-button ng-click="$ctrl.delete()" class="md-raised md-warn">Delete</md-button>
+    </md-card-actions>
+</md-card>
+
+<md-grid-list md-cols="4" md-row-height="4:3">
+    <md-grid-tile ng-repeat="group in $ctrl.groups | orderBy:'id'">
+        <md-card>
+            <md-card-header>
+                <div class="md-headline">
+                    Group
+                </div>
+            </md-card-header>
+            <md-card-content>
+                <table>
+                    <tr>
+                        <td>Name:</td>
+                        <td><b>{{group.groupName}}</b></td>
+                    </tr>
+                    <tr>
+                        <td>Year:</td>
+                        <td>{{group.startYear}} - {{group.endYear}}</td>
+                    </tr>
+                    <tr>
+                        <td>Period:</td>
+                        <td>{{group.period.join(', ')}}</td>
+                    </tr>
+                </table>
+            </md-card-content>
+            <md-card-actions align="right">
+                <md-divider></md-divider>
+                <md-button ng-click="$ctrl.viewGroup(group)" class="md-primary">View</md-button>
+            </md-card-actions>
+        </md-card>
+    </md-grid-tile>
+</md-grid-list>

@@ -1,0 +1,45 @@
+.md-subhead{
+    color: #8CA0B3;
+}
+
+.md-caption{
+    margin-top: 20px;
+    font-style: italic;
+    color: #8CA0B3;
+    display: inline-block;
+}
+
+.open{
+    color: #2DD1AC;
+}
+
+.pending{
+    color: #F5A623;
+}
+
+.closed{
+    color: #DB2828;
+}
+
+.failMark{
+    color: #DB2828;
+}
+
+.passMark{
+    color: #2DD1AC;
+}
+
+.closeMark{
+    color: #F5A623;
+}
+
+.groupGradeBtn{
+    color: #2DD1AC;
+    font-size: 20px;
+    position: absolute;
+    right: 0;
+}
+
+.relativeDiv{
+    position: relative;
+}

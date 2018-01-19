@@ -1,11 +1,11 @@
 app.factory('UserService', function (API) {
     return {
-        getSelf: function () {
+        getSelf: () => {
             return API.get({
                 path: `users/self`
-            })
+            });
         },
-        getAllUsers: function () {
+        getAllUsers: () => {
             return API.get({
                 path: `users`
             });

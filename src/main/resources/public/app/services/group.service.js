@@ -40,7 +40,7 @@ app.factory('GroupService', function (API, $state) {
             path: `groups`,
             data: group
         });
-    }
+    };
 
     return this;
 });
