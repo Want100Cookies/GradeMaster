@@ -66,12 +66,12 @@ public class GradeController {
         Group group = groupService.findById(groupId);
 
         if(group != null){
-            current = Status.Open;
+            current = Status.OPEN;
             if(group.getGroupGrade() != null){
-                current = Status.Pending;
+                current = Status.PENDING;
 
                 if(groupService.getStudents(groupId).size() == groupService.getGradesFromTeacherToStudent(groupId).size()){
-                    current = Status.Closed;
+                    current = Status.CLOSED;
                 }
             }
             status.put("status", current);

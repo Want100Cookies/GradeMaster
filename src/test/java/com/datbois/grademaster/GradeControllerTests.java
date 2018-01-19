@@ -51,14 +51,12 @@ public class GradeControllerTests extends OAuthTests {
                 .contentType(ContentType.JSON)
                 .get("/api/v1/grades/status/groups/3")
                 .then()
-                .body("status", is(Status.Pending.name()));
+                .body("status", is(Status.PENDING.name()));
     }
 
     @Test
     public void StudentInsertGradeWithoutMotivationDoesNotCount(){
         String token = this.obtainAccessToken("john.doe@student.stenden.com", "password");
-
-//        gradeService.delete(5L);
 
         User fromUser = userService.findById(1L);
         User toUser = userService.findById(1L);
