@@ -40,6 +40,6 @@
     right: 0;
 }
 
-div{
+.relativeDiv{
     position: relative;
 }
