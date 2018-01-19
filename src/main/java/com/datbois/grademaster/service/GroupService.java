@@ -1,5 +1,6 @@
 package com.datbois.grademaster.service;
 
+import com.datbois.grademaster.model.Grade;
 import com.datbois.grademaster.model.Group;
 import com.datbois.grademaster.model.User;
 
@@ -18,4 +19,10 @@ public interface GroupService {
     void delete(Long id);
 
     Group setUsers(Group group, Set<User> users);
+
+    boolean userIsInGroup(Long userId, Long groupId);
+
+    List<Grade> getGradesFromTeacherToStudent(Long groupId);
+
+    Set<User> getStudents(Long groupId);
 }
