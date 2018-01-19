@@ -5,10 +5,10 @@ app.factory('UserService', function (API) {
                 path: `users/self`
             });
         },
-        getAllUsers: function () {
+        getAllUsers: () => {
             return API.get({
                 path: `users`
             });
-        }
+        },
     }
 });

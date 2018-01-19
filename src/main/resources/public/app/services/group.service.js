@@ -6,6 +6,11 @@ app.factory('GroupService', function (API, $state) {
         });
     };
 
+    this.getGroups = () => {
+        return API.get({
+            path: `groups`
+        })
+    }
     this.createGrades = (students, user, group) => {
         let data = [];
         for (let i = 0; i < students.length; i++) {
@@ -31,21 +36,9 @@ app.factory('GroupService', function (API, $state) {
     };
 
     this.createGroup = (group) => {
-        const {groupName, startYear, endYear, users} = group;
-        const course = 1;
-        const period = [`Q1`, `Q2`];
-        const data = {
-            groupName,
-            startYear,
-            endYear,
-            users,
-            course,
-            period
-        };
-
         return API.post({
             path: `groups`,
-            data
+            data: group
         });
     };
 
