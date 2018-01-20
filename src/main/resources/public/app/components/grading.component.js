@@ -1,4 +1,4 @@
-function gradingController($stateParams, $mdDialog, $state, UserService, GroupService) {
+function gradingController($stateParams, $mdDialog, $state, UserService, GroupService, GradeService) {
     let ctrl = this;
 
     ctrl.groupGrade = 0;
@@ -7,11 +7,12 @@ function gradingController($stateParams, $mdDialog, $state, UserService, GroupSe
     ctrl.self = {};
     ctrl.loading = true;
 
-    UserService.getUser().then(user => {
+    UserService.getSelf().then(user => {
         ctrl.self = user;
     });
 
-    GroupService.getGroup($stateParams.groupId).then(group => {
+    GroupService.getGroup($stateParams.groupId).then(response => {
+        const group = response.data;
         ctrl.group = group;
         ctrl.groupGrade = group.groupGrade.grade;
         ctrl.students = group.users.filter(user => {
@@ -27,7 +28,9 @@ function gradingController($stateParams, $mdDialog, $state, UserService, GroupSe
             };
         }
         ctrl.loading = false;
-    });
+    }).catch(function (data) {
+        $state.transitionTo('app.dashboard')
+    });;
 
     ctrl.save = () => {
         let confirm = $mdDialog.confirm()
@@ -40,7 +43,7 @@ function gradingController($stateParams, $mdDialog, $state, UserService, GroupSe
             .then(() => {
                 ctrl.loading = true;
 
-                GroupService.createGrades(ctrl.students, ctrl.self, ctrl.group).then(() => {
+                GradeService.createGrades(ctrl.students, ctrl.self, ctrl.group).then(() => {
                     $state.transitionTo("app.groups");
                 }, () => {
                     ctrl.loading = false;
