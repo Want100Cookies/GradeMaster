@@ -59,5 +59,10 @@ app.factory('GroupService', function (API, $state) {
         });
     };
 
+    this.deleteGroup = (groupId) => {
+        return API.delete({
+            path: 'groups/'+ groupId
+        });
+    }
     return this;
 });

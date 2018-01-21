@@ -2,7 +2,15 @@
     <md-card>
         <md-card-title>
             <md-card-title-text>
-                <span class="md-headline">{{groupName}}</span>
+                <div layout="row" layout-align="left">
+                    <span class="md-headline" flex="90">{{groupName}}</span>
+                    <md-button class="md-icon-button" ng-click="deleteGroup()">
+                        <md-icon aria-label="delete" md-svg-src="app/icons/delete.svg"></md-icon>
+                    </md-button>
+                    <md-button class="md-icon-button" ng-click="editGroup()">
+                        <md-icon aria-label="delete" md-svg-src="app/icons/edit.svg"></md-icon>
+                    </md-button>
+                </div>
                 <div layout="row" layout-align="left">
                     <span class="md-subhead" flex="">Group status</span>
                     <span class="md-subhead" flex="">Group grade</span>
@@ -27,7 +35,7 @@
                         {{member.name}}
                     </div>
                 </div>
-                <md-button ng-disabled="groupStatus != 'PENDING'" href="#!/home/grades" class="groupGradeBtn">GRADE</md-button>
+                <md-button ng-disabled="groupStatus != 'Pending'" ng-click="gradeGroup()" class="groupGradeBtn">GRADE</md-button>
             </div>
             <br>
             <md-divider></md-divider>
