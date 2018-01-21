@@ -8,7 +8,8 @@ function gradingController($stateParams, $mdDialog, $state, UserService, GroupSe
     ctrl.loading = true;
 
     UserService.getSelf().then(user => {
-        ctrl.self = user;
+        ctrl.self = user.data;
+        
     });
 
     GroupService.getGroup($stateParams.groupId).then(response => {

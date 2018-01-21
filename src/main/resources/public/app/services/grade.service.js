@@ -35,10 +35,15 @@ app.factory('GradeService', function (API) {
         }
 
         return API.post({
-            path: `users/${user.id}`,
+            path: `grades/groups/${group.id}`,
             data
         });
     };
 
+    this.getGradesByGroup = (groupId) => {
+        return API.get({
+            path: `/grades/groups/`+groupId
+        });
+    }
     return this;
 });
