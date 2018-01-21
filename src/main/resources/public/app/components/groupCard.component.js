@@ -19,7 +19,7 @@ function GroupCardCtrl($scope, StudentGroupsService){
                 }
         }).catch((error) => {
             if (error.status === 404) {
-                $scope.finalGrades.push("T.B.D");
+                $scope.finalGrades.push("TBD");
             } else {
                 $scope.finalGrades.push("ERROR");
             }
@@ -31,13 +31,17 @@ function GroupCardCtrl($scope, StudentGroupsService){
         });
 
         if(!$scope.$ctrl.group.groupGrade){
-            $scope.groupGrades.push("T.B.D");
+            $scope.groupGrades.push("TBD");
         }
         else if($scope.$ctrl.group.groupGrade.grade){
             $scope.groupGrades.push($scope.$ctrl.group.groupGrade.grade);
             $scope.groupGradeStatus = CheckGrade($scope.$ctrl.group.groupGrade.grade);
         }
 
+    }
+
+    $scope.gradeGroupMembers = () => {
+        window.location.href = window.location.href + '/' + $scope.$ctrl.group.id + '/grading';
     }
 
     function CheckGrade(grade){
@@ -53,7 +57,10 @@ function GroupCardCtrl($scope, StudentGroupsService){
     }
 
     function CheckStatus(status){
-        if(status == "OPEN"){
+        if(status == "INACTIVE"){
+            return "inactive";
+        }
+        else if(status == "OPEN"){
             return "open";
         }
         else if(status == "PENDING"){

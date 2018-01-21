@@ -9,6 +9,10 @@
     display: inline-block;
 }
 
+.inactive{
+    color: #555C78;
+}
+
 .open{
     color: #2DD1AC;
 }

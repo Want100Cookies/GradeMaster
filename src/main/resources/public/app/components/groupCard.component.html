@@ -12,12 +12,11 @@
                     <div ng-class="groupStatus" class="md-title" ng-repeat="status in groupsStatuses" flex>
                         {{status}}
                     </div>
-                    <div ng-class="groupGradeStatus" class="md-title" ng-repeat="grade in groupGrades" flex>
-                        {{grade}}
+                    <div ng-class="groupGradeStatus" class="md-title" flex>
+                        {{groupGrades[0]}}
                     </div>
-                    <!-- <span ng-class="groupGradeStatus" class="md-title" flex>{{ctrl.groupGrade}}</span> -->
-                    <div ng-class="finalGradeStatus" class="md-title" flex ng-repeat="grade in finalGrades">
-                        {{grade}}
+                    <div ng-class="finalGradeStatus" class="md-title" flex>
+                        {{finalGrades[0]}}
                     </div>                 
                 </div> 
             </md-card-title-text>
@@ -32,7 +31,7 @@
                         {{member.name}}
                     </div>        
                 </div> 
-                <md-button ng-disabled="groupStatus != 'pending'" href="#!/home/grades" class="groupGradeBtn">GRADE</md-button>
+                <md-button ng-disabled="groupStatus != 'open'" ng-click="gradeGroupMembers()" class="groupGradeBtn">GRADE</md-button>
             </div><br>
             <md-divider></md-divider>
         </md-card-content>
