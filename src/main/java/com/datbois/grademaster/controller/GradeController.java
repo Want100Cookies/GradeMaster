@@ -56,25 +56,62 @@ public class GradeController {
                     "     PENDING: Group exists and group grade is set, students can start grading.\n" +
                     "     CLOSED: All students have received a grade from teacher, grading closed."
     )
-    public StatusResponse getGradingStatus(@PathVariable Long groupId) {
-        Status current;
-
+    public StatusResponse getGradingStatus(Authentication authentication, @PathVariable Long groupId) {
         Group group = groupService.findById(groupId);
+        User user = ((UserDetails) authentication.getPrincipal()).getUser();
 
         if (group == null) {
             throw new NotFoundException();
         }
 
-        current = Status.OPEN;
-        if (group.getGroupGrade() != null) {
-            current = Status.PENDING;
+        Status status;
 
-            if (groupService.getStudents(groupId).size() == groupService.getGradesFromTeacherToStudent(groupId).size()) {
-                current = Status.CLOSED;
+        if (user.hasAnyRole("STUDENT_ROLE")) {
+            // No group grade has been given
+            status = Status.INACTIVE;
+
+            if (group.getGroupGrade() != null) {
+                if (group.getGrades()
+                        .stream()
+                        .filter(grade -> grade.getToUser().getId().equals(user.getId()) && grade.getFromUser().hasAnyRole("TEACHER_ROLE"))
+                        .findFirst()
+                        .orElse(null) != null
+                        ) {
+                    // The student has received the final grade from the teacher
+                    status = Status.CLOSED;
+                } else if (group.getGrades()
+                        .stream()
+                        .noneMatch(grade -> grade.getFromUser().getId().equals(user.getId()))) {
+                    // Group grade has been given
+                    // And the student hasn't graded anyone
+                    status = Status.OPEN;
+                } else {
+                    // Waiting for the teacher to finalize the grade
+                    status = Status.PENDING;
+                }
+            }
+        } else {
+            status = Status.OPEN;
+
+            if (group.getGroupGrade() != null) {
+                status = Status.PENDING;
+
+                if (group.getGrades()
+                        .stream()
+                        .filter(grade -> grade.getFromUser().hasAnyRole("TEACHER_ROLE"))
+                        .count()
+                        ==
+                        group.getUsers()
+                                .stream()
+                                .filter(groupUser -> groupUser.hasAnyRole("STUDENT_ROLE"))
+                                .count()
+                        ) {
+                    status = Status.CLOSED;
+                }
             }
         }
 
-        return new StatusResponse(current);
+        return new StatusResponse(status);
     }
 
     @RequestMapping(value = "/grades/groups/{groupId}/users/{userId}", method = RequestMethod.GET)

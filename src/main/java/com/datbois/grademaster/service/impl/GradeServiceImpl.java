@@ -3,12 +3,16 @@ package com.datbois.grademaster.service.impl;
 import com.datbois.grademaster.model.Grade;
 import com.datbois.grademaster.model.Group;
 import com.datbois.grademaster.model.Notification;
+import com.datbois.grademaster.model.User;
 import com.datbois.grademaster.repository.GradeRepository;
 import com.datbois.grademaster.service.GradeService;
 import com.datbois.grademaster.service.GroupService;
 import com.datbois.grademaster.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class GradeServiceImpl implements GradeService {
@@ -56,15 +60,19 @@ public class GradeServiceImpl implements GradeService {
     }
 
     private void sendNotificationToTeacher(Group group) {
-        group.getUsers()
+        List<User> users = group.getUsers()
                 .stream()
                 .filter(user -> user.hasAnyRole("TEACHER_ROLE"))
-                .forEach(user -> notificationService.save(new Notification(
-                        String.format("All members of %s have graded their team members.", group.getGroupName()),
-                        "All the team members have graded each other. You can now confirm their grades in Grade Master",
-                        user,
-                        "/",
-                        "Open Grade Master"
-                )));
+                .collect(Collectors.toList());
+
+        for (User teacher : users) {
+            notificationService.save(new Notification(
+                    String.format("All members of %s have graded their team members.", group.getGroupName()),
+                    "All the team members have graded each other. You can now confirm their grades in Grade Master",
+                    teacher,
+                    "/",
+                    "Open Grade Master"
+            ));
+        }
     }
 }
