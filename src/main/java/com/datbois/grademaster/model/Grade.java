@@ -1,7 +1,5 @@
 package com.datbois.grademaster.model;
 
-import org.joda.time.DateTime;
-
 import javax.persistence.*;
 
 @Entity
@@ -27,7 +25,7 @@ public class Grade extends BaseModel {
     private User toUser;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    public Group group;
+    private Group group;
 
     private boolean valid = true;
 
