@@ -47,16 +47,7 @@ public class GradeServiceImpl implements GradeService {
     private boolean allGroupMembersHaveGraded(Group group) {
         Integer noStudents = (int) group.getUsers()
                 .stream()
-                .filter(user ->
-                        user.getRoles()
-                                .stream()
-                                .filter(role ->
-                                        role.getCode().equalsIgnoreCase("STUDENT_ROLE")
-                                )
-                                .findFirst()
-                                .orElse(null)
-                                != null
-                )
+                .filter(user -> user.hasAnyRole("STUDENT_ROLE"))
                 .count();
 
         Integer noGrades = group.getGrades().size();
@@ -67,16 +58,7 @@ public class GradeServiceImpl implements GradeService {
     private void sendNotificationToTeacher(Group group) {
         group.getUsers()
                 .stream()
-                .filter(user ->
-                        user.getRoles()
-                                .stream()
-                                .filter(role ->
-                                        role.getCode().equalsIgnoreCase("TEACHER_ROLE")
-                                )
-                                .findFirst()
-                                .orElse(null)
-                                != null
-                )
+                .filter(user -> user.hasAnyRole("TEACHER_ROLE"))
                 .forEach(user -> notificationService.save(new Notification(
                         String.format("All members of %s have graded their team members.", group.getGroupName()),
                         "All the team members have graded each other. You can now confirm their grades in Grade Master",

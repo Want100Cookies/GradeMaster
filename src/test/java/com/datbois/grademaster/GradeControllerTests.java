@@ -4,6 +4,7 @@ import com.datbois.grademaster.model.*;
 import com.datbois.grademaster.model.Email;
 import com.datbois.grademaster.model.Group;
 import com.datbois.grademaster.model.User;
+import com.datbois.grademaster.response.GradeResponse;
 import com.datbois.grademaster.service.EmailService;
 import com.datbois.grademaster.service.GradeService;
 import com.datbois.grademaster.service.GroupService;
@@ -78,7 +79,7 @@ public class GradeControllerTests extends OAuthTests {
                 .body(grades)
                 .post("/api/v1/grades/groups/"+group.getId())
                 .then()
-                .statusCode(HttpStatus.OK.value())
+                .statusCode(HttpStatus.CREATED.value())
                 .extract()
                 .path("$");
 
@@ -111,7 +112,7 @@ public class GradeControllerTests extends OAuthTests {
                 .body(grades)
                 .post("/api/v1/grades/groups/"+group.getId())
                 .then()
-                .statusCode(HttpStatus.OK.value())
+                .statusCode(HttpStatus.CREATED.value())
                 .extract()
                 .path("$");
 
@@ -187,7 +188,7 @@ public class GradeControllerTests extends OAuthTests {
                 .when()
                 .patch("/api/v1/grades/groups/3")
                 .then()
-                .statusCode(HttpStatus.OK.value())
+                .statusCode(HttpStatus.CREATED.value())
                 .extract()
                 .path("$");
 
@@ -206,7 +207,7 @@ public class GradeControllerTests extends OAuthTests {
         Group group = groupService.findById(2L);
 
         Map<String, Object> gradeData = new HashMap<>();
-        gradeData.put("grade", 3.0f);
+        gradeData.put("grade", 3.0);
         gradeData.put("motivation", "pleb");
         gradeData.put("fromUser", fromUser);
         gradeData.put("toUser", toUser);
@@ -214,22 +215,24 @@ public class GradeControllerTests extends OAuthTests {
         List<Map<String, Object>> grades = new ArrayList<>();
         grades.add(gradeData);
 
-        ArrayList<Map<String, Object>> result = given()
+        GradeResponse[] result = given()
                 .auth()
                 .oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(grades)
                 .post("/api/v1/grades/groups/"+group.getId())
                 .then()
-                .statusCode(HttpStatus.OK.value())
+                .statusCode(HttpStatus.CREATED.value())
                 .extract()
-                .path("$");
+                .as(GradeResponse[].class);
 
-        assertThat(result.get(0).get("grade"), Matchers.is(gradeData.get("grade")));
-        assertThat(result.get(0).get("motivation"), Matchers.is(gradeData.get("motivation")));
-        assertThat(Long.parseLong(result.get(0).get("fromUser").toString()), Matchers.is(fromUser.getId()));
-        assertThat(Long.parseLong(result.get(0).get("toUser").toString()), Matchers.is(toUser.getId()));
-        assertThat(Long.parseLong(result.get(0).get("group").toString()), Matchers.is(group.getId()));
+        GradeResponse gradeResponse = result[0];
+
+        assertThat(gradeResponse.getGrade(), Matchers.is(gradeData.get("grade")));
+        assertThat(gradeResponse.getMotivation(), Matchers.is(gradeData.get("motivation")));
+        assertThat(gradeResponse.getFromUser().getId(), Matchers.is(fromUser.getId()));
+        assertThat(gradeResponse.getToUser().getId(), Matchers.is(toUser.getId()));
+        assertThat(gradeResponse.getGroup().getId(), Matchers.is(group.getId()));
         verify(emailService).sendToEmailQueue(ArgumentMatchers.any(Email.class));
     }
 

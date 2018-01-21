@@ -1,15 +1,13 @@
 package com.datbois.grademaster.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-import java.util.*;
 
 @Entity
 @Table(
@@ -186,6 +184,19 @@ public class User extends BaseModel {
 
     public void setNotificationList(List<Notification> notificationList) {
         this.notificationList = notificationList;
+    }
+
+    @JsonIgnore
+    public boolean hasAnyRole(String... roleCodes) {
+        return getRoles()
+                .stream()
+                .filter(role1 -> Arrays
+                        .stream(roleCodes)
+                        .filter(role2 -> role2.equalsIgnoreCase(role1.getCode()))
+                        .findFirst()
+                        .orElse(null) != null)
+                .findFirst()
+                .orElse(null) != null;
     }
 
     @Override
