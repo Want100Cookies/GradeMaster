@@ -58,7 +58,6 @@ app.config(function ($stateProvider) {
         })
         .state('app.dashboard', {
             url: '/dashboard',
-<<<<<<< HEAD
             templateProvider: function(AuthService){
                 return AuthService.hasRoles('STUDENT_ROLE').then((hasRole) => {
                     if(hasRole){
@@ -77,13 +76,6 @@ app.config(function ($stateProvider) {
                         })
                     }
                 })
-=======
-            templateUrl: '/app/pages/dashboard.html',
-            resolve: {
-                'auth': (AuthService) => {
-                    return AuthService.authenticate();
-                },
->>>>>>> 09c983adce8cdf80ef92fa992d9d512a92627d2f
             }
         })
         .state('app.groups', {
