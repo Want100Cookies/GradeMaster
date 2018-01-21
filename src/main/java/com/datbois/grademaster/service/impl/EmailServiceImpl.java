@@ -2,7 +2,7 @@ package com.datbois.grademaster.service.impl;
 
 import com.datbois.grademaster.model.Email;
 import com.datbois.grademaster.service.EmailService;
-import com.datbois.grademaster.utils.CssInliner;
+import com.datbois.grademaster.util.CssInliner;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
