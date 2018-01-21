@@ -1,7 +1,6 @@
 package com.datbois.grademaster.controller;
 
 import com.datbois.grademaster.model.Group;
-import com.datbois.grademaster.model.Role;
 import com.datbois.grademaster.model.User;
 import com.datbois.grademaster.model.UserDetails;
 import com.datbois.grademaster.service.GroupService;
@@ -32,15 +31,11 @@ public class GroupController {
     )
     public List<Group> getGroups(Authentication authentication) {
         User user = ((UserDetails) authentication.getPrincipal()).getUser();
-        Set<Role> roles = user.getRoles();
-        if (roles.stream()
-                .filter(role ->
-                        role.getCode().equalsIgnoreCase("ADMIN_ROLE")
-                )
-                .findFirst()
-                .orElse(null) != null) {
+
+        if (user.hasAnyRole("ADMIN_ROLE")) {
             return groupService.findAll();
         }
+
         return new ArrayList<>(user.getGroups());
     }
 
