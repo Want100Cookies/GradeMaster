@@ -1,0 +1,44 @@
+<div ng-init="init()">
+    <md-card>
+        <md-card-title>
+            <md-card-title-text>
+                <div layout="row" layout-align="left">
+                    <span class="md-headline" flex="90">{{groupName}}</span>
+                    <md-button class="md-icon-button" ng-click="deleteGroup()">
+                        <md-icon aria-label="delete" md-svg-src="app/icons/delete.svg"></md-icon>
+                    </md-button>
+                    <md-button class="md-icon-button" ng-click="editGroup()">
+                        <md-icon aria-label="delete" md-svg-src="app/icons/edit.svg"></md-icon>
+                    </md-button>
+                </div>
+                <div layout="row" layout-align="left">
+                    <span class="md-subhead" flex="">Group status</span>
+                    <span class="md-subhead" flex="">Group grade</span>
+                </div>
+                <div layout="row" layout-align="left">
+                    <div ng-class="groupStatus" class="md-title" flex>
+                        {{groupStatus}}
+                    </div>
+                    <div ng-class="groupGradeStatus" class="md-title" flex>
+                        <span>{{groupGrade}}</span>
+                    </div>
+                </div>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+            <div layout="row" class="relativeDiv">
+                <div class="md-caption" ng-repeat="member in groupMembers">
+                    <div ng-if="!$last">
+                        {{member.name}}, &nbsp;
+                    </div>
+                    <div ng-if="$last">
+                        {{member.name}}
+                    </div>
+                </div>
+                <md-button ng-disabled="groupStatus != 'Pending'" ng-click="gradeGroup()" class="groupGradeBtn">GRADE</md-button>
+            </div>
+            <br>
+            <md-divider></md-divider>
+        </md-card-content>
+    </md-card>
+</div>

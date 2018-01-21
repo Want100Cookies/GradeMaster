@@ -11,6 +11,36 @@ app.factory('GroupService', function (API) {
             path: `groups`
         })
     };
+    
+    this.getGroupsByUserId = (userId) => {
+        return API.get({
+            path: 'users/' + userId + '/groups'
+        });
+    };
+
+    this.createGrades = (students, user, group) => {
+        let data = [];
+        for (let i = 0; i < students.length; i++) {
+            data.push({
+                fromUser: {
+                    id: user.id
+                },
+                toUser: {
+                    id: students[i].id
+                },
+                group: {
+                    id: group.id
+                },
+                grade: students[i].grade.grade,
+                motivation: students[i].grade.motivation
+            })
+        }
+
+        return API.post({
+            path: `users/${user.id}`,
+            data
+        });
+    };
 
     this.createGroup = (group) => {
         return API.post({
@@ -19,5 +49,22 @@ app.factory('GroupService', function (API) {
         });
     };
 
+    this.getGradingStatus = (groupId) => {
+        return API.get({
+            path: 'grades/status/groups/' + groupId
+        });
+    };
+
+    this.getGroupMembers = (groupId) => {
+        return API.get({
+            path: 'groups/' + groupId + '/users'
+        });
+    };
+
+    this.deleteGroup = (groupId) => {
+        return API.delete({
+            path: 'groups/' + groupId
+        });
+    };
     return this;
 });
