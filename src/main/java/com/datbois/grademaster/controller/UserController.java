@@ -6,6 +6,7 @@ import com.datbois.grademaster.model.*;
 import com.datbois.grademaster.service.EmailService;
 import com.datbois.grademaster.service.RoleService;
 import com.datbois.grademaster.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.text.WordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,16 +37,12 @@ public class UserController {
     @Autowired
     private EmailService emailService;
 
-    /**
-     * Get all users in the application including their groups.
-     * But only if logged in user is a teacher or admin.
-     *
-     * @return All users
-     * @endpoint (GET) /api/v1/users
-     * @responseStatus OK
-     */
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE')")
+    @ApiOperation(
+            value = "Get all users in the application including their groups.",
+            notes = "Only works as admin or teacher"
+    )
     public List<User> users(@RequestParam(required = false) String role) {
         if (role != null) {
             return userService.findByRole(roleService.findByName(role));
@@ -54,47 +51,28 @@ public class UserController {
         return userService.findAll();
     }
 
-    /**
-     * Retrieve a single user and his group.
-     * But only retrieve this user if it is the currently logged in user,
-     * or the logged in user is an teacher/admin.
-     *
-     * @param userId ID of needed user
-     * @return A single user
-     * @endpoint (GET) /api/v1/users/{userId}
-     * @responseStatus OK
-     */
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.GET)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE') or isCurrentUser(#userId)")
+    @ApiOperation(
+            value = "Retrieve a single user and his group.",
+            notes = "But only retrieve this user if it is the currently logged in user, or the logged in user is an teacher/admin."
+    )
     public User user(@PathVariable Long userId) {
         return userService.findById(userId);
     }
 
-    /**
-     * Retrieve the currently logged in user
-     *
-     * @param authentication The UserDetails implementation of Authentication
-     * @return Logged in user
-     * @endpoint (GET) /api/v1/users/self
-     * @responseStatus OK
-     */
     @RequestMapping(value = "/users/self", method = RequestMethod.GET)
+    @ApiOperation(value = "Retrieve the currently logged in user")
     public User currentUser(Authentication authentication) {
         return ((UserDetails) authentication.getPrincipal()).getUser();
     }
 
-    /**
-     * Create a new user using the RequestBody.
-     * The first user that registers with the application becomes admin.
-     * Also the role is matched using the email address provided.
-     *
-     * @param user JSON object with {name, email, referenceId, password}
-     * @return The created user
-     * @endpoint (POST) /api/v1/users
-     * @responseStatus CREATED
-     */
     @RequestMapping(value = "/users", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(
+            value = "Create a new user using the RequestBody.",
+            notes = "The first user that registers with the application becomes admin. Also the role is matched using the email address provided."
+    )
     public User createUser(@RequestBody User user) {
         // Set email to unverified and generate random string for the verification email
         user.setVerified(false);
@@ -145,19 +123,12 @@ public class UserController {
         return user;
     }
 
-    /**
-     * Update a user with only the given fields.
-     * An student can only update himself and an teacher/admin can update any user.
-     *
-     * @param userId The id of the user that has to be updated.
-     * @param user   A JSON object with some or all of the following fields: {name, email, referenceId, password}
-     * @return The updated user
-     * @throws Exception If some fields don't exist in the User model
-     * @endpoint (PATCH) /api/v1/users/{userId}
-     * @responseStatus OK
-     */
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.PATCH)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE') or isCurrentUser(#userId)")
+    @ApiOperation(
+            value = "Update a user with only the given fields.",
+            notes = "An student can only update himself and an teacher/admin can update any user."
+    )
     public User updateSingleUser(@PathVariable Long userId, @RequestBody User user) throws Exception {
         User existing = userService.findById(userId);
         boolean verified = existing.isVerified();
@@ -170,31 +141,20 @@ public class UserController {
         return userService.save(existing);
     }
 
-    /**
-     * Remove a user from the database.
-     * Only admins can delete users.
-     *
-     * @param userId The id of the to be deleted user.
-     * @endpoint (DELETE) /api/v1/users/{userID}
-     * @responseStatus ACCEPTED
-     */
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.DELETE)
     @PreAuthorize("hasAuthority('ADMIN_ROLE')")
     @ResponseStatus(HttpStatus.ACCEPTED)
+    @ApiOperation(
+            value = "Remove a user from the database.",
+            notes = "Only admins can delete users."
+    )
     public void removeUser(@PathVariable Long userId) {
         userService.delete(userId);
     }
 
-    /**
-     * Get all groups assigned to a user
-     *
-     * @param userId The id of the user
-     * @return A list of all groups the user is member of
-     * @endpoint (GET) /api/v1/users/{userId}/groups
-     * @responseStatus OK
-     */
     @RequestMapping(value = "/users/{userId}/groups", method = RequestMethod.GET)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE') or isCurrentUser(#userId)")
+    @ApiOperation(value = "Get all groups assigned to a user")
     public Set<Group> getGroupsForUser(@PathVariable Long userId) {
         User user = userService.findById(userId);
         return user.getGroups();

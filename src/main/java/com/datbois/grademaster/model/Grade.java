@@ -25,7 +25,7 @@ public class Grade extends BaseModel {
     private User toUser;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    public Group group;
+    private Group group;
 
     private boolean valid = true;
 
@@ -109,7 +109,12 @@ public class Grade extends BaseModel {
     public String toString() {
         return "Grade{" +
                 "id=" + id +
-                ", grade='" + grade + '\'' +
+                ", grade=" + grade +
+                ", motivation='" + motivation + '\'' +
+                ", fromUser=" + fromUser +
+                ", toUser=" + toUser +
+                ", group=" + group +
+                ", valid=" + valid +
                 '}';
     }
 }

@@ -111,7 +111,7 @@ public class CourseControllerTests extends OAuthTests {
                 .when()
                 .patch("/api/v1/courses/{courseId}", course.getId())
                 .then()
-                .statusCode(HttpStatus.OK.value());
+                .statusCode(HttpStatus.ACCEPTED.value());
 
         Course testCourse = courseService.findById(course.getId());
 

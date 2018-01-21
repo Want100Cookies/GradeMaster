@@ -106,7 +106,7 @@ public class EducationControllerTests extends OAuthTests {
                 .when()
                 .patch("/api/v1/educations/{educationId}", education.getId())
                 .then()
-                .statusCode(HttpStatus.OK.value());
+                .statusCode(HttpStatus.ACCEPTED.value());
 
         Education testEducation = educationService.findById(education.getId());
 
