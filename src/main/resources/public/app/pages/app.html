@@ -1,32 +1,25 @@
-<div layout="column" ng-controller="LayoutController" ng-cloak class="container">
+<div layout="column" ng-controller="LayoutController as ctrl" ng-cloak class="container">
     <section layout="row" flex>
-        <md-sidenav active-user="user" class="md-sidenav-left" md-component-id="left"
-                    md-is-locked-open="$mdMedia('gt-md')" md-whiteframe="4">
+        <md-sidenav active-user="user" class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')" md-whiteframe="4">
             <md-toolbar id="override-sidebar">
                 <div layout="row" class="sideToolbar">
-                    <md-button hide-gt-md class="md-icon-button" aria-label="close" ng-click="closeSideNav()"
-                               style="margin-top: 12px;">
+                    <md-button hide-gt-md class="md-icon-button" aria-label="close" ng-click="ctrl.closeSideNav()" style="margin-top: 12px;">
                         <md-icon md-svg-icon="/app/icons/close.svg"></md-icon>
                     </md-button>
                     <h1 class="md-toolbar-tools">Grade Master</h1>
                 </div>
             </md-toolbar>
             <md-content class="sideContent" layout-padding layout="column">
-                <md-button md-no-ink href="#!/dashboard" ng-click="closeSideNav()" active-link="active"
-                           id="override-menubutton">
+                <md-button md-no-ink href="#!/dashboard" ng-click="ctrl.closeSideNav()" active-link="active" id="override-menubutton">
                     Dashboard
                 </md-button>
-                <md-button md-no-ink href="#!/groups" ng-click="closeSideNav()" active-link="active"
-                           id="override-menubutton">
+                <md-button md-no-ink href="#!/groups" ng-click="ctrl.closeSideNav()" active-link="active" id="override-menubutton">
                     Groups
                 </md-button>
-                <md-button md-no-ink href="#!/grades" ng-click="closeSideNav()" active-link="active"
-                           id="override-menubutton">
+                <md-button md-no-ink href="#!/grades" ng-click="ctrl.closeSideNav()" active-link="active" id="override-menubutton">
                     Grades
                 </md-button>
-                <md-button ng-show="isAdmin"
-                           md-no-ink href="#!/educations" ng-click="closeSideNav()" active-link="active"
-                           id="override-menubutton">
+                <md-button ng-show="isAdmin" md-no-ink href="#!/educations" ng-click="ctrl.closeSideNav()" active-link="active" id="override-menubutton">
                     Educations
                 </md-button>
             </md-content>
@@ -34,17 +27,48 @@
         <md-content class="mainContent">
             <md-toolbar id="override-toolbar">
                 <div class="md-toolbar-tools">
-                    <md-button ng-click="openSideNav()" hide-gt-md class="md-icon-button" aria-label="Menu">
+                    <md-button ng-click="ctrl.openSideNav()" hide-gt-md class="md-icon-button" aria-label="Menu">
                         <md-icon md-svg-icon="/app/icons/menu.svg"></md-icon>
                     </md-button>
                     <span flex></span>
-                    <md-button class="md-icon-button" aria-label="Notification">
-                        <md-icon md-svg-icon="/app/icons/notification.svg"></md-icon>
-                    </md-button>
-                    <md-button class="md-icon-button" aria-label="Recent">
-                        <md-icon md-svg-icon="/app/icons/recent.svg"></md-icon>
-                    </md-button>
-                    <md-button class="md-icon-button" ng-click="logout()" aria-label="Profile">
+                    <md-menu>
+                        <md-button class="md-icon-button" ng-click="ctrl.showNotifications($mdOpenMenu, $event)" aria-label="Notifications">
+                            <md-icon md-menu-origin md-svg-icon="/app/icons/notification.svg"></md-icon>
+                        </md-button>
+                        <md-menu-content width="6">
+                            <div class="notification-header">
+                                <md-icon md-svg-icon="/app/icons/notification.svg" md-menu-align-target></md-icon>
+                                <p class="title">Notifications</p>
+                                <p class="empty" ng-if="!ctrl.newNotifications.length">You have no new Notifications</p>
+                                <md-button ng-if="ctrl.newNotifications.length" ng-click="ctrl.readAllNotifications()">
+                                    Mark all as read
+                                </md-button>
+                            </div>
+                            <div class="notifcation-content" ng-class="{unseen: !n.seen}" ng-mouseover="ctrl.readNotification(n)" ng-repeat="n in ctrl.newNotifications">
+                                <b class="title">{{n.title}}</b>
+                                <p class="message">{{n.message}}</p>
+                                <a class="link" href="{{n.link}}">{{n.linkText}}</a>
+                            </div>
+                        </md-menu-content>
+                    </md-menu>
+                    <md-menu>
+                        <md-button class="md-icon-button" ng-click="ctrl.showOldNotifications($mdOpenMenu, $event)" aria-label="Old Notification">
+                            <md-icon md-menu-origin md-svg-icon="/app/icons/recent.svg"></md-icon>
+                        </md-button>
+                        <md-menu-content width="6">
+                            <div class="notification-header">
+                                <md-icon md-svg-icon="/app/icons/recent.svg" md-menu-align-target></md-icon>
+                                <p class="title">Notification history</p>
+                                <p class="empty" ng-if="!ctrl.oldNotifications.length">You have no notification history</p>
+                            </div>
+                            <div class="notifcation-content" ng-repeat="n in ctrl.oldNotifications">
+                                <b class="title">{{n.title}}</b>
+                                <p class="message">{{n.message}}</p>
+                                <a class="link" href="{{n.link}}">{{n.linkText}}</a>
+                            </div>
+                        </md-menu-content>
+                    </md-menu>
+                    <md-button class="md-icon-button" ng-click="ctrl.logout()" aria-label="Profile">
                         <md-icon md-svg-icon="/app/icons/account.svg"></md-icon>
                     </md-button>
                 </div>
@@ -53,4 +77,3 @@
         </md-content>
     </section>
 </div>
-    
