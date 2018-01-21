@@ -58,7 +58,7 @@ public class NotificationControllerTests extends OAuthTests {
                 .when()
                 .patch("/api/v1/notifications")
                 .then()
-                .statusCode(HttpStatus.OK.value());
+                .statusCode(HttpStatus.ACCEPTED.value());
 
         for(Notification n : notifications){
             assertThat(n.isSeen(), equalTo(true));
@@ -82,7 +82,7 @@ public class NotificationControllerTests extends OAuthTests {
                 .when()
                 .patch("/api/v1/notifications/{notificationId}", notification.getId())
                 .then()
-                .statusCode(HttpStatus.OK.value())
+                .statusCode(HttpStatus.ACCEPTED.value())
                 .extract()
                 .path("$");
 
