@@ -3,66 +3,7 @@
         <div flex="50" flex-xs="100">
             <md-card>
                 <md-card-content>
-                    <table layout-fill>
-                        <tr>
-                            <td colspan="3"><span class="md-headline">Kennismanagement</span></td>
-                        </tr>
-                        <tr>
-                            <td><span class="md-subhead" flex="">Status</span></td>
-                            <td><span class="md-subhead" flex="">Group grade</span></td>
-                            <td><span class="md-subhead" flex="">Your grade</span></td>
-                        </tr>
-                        <tr>
-                            <td><span ng-class="groupStatus" class="md-title">Open</span></td>
-                            <td><span ng-class="groupStatus" class="md-title">6</span></td>
-                            <td><span ng-class="groupStatus" class="md-title">8</span></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2"><span class="md-caption">Bas, Danny, Jesper</span></td>
-                            <td colspan="1"><md-button>View</md-button></td>
-                        </tr>
-                    </table>
-                    <hr>
-                    <table layout-fill>
-                        <tr>
-                            <td colspan="3"><span class="md-headline">Kennismanagement</span></td>
-                        </tr>
-                        <tr>
-                            <td><span class="md-subhead" flex="">Status</span></td>
-                            <td><span class="md-subhead" flex="">Group grade</span></td>
-                            <td><span class="md-subhead" flex="">Your grade</span></td>
-                        </tr>
-                        <tr>
-                            <td><span ng-class="groupStatus" class="md-title">Open</span></td>
-                            <td><span ng-class="groupStatus" class="md-title">6</span></td>
-                            <td><span ng-class="groupStatus" class="md-title">8</span></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2"><span class="md-caption">Bas, Danny, Jesper</span></td>
-                            <td colspan="1"><md-button>View</md-button></td>
-                        </tr>
-                    </table>
-                    <hr>
-                    <table layout-fill>
-                        <tr>
-                            <td colspan="3"><span class="md-headline">Kennismanagement</span></td>
-                        </tr>
-                        <tr>
-                            <td><span class="md-subhead" flex="">Status</span></td>
-                            <td><span class="md-subhead" flex="">Group grade</span></td>
-                            <td><span class="md-subhead" flex="">Your grade</span></td>
-                        </tr>
-                        <tr>
-                            <td><span ng-class="groupStatus" class="md-title">Open</span></td>
-                            <td><span ng-class="groupStatus" class="md-title">6</span></td>
-                            <td><span ng-class="groupStatus" class="md-title">8</span></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2"><span class="md-caption">Bas, Danny, Jesper</span></td>
-                            <td colspan="1"><md-button>View</md-button></td>
-                        </tr>
-                    </table>
-                    <hr>
+                    <dashboard-course-overview></dashboard-course-overview>
                 </md-card-content>
             </md-card>
         </div>
@@ -71,84 +12,16 @@
                 <div flex>
                     <md-card>
                         <md-card-content>
-                            <table layout-fill>
-                                <tr>
-                                    <td colspan="3"><span class="md-headline">Projects Overview</span></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="md-subhead" flex="">Projects closed</span></td>
-                                    <td><span class="md-subhead" flex="">Open projects</span></td>
-                                    <td><span class="md-subhead" flex="">Grading pending</span></td>
-                                </tr>
-                                <tr>
-                                    <td><span ng-class="groupStatus" class="md-title">3</span></td>
-                                    <td><span ng-class="groupStatus" class="md-title">1</span></td>
-                                    <td><span ng-class="groupStatus" class="md-title">2</span></td>
-                                </tr>
-                            </table>
+                            <span class="md-headline">Projects Overview</span>
+                            <dashboard-projects-overview></dashboard-projects-overview>
                         </md-card-content>
                     </md-card>
                 </div>
                 <div flex>
                     <md-card>
                         <md-card-content>
-                            <table layout-fill>
-                                <tr>
-                                    <td colspan="3"><span class="md-headline">Grade Overview</span></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="3"><span class="md-headline">Kennismanagement</span></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="md-subhead" flex="">Group grade</span></td>
-                                    <td><span class="md-subhead" flex="">Your grade</span></td>
-                                    <td><span class="md-subhead" flex="">Change in grade</span></td>
-                                </tr>
-                                <tr>
-                                    <td><span ng-class="groupStatus" class="md-title">6.5</span></td>
-                                    <td><span ng-class="groupStatus" class="md-title">7</span></td>
-                                    <td><span ng-class="groupStatus" class="md-title">7.7%</span></td>
-                                </tr>
-                            </table>
-                            <hr>
-                            <table layout-fill>
-                                <tr>
-                                    <td colspan="3"><span class="md-headline">Grade Overview</span></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="3"><span class="md-headline">Kennismanagement</span></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="md-subhead" flex="">Group grade</span></td>
-                                    <td><span class="md-subhead" flex="">Your grade</span></td>
-                                    <td><span class="md-subhead" flex="">Change in grade</span></td>
-                                </tr>
-                                <tr>
-                                    <td><span ng-class="groupStatus" class="md-title">6.5</span></td>
-                                    <td><span ng-class="groupStatus" class="md-title">7</span></td>
-                                    <td><span ng-class="groupStatus" class="md-title">7.7%</span></td>
-                                </tr>
-                            </table>
-                            <hr>
-                            <table layout-fill>
-                                <tr>
-                                    <td colspan="3"><span class="md-headline">Grade Overview</span></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="3"><span class="md-headline">Kennismanagement</span></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="md-subhead" flex="">Group grade</span></td>
-                                    <td><span class="md-subhead" flex="">Your grade</span></td>
-                                    <td><span class="md-subhead" flex="">Change in grade</span></td>
-                                </tr>
-                                <tr>
-                                    <td><span ng-class="groupStatus" class="md-title">6.5</span></td>
-                                    <td><span ng-class="groupStatus" class="md-title">7</span></td>
-                                    <td><span ng-class="groupStatus" class="md-title">7.7%</span></td>
-                                </tr>
-                            </table>
-                            <hr>
+                            <span class="md-headline">Grade Overview</span>
+                            <dashboard-grade-overview></dashboard-grade-overview>
                         </md-card-content>
                     </md-card>
                 </div>
