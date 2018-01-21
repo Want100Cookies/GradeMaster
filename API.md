@@ -105,17 +105,31 @@ Add users to this group
 ### (DELETE)
 Delete this user from the group
 
-## /api/{v1}/grade/users/{id}
+## api/{v1}/grades/groups/{id}
 ### (POST)
 Set grades for group members
-
-## api/{v1}/grade/group/{id}
 ### (GET)
 Get the group grade and all the grades for the group members
 ### (PATCH)
 Adjust group grade
 ### (DELETE)
 Delete graden given out by students for specific group
+
+## api/{v1}/grades/status/groups/{id}
+### (GET)
+Get grading status of a particular group
+
+## api/{v1}/grades/groups/{id}/users/{id}
+### (GET)
+Get final grade of student in a particular group
+
+## api/{v1}/grades/groups/{id}/export.csv
+### (GET)
+Get grades exported to csv
+
+## api/{v1}/grades/groups/{id}/export.pdf
+### (GET)
+Get grades exported to pdf
 
 ## /api/{v1}/notifications
 ### (GET)
