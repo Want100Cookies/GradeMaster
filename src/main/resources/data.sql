@@ -58,11 +58,11 @@ INSERT INTO `notification`(`id`, `title`, `message`, `seen`, `user_id`) VALUES
  (2, "Ratings","Your grade ratings have been sent!", 0, 1),
  (3, "Final", "Your final grade has been determined.", 0, 1),
  (4, "Received", "All group ratings received", 0, 2),
- (5, "Test", "Group grade can be made final", 1, 2),
- (6, "Wey", "Do u new de", 1, 2),
+ (5, "Test", "Group grade can be made final", 0, 2),
+ (6, "Wey", "Do u new de", 0, 2),
  (7, "Mekker", "Skoapy skoapy hopsa", 0, 2),
  (8, "Relevant", "Datz wet ai am", 0, 2),
- (9, "Test", "Group grade can be made final", 1, 2),
+ (9, "Test", "Group grade can be made final", 0, 2),
  (10, "Mayonnaise", "Music instruments", 0, 2),
  (11, "*Laying horizontal*", "BUT CAN YOU DO DIS", 0, 2);
 

@@ -32,34 +32,22 @@
                     </md-button>
                     <span flex></span>
                     <md-menu>
-                        <md-button class="md-icon-button" ng-click="ctrl.showNotifications($mdOpenMenu, $event)" aria-label="Notification">
+                        <md-button class="md-icon-button" ng-click="ctrl.showNotifications($mdOpenMenu, $event)" aria-label="Notifications">
                             <md-icon md-menu-origin md-svg-icon="/app/icons/notification.svg"></md-icon>
                         </md-button>
                         <md-menu-content width="6">
-                            <div ng-if="!ctrl.newNotifications.length">
-                                <md-menu-item>
-                                    <md-button>
-                                        <md-icon md-svg-icon="/app/icons/notification.svg" md-menu-align-target></md-icon>
-                                        You have no new notifications
-                                    </md-button>
-                                </md-menu-item>
+                            <div class="notification-header">
+                                <md-icon md-svg-icon="/app/icons/notification.svg" md-menu-align-target></md-icon>
+                                <p class="title">Notifications</p>
+                                <p class="empty" ng-if="!ctrl.newNotifications.length">You have no new Notifications</p>
+                                <md-button ng-if="ctrl.newNotifications.length" ng-click="ctrl.readAllNotifications()">
+                                    Mark all as read
+                                </md-button>
                             </div>
-                            <div ng-if="ctrl.newNotifications.length">
-                                <md-menu-item>
-                                    <md-button ng-click="ctrl.readAllNotifications()">
-                                        <md-icon md-svg-icon="/app/icons/notification.svg" md-menu-align-target></md-icon>
-                                        Mark all as read
-                                    </md-button>
-                                </md-menu-item>
-                                <md-menu-item ng-repeat="noti in ctrl.newNotifications">
-                                    <md-button ng-mouseover="ctrl.readNotification(noti)">
-                                        <span ng-if="noti.seen">{{noti.message}}</span>
-                                        <span ng-if="!noti.seen">
-                                            <b>{{noti.message}}</b>
-                                        </span>
-                                        <a href="{{noti.link}}">{{noti.linkText}}</a>
-                                    </md-button>
-                                </md-menu-item>
+                            <div class="notifcation-content" ng-class="{unseen: !n.seen}" ng-mouseover="ctrl.readNotification(n)" ng-repeat="n in ctrl.newNotifications">
+                                <b class="title">{{n.title}}</b>
+                                <p class="message">{{n.message}}</p>
+                                <a class="link" href="{{n.link}}">{{n.linkText}}</a>
                             </div>
                         </md-menu-content>
                     </md-menu>
@@ -68,27 +56,15 @@
                             <md-icon md-menu-origin md-svg-icon="/app/icons/recent.svg"></md-icon>
                         </md-button>
                         <md-menu-content width="6">
-                            <div ng-if="!ctrl.oldNotifications.length">
-                                <md-menu-item>
-                                    <md-button>
-                                        <md-icon md-svg-icon="/app/icons/recent.svg" md-menu-align-target></md-icon>
-                                        You have no notification history
-                                    </md-button>
-                                </md-menu-item>
+                            <div class="notification-header">
+                                <md-icon md-svg-icon="/app/icons/recent.svg" md-menu-align-target></md-icon>
+                                <p class="title">Notification history</p>
+                                <p class="empty" ng-if="!ctrl.oldNotifications.length">You have no notification history</p>
                             </div>
-                            <div ng-if="ctrl.oldNotifications.length">
-                                <md-menu-item>
-                                    <md-button>
-                                        <md-icon md-svg-icon="/app/icons/recent.svg" md-menu-align-target></md-icon>
-                                        Notification history
-                                    </md-button>
-                                </md-menu-item>
-                                <md-menu-item ng-repeat="noti in ctrl.oldNotifications">
-                                    <md-button>
-                                        {{noti.message}}
-                                        <a href="{{noti.link}}">{{noti.linkText}}</a>
-                                    </md-button>
-                                </md-menu-item>
+                            <div class="notifcation-content" ng-repeat="n in ctrl.oldNotifications">
+                                <b class="title">{{n.title}}</b>
+                                <p class="message">{{n.message}}</p>
+                                <a class="link" href="{{n.link}}">{{n.linkText}}</a>
                             </div>
                         </md-menu-content>
                     </md-menu>
