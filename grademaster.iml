@@ -26,6 +26,13 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: joda-time:joda-time:2.9.9" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.8.10" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.jaxrs:jackson-jaxrs-base:2.8.10" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.8.10" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-joda:2.8.10" level="project" />
+    <orderEntry type="library" name="Maven: org.jadira.usertype:usertype.core:5.0.0.GA" level="project" />
+    <orderEntry type="library" name="Maven: org.jadira.usertype:usertype.spi:5.0.0.GA" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter:1.5.9.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:1.5.9.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:1.5.9.RELEASE" level="project" />

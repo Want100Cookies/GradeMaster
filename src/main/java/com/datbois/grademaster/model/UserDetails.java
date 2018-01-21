@@ -11,7 +11,7 @@ public class UserDetails implements org.springframework.security.core.userdetail
 
     private static final long serialVerionUID = 1L;
 
-    private final User user;
+    private User user;
 
     public UserDetails(User user) {
         this.user = user;
