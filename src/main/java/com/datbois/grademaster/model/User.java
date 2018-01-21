@@ -199,6 +199,14 @@ public class User extends BaseModel {
                 .orElse(null) != null;
     }
 
+    @JsonIgnore
+    public boolean isInGroup(Long groupId) {
+        return getGroups()
+                .stream()
+                .filter(group -> group.getId().equals(groupId))
+                .findFirst().orElse(null) != null;
+    }
+
     @Override
     public String toString() {
         return "User{" +
