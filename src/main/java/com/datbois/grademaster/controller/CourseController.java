@@ -2,6 +2,7 @@ package com.datbois.grademaster.controller;
 
 import com.datbois.grademaster.model.Course;
 import com.datbois.grademaster.model.Group;
+import com.datbois.grademaster.response.SimpleGroupResponse;
 import com.datbois.grademaster.service.CourseService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/api/v1")
@@ -64,9 +65,14 @@ public class CourseController {
 
     @RequestMapping(value = "/courses/{courseId}/groups", method = RequestMethod.GET)
     @ApiOperation(value = "Get all groups under this course")
-    public Set<Group> groupsInCourse(@PathVariable Long courseId) {
+    public List<SimpleGroupResponse> groupsInCourse(@PathVariable Long courseId) {
         Course course = courseService.findById(courseId);
+        List<SimpleGroupResponse> response = new ArrayList<>();
 
-        return course.getGroups();
+        for (Group group : course.getGroups()) {
+            response.add(new SimpleGroupResponse(group));
+        }
+
+        return response;
     }
 }
