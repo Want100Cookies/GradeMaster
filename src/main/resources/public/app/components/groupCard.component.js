@@ -2,7 +2,7 @@ function GroupCardCtrl($scope, StudentGroupsService){
     var ctrl = this;
 
     $scope.init = function(){
-        ctrl.name =  $scope.$ctrl.group.groupName; 
+        ctrl.name =  $scope.$ctrl.group.groupName;
         $scope.groupGrades = [];
         $scope.finalGrades = [];
 
@@ -13,15 +13,16 @@ function GroupCardCtrl($scope, StudentGroupsService){
         StudentGroupsService.getFinalGroupGrade($scope.$ctrl.group.id, $scope.$ctrl.user.id).then(function(response){
                 $scope.finalGroupGrades = response.data;
                 if($scope.finalGroupGrades.grade)
-                {                  
-                    $scope.finalGrades.push($scope.finalGroupGrades.grade);
-                    $scope.finalGradeStatus = CheckGrade($scope.finalGrades);                  
-                }
-                else
                 {
-                    $scope.finalGrades.push("T.B.D");
+                    $scope.finalGrades.push($scope.finalGroupGrades.grade);
+                    $scope.finalGradeStatus = CheckGrade($scope.finalGrades);
                 }
-
+        }).catch((error) => {
+            if (error.status === 404) {
+                $scope.finalGrades.push("T.B.D");
+            } else {
+                $scope.finalGrades.push("ERROR");
+            }
         });
 
         StudentGroupsService.getGradingStatus($scope.$ctrl.group.id).then(function(response){
