@@ -1,0 +1,14 @@
+<div ng-init="init()">
+    <table layout-fill>
+        <tr>
+            <td><span class="md-subhead" flex="">Projects closed</span></td>
+            <td><span class="md-subhead" flex="">Open projects</span></td>
+            <td><span class="md-subhead" flex="">Grading pending</span></td>
+        </tr>
+        <tr>
+            <td><span class="md-title closed grade">{{$ctrl.closed}}</span></td>
+            <td><span class="md-title open grade">{{$ctrl.open}}</span></td>
+            <td><span class="md-title pending grade">{{$ctrl.pending}}</span></td>
+        </tr>
+    </table>
+</div>

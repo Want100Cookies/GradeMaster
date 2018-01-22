@@ -1,0 +1,37 @@
+.md-subhead {
+    color: #8CA0B3;
+}
+
+.md-caption {
+    margin-top: 20px;
+    font-style: italic;
+    color: #8CA0B3;
+    display: inline-block;
+}
+
+.blue-text {
+    color: #2DD1AC;
+}
+
+.yellow-text {
+    color: #F5A623;
+}
+
+.red-text {
+    color: #DB2828;
+}
+
+.inactive-text {
+    color: #555c78;
+}
+
+.groupGradeBtn {
+    color: #2DD1AC;
+    font-size: 20px;
+    position: absolute;
+    right: 0;
+}
+
+.relativeDiv {
+    position: relative;
+}

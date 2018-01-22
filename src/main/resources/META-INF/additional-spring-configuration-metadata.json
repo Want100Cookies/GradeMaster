@@ -1,0 +1,18 @@
+{
+  "properties": [
+    {
+      "name": "domain.teacher",
+      "type": "java.lang.String",
+      "description": "The domain for teacher email addresses."
+    },
+    {
+      "name": "domain.student",
+      "type": "java.lang.String",
+      "description": "The domain for student email addresses."
+    },
+    {
+      "name": "domain.base",
+      "type": "java.lang.String",
+      "description": "The base URL of the application."
+    }
+  ] }

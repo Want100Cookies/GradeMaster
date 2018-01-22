@@ -1,0 +1,18 @@
+<div ng-init="init()">
+    <table layout-fill>
+        <tr>
+            <td colspan="3"><span class="md-subhead dashboard-course-name">{{$ctrl.course.name}}</span></td>
+        </tr>
+        <tr>
+            <td><span class="md-subhead" flex="">Group grade</span></td>
+            <td><span class="md-subhead" flex="">Your grade</span></td>
+            <td><span class="md-subhead" flex="">Change in grade</span></td>
+        </tr>
+        <tr>
+            <td><span class="md-title grade">{{$ctrl.group.groupGrade.grade}}</span></td>
+            <td><span class="md-title grade">{{$ctrl.finalGrade}}</span></td>
+            <td><span ng-class="$ctrl.percentage" class="md-title grade">{{$ctrl.calculateGradeChange($ctrl.group.groupGrade.grade, $ctrl.finalGrade)}}</span></td>
+        </tr>
+    </table>
+    <hr>
+</div>

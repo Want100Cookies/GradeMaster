@@ -1,0 +1,10 @@
+<body ng-app="gmApp" ng-controller="GroupsCtrl">
+    <div ng-controller="TeacherGroupsCtrl" ng-init="onInit()">
+        <md-button class="md-fab" id="override-fab" aria-label="Add groups" ng-click="showAddGroup($event)">
+            <md-icon md-svg-src="app/icons/add.svg"></md-icon>
+        </md-button>
+        <div ng-repeat="group in teacherGroupList">
+            <teacher-card group="group"></teacher-card>
+        </div>
+    </div>
+</body>

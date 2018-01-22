@@ -1,0 +1,31 @@
+<div ng-init="init()">
+    <table layout-fill>
+        <tr>
+            <td colspan="3"><span class="md-headline">{{$ctrl.name}}</span></td>
+        </tr>
+        <tr>
+            <td><span class="md-subhead" flex="">Status</span></td>
+            <td><span class="md-subhead" flex="">Group grade</span></td>
+            <td><span class="md-subhead" flex="">Your grade</span></td>
+        </tr>
+        <tr>
+            <td><span ng-class="$ctrl.groupStatusClass" class="md-title">{{$ctrl.groupStatus}}</span></td>
+            <td><span class="md-title grade">{{$ctrl.group.groupGrade.grade}}</span></td>
+            <td><span class="md-title grade">{{$ctrl.finalGrade}}</span></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div class="md-caption" ng-repeat="member in groupMembers">
+                    <div ng-if="!$last">
+                        {{member.name}}, &nbsp;
+                    </div>
+                    <div ng-if="$last">
+                        {{member.name}}
+                    </div>        
+                </div>
+            </td>
+        </tr>
+    </table>
+    <hr>
+</div>
+
