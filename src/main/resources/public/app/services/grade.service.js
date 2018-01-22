@@ -26,9 +26,6 @@ app.factory('GradeService', function (API) {
                 toUser: {
                     id: students[i].id
                 },
-                group: {
-                    id: group.id
-                },
                 grade: students[i].grade.grade,
                 motivation: students[i].grade.motivation
             })

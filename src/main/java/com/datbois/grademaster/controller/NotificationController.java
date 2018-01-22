@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -23,8 +24,10 @@ public class NotificationController {
     @ApiOperation(value = "Get all notifications for the logged in user")
     public List<Notification> getAllUserNotifications(Authentication authentication) {
         User user = ((UserDetails) authentication.getPrincipal()).getUser();
-
-        return user.getNotificationList();
+        return notificationService.findAll()
+                .stream()
+                .filter(notification -> notification.getUser().getId().equals(user.getId()))
+                .collect(Collectors.toList());
     }
 
     @RequestMapping(value = "/notifications", method = RequestMethod.PATCH)
@@ -49,10 +52,11 @@ public class NotificationController {
     public Notification markNotificationSeen(Authentication authentication, @PathVariable Long notificationId) {
         User user = ((UserDetails) authentication.getPrincipal()).getUser();
 
-        Notification notify = user.getNotificationList().get(notificationId.intValue());
+        Notification notification = notificationService.findById(notificationId);
+        if(notification.getUser().getId().equals(user.getId())) {
+            notification.setSeen(true);
+        }
 
-        notify.setSeen(true);
-
-        return notificationService.save(notify);
+        return notificationService.save(notification);
     }
 }

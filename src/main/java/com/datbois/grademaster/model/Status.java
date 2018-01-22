@@ -1,7 +1,8 @@
 package com.datbois.grademaster.model;
 
 public enum Status {
+    INACTIVE,
     OPEN,
-    CLOSED,
-    PENDING;
+    PENDING,
+    CLOSED
 }

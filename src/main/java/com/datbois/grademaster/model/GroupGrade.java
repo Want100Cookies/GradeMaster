@@ -1,6 +1,7 @@
 package com.datbois.grademaster.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
@@ -23,6 +24,7 @@ public class GroupGrade extends BaseModel {
     @ManyToOne(fetch = FetchType.LAZY)
     private User teacher;
 
+    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime deadline; // Needs this format: 1970-01-01T00:00:00.000+0000
 
     public GroupGrade() {

@@ -8,18 +8,58 @@ var app = angular.module('gmApp', [
     'ui.router'
 ]);
 
-app.controller('LayoutController', function ($scope, $mdSidenav, $window, $cookies, AuthService) {
+app.controller('LayoutController', function ($scope, $mdSidenav, $window, $cookies, $mdDialog, AuthService, NotificationService) {
+
+    this.newNotifications = [];
+    this.oldNotifications = [];
+    this.patchNotifications = [];
+
+    this.getNotifications = () => {
+        return NotificationService.getNotifications().then((resp) => {
+            this.newNotifications = [];
+            this.oldNotifications = [];
+            this.patchNotifications = [];
+            resp.data.forEach(n => {
+                if (!n.seen) this.newNotifications.push(n);
+                else this.oldNotifications.push(n);
+            });
+        });
+    }
+
     AuthService.hasRoles("ADMIN_ROLE").then((hasRole) => {
         $scope.isAdmin = hasRole;
     });
-    $scope.openSideNav = function () {
+
+    this.openSideNav = () => {
         $mdSidenav('left').open();
     };
-    $scope.closeSideNav = function () {
+    this.closeSideNav = () => {
         $mdSidenav('left').close();
     };
-    $scope.logout = function () {
-        angular.forEach($cookies.getAll(), function (v, k) {
+    this.showNotifications = ($mdOpenMenu, ev) => {
+        this.getNotifications().then((resp) => {
+            $mdOpenMenu(ev);
+        });
+    }
+    this.showOldNotifications = ($mdOpenMenu, ev) => {
+        this.getNotifications().then((resp) => {
+            $mdOpenMenu(ev);
+        });
+    }
+    this.readNotification = (notification) => {
+        if (!notification.seen) {
+            notification.seen = true;
+            this.patchNotifications.push(notification);
+        }
+    }
+    this.readAllNotifications = () => {
+        NotificationService.readNotification();
+    }
+    $scope.$on("$mdMenuClose", () => {
+        this.patchNotifications.forEach(n => NotificationService.readNotification(n.id));
+    });
+    this.logout = () => {
+        angular.forEach($cookies.getAll(), (v, k) => {
             $cookies.remove(k);
         });
         $window.location.reload();
@@ -58,11 +98,24 @@ app.config(function ($stateProvider) {
         })
         .state('app.dashboard', {
             url: '/dashboard',
-            templateUrl: '/app/pages/dashboard.html',
-            resolve: {
-                'auth': (AuthService) => {
-                    return AuthService.authenticate();
-                },
+            templateProvider: function(AuthService){
+                return AuthService.hasRoles('STUDENT_ROLE').then((hasRole) => {
+                    if(hasRole){
+                        return '<div ng-include="\'/app/pages/dashboard.html\'"></div>';
+                    }else{
+                        return AuthService.hasRoles('TEACHER_ROLE').then((hasRole) => {
+                            if(hasRole){
+                                return '<div ng-include="\'/app/pages/dashboard-teacher.html\'"></div>';
+                            }else{
+                                return AuthService.hasRoles('ADMIN_ROLE').then((hasRole) => {
+                                    if(hasRole){
+                                        return '<div ng-include="\'/app/pages/dashboard-admin.html\'"></div>';
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
             }
         })
         .state('app.groups', {

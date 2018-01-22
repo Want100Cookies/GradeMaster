@@ -30,10 +30,10 @@ INSERT INTO `course` (`id`, `name`, `education_id`) VALUES
   (2, "EthHack", 1),
   (3, "Minor", 2);
 
-INSERT INTO `group_grade` (`id`, `grade`, `comment`, `teacher_id`) VALUES
-  (1, 6, "comment", 2),
-  (2, 7, "comment", 2),
-  (3, 8, "comment", 2);
+INSERT INTO `group_grade` (`id`, `grade`, `comment`, `teacher_id`, `deadline`) VALUES
+  (1, 6, "comment", 2, NOW() + INTERVAL 1 DAY),
+  (2, 7, "comment", 2, NOW() + INTERVAL 1 DAY),
+  (3, 8, "comment", 2, NOW() + INTERVAL 1 DAY);
 
 INSERT INTO `group` (`id`, `course_id`, `group_name`, `start_year`, `end_year`, `group_grade_id`) VALUES
   (1, 1, "Musketiers", 2017, 2018, 1),

@@ -1,5 +1,6 @@
 package com.datbois.grademaster.controller;
 
+import com.datbois.grademaster.exception.ForbiddenException;
 import com.datbois.grademaster.exception.NotFoundException;
 import com.datbois.grademaster.model.*;
 import com.datbois.grademaster.response.AllGradesInGroupResponse;
@@ -56,25 +57,15 @@ public class GradeController {
                     "     PENDING: Group exists and group grade is set, students can start grading.\n" +
                     "     CLOSED: All students have received a grade from teacher, grading closed."
     )
-    public StatusResponse getGradingStatus(@PathVariable Long groupId) {
-        Status current;
-
+    public StatusResponse getGradingStatus(Authentication authentication, @PathVariable Long groupId) {
         Group group = groupService.findById(groupId);
+        User user = ((UserDetails) authentication.getPrincipal()).getUser();
 
         if (group == null) {
             throw new NotFoundException();
         }
 
-        current = Status.OPEN;
-        if (group.getGroupGrade() != null) {
-            current = Status.PENDING;
-
-            if (groupService.getStudents(groupId).size() == groupService.getGradesFromTeacherToStudent(groupId).size()) {
-                current = Status.CLOSED;
-            }
-        }
-
-        return new StatusResponse(current);
+        return new StatusResponse(group.getGradingStatusForUser(user));
     }
 
     @RequestMapping(value = "/grades/groups/{groupId}/users/{userId}", method = RequestMethod.GET)
@@ -118,11 +109,15 @@ public class GradeController {
             value = "Insert grades for all group members",
             notes = "Only if user is in group, teacher or admin"
     )
-    public List<GradeResponse> createGrade(@PathVariable Long groupId, @RequestBody Grade[] grades) {
-
+    public List<GradeResponse> createGrade(Authentication authentication, @PathVariable Long groupId, @RequestBody Grade[] grades) {
+        User user = ((UserDetails) authentication.getPrincipal()).getUser();
         List<GradeResponse> responses = new ArrayList<>();
 
         Group group = groupService.findById(groupId);
+
+        if (user.hasAnyRole("STUDENT_ROLE") && group.getGradingStatusForUser(user) != Status.OPEN) {
+            throw new ForbiddenException("This group is not open for grades at the moment");
+        }
 
         Arrays
                 .stream(grades)
@@ -132,7 +127,7 @@ public class GradeController {
                 .forEach(grade -> {
 
                     grade.setValid(!(grade.getMotivation().equals("")
-                            && grade.getFromUser().hasAnyRole("STUDENT_ROLE"))
+                            && userService.findById(grade.getFromUser().getId()).hasAnyRole("STUDENT_ROLE"))
                     );
 
                     grade.setGroup(group);
