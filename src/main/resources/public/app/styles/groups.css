@@ -1,49 +1,37 @@
-.md-subhead{
+.md-subhead {
     color: #8CA0B3;
 }
 
-.md-caption{
+.md-caption {
     margin-top: 20px;
     font-style: italic;
     color: #8CA0B3;
     display: inline-block;
 }
 
-.inactive{
-    color: #555C78;
-}
-
-.open{
+.blue-text {
     color: #2DD1AC;
 }
 
-.pending{
+.yellow-text {
     color: #F5A623;
 }
 
-.closed{
+.red-text {
     color: #DB2828;
 }
 
-.failMark{
-    color: #DB2828;
+.inactive-text {
+    color: #555c78;
 }
 
-.passMark{
-    color: #2DD1AC;
-}
-
-.closeMark{
-    color: #F5A623;
-}
-
-.groupGradeBtn{
+.groupGradeBtn {
     color: #2DD1AC;
     font-size: 20px;
     position: absolute;
     right: 0;
 }
 
-.relativeDiv{
+.relativeDiv {
     position: relative;
 }

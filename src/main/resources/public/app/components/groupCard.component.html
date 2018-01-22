@@ -9,21 +9,21 @@
                     <span class="md-subhead" flex="">Your grade</span>
                 </div>
                 <div layout="row" layout-align="left">
-                    <div ng-class="groupStatus" class="md-title" ng-repeat="status in groupsStatuses" flex>
-                        {{status}}
+                    <div ng-class="$ctrl.groupStatusClass" class="md-title" flex>
+                        {{$ctrl.groupStatus}}
                     </div>
-                    <div ng-class="groupGradeStatus" class="md-title" flex>
-                        {{groupGrades[0]}}
-                    </div>
-                    <div ng-class="finalGradeStatus" class="md-title" flex>
-                        {{finalGrades[0]}}
+                    <div ng-class="$ctrl.getGradeClass($ctrl.group.groupGrade.grade)" class="md-title" flex>
+                        {{$ctrl.group.groupGrade.grade}}
+                    </div>                   
+                    <div ng-class="$ctrl.getGradeClass($ctrl.finalGrade)" class="md-title" flex >
+                        {{$ctrl.finalGrade}}
                     </div>                 
                 </div> 
             </md-card-title-text>
         </md-card-title>
         <md-card-content>
             <div layout="row" class="relativeDiv">
-                <div class="md-caption" ng-repeat="member in groupMembers">
+                <div class="md-caption" ng-repeat="member in $ctrl.group.users">
                     <div ng-if="!$last">
                         {{member.name}}, &nbsp;
                     </div>
@@ -31,7 +31,7 @@
                         {{member.name}}
                     </div>        
                 </div> 
-                <md-button ng-disabled="groupStatus != 'open'" ng-click="gradeGroupMembers()" class="groupGradeBtn">GRADE</md-button>
+                <md-button ng-disabled="$ctrl.groupStatus !== 'OPEN'" ng-click="$ctrl.gradeGroupMembers()" class="groupGradeBtn">GRADE</md-button>
             </div><br>
             <md-divider></md-divider>
         </md-card-content>
