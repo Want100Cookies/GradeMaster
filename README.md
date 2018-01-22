@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.com/Want100Cookies/GradeMaster.svg?token=sKpyGyXRMBtmPh6qJBuM&branch=develop)](https://travis-ci.com/Want100Cookies/GradeMaster)
 
 # GradeMaster
-A small application to ease the grading of groups for teachers.
+A small application to ease the grading of project groups for teachers.
 
 ### Features:
 - Teachers can assign and deadline a grade to a group
@@ -10,3 +10,15 @@ A small application to ease the grading of groups for teachers.
 
 ### Documentation
 To view the documentation run the Spring boot app and visit [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+
+### Setup
+Docker is being used to run all the needed backend services:
+```
+$ docker-compose up -d
+```
+
+To run the backend the following environment variables should exist:
+- EMAIL_HOST
+- EMAIL_PORT
+- EMAIL_USERNAME
+- EMAIL_PASSWORD
