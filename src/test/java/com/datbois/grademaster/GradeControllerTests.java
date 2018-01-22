@@ -111,7 +111,7 @@ public class GradeControllerTests extends OAuthTests {
     }
 
     @Test
-    public void StudentCanGetGradeStatusPending() {
+    public void StudentCanGetGradeStatusPendingAllStudentsHaveGraded() {
         User jane = userService.findByEmail("jane.doe@stenden.com");
         User john = userService.findByEmail("john.doe@student.stenden.com");
         User foo = createStudent("Foo User");
@@ -135,6 +135,33 @@ public class GradeControllerTests extends OAuthTests {
                 .body("status", is(Status.PENDING.name()));
 
         verify(emailService, times(3)).sendToEmailQueue(ArgumentMatchers.any(Email.class));
+    }
+
+    @Test
+    public void StudentCanGetGradeStatusPendingDeadlinePassed() {
+        User jane = userService.findByEmail("jane.doe@stenden.com");
+        User john = userService.findByEmail("john.doe@student.stenden.com");
+        User foo = createStudent("Foo User");
+        Group group = createFreshGroup(jane, john, foo);
+
+        GroupGrade groupGrade = groupGradeService.save(new GroupGrade(8.2, "Very welll", group, jane, new DateTime().minusDays(1).toDateTime()));
+        group.setGroupGrade(groupGrade);
+        groupService.save(group);
+
+        gradeService.save(new Grade(8.2, "foo", john, foo, group));
+        gradeService.save(new Grade(8.2, "foo", john, john, group));
+
+        String token = this.obtainAccessToken(john.getEmail(), "password");
+
+        given()
+                .auth()
+                .oauth2(token)
+                .contentType(ContentType.JSON)
+                .get("/api/v1/grades/status/groups/{groupId}", group.getId())
+                .then()
+                .body("status", is(Status.PENDING.name()));
+
+        verify(emailService, times(2)).sendToEmailQueue(ArgumentMatchers.any(Email.class));
     }
 
     @Test
@@ -213,6 +240,8 @@ public class GradeControllerTests extends OAuthTests {
         User fromUser = userService.findById(1L);
         User toUser = userService.findById(1L);
         Group group = groupService.findById(2L);
+
+        gradeService.delete(3L);
 
         Map<String, Object> gradeData = new HashMap<>();
         gradeData.put("grade", 3.0f);
@@ -384,7 +413,6 @@ public class GradeControllerTests extends OAuthTests {
         assertThat(gradeResponse.getFromUser().getId(), Matchers.is(fromUser.getId()));
         assertThat(gradeResponse.getToUser().getId(), Matchers.is(toUser.getId()));
         assertThat(gradeResponse.getGroup().getId(), Matchers.is(group.getId()));
-        verify(emailService).sendToEmailQueue(ArgumentMatchers.any(Email.class));
     }
 
     @Test

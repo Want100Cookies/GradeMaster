@@ -3,8 +3,6 @@ package com.datbois.grademaster.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -121,6 +119,60 @@ public class Group extends BaseModel {
 
     public void setGrades(List<Grade> grades) {
         this.grades = grades;
+    }
+
+    @JsonIgnore
+    public Status getGradingStatusForUser(User user) {
+        Status status;
+
+        if (user.hasAnyRole("STUDENT_ROLE")) {
+            // No group grade has been given
+            status = Status.INACTIVE;
+
+            if (getGroupGrade() != null) {
+                if (getGrades()
+                        .stream()
+                        .filter(grade -> grade.getToUser().getId().equals(user.getId()) && grade.getFromUser().hasAnyRole("TEACHER_ROLE"))
+                        .findFirst()
+                        .orElse(null) != null
+                        ) {
+                    // The student has received the final grade from the teacher
+                    status = Status.CLOSED;
+                } else if (getGroupGrade().getDeadline().isBeforeNow()) {
+                    status = Status.PENDING;
+                } else if (getGrades()
+                        .stream()
+                        .noneMatch(grade -> grade.getFromUser().getId().equals(user.getId()))) {
+                    // Group grade has been given
+                    // And the student hasn't graded anyone
+                    status = Status.OPEN;
+                } else {
+                    // Waiting for the teacher to finalize the grade
+                    status = Status.PENDING;
+                }
+            }
+        } else {
+            status = Status.OPEN;
+
+            if (getGroupGrade() != null) {
+                status = Status.PENDING;
+
+                if (getGrades()
+                        .stream()
+                        .filter(grade -> grade.getFromUser().hasAnyRole("TEACHER_ROLE"))
+                        .count()
+                        ==
+                        getUsers()
+                                .stream()
+                                .filter(groupUser -> groupUser.hasAnyRole("STUDENT_ROLE"))
+                                .count()
+                        ) {
+                    status = Status.CLOSED;
+                }
+            }
+        }
+
+        return status;
     }
 
     @Override
