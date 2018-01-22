@@ -1,5 +1,6 @@
 package com.datbois.grademaster.controller;
 
+import com.datbois.grademaster.exception.ForbiddenException;
 import com.datbois.grademaster.exception.NotFoundException;
 import com.datbois.grademaster.model.*;
 import com.datbois.grademaster.response.AllGradesInGroupResponse;
@@ -64,54 +65,7 @@ public class GradeController {
             throw new NotFoundException();
         }
 
-        Status status;
-
-        if (user.hasAnyRole("STUDENT_ROLE")) {
-            // No group grade has been given
-            status = Status.INACTIVE;
-
-            if (group.getGroupGrade() != null) {
-                if (group.getGrades()
-                        .stream()
-                        .filter(grade -> grade.getToUser().getId().equals(user.getId()) && grade.getFromUser().hasAnyRole("TEACHER_ROLE"))
-                        .findFirst()
-                        .orElse(null) != null
-                        ) {
-                    // The student has received the final grade from the teacher
-                    status = Status.CLOSED;
-                } else if (group.getGrades()
-                        .stream()
-                        .noneMatch(grade -> grade.getFromUser().getId().equals(user.getId()))) {
-                    // Group grade has been given
-                    // And the student hasn't graded anyone
-                    status = Status.OPEN;
-                } else {
-                    // Waiting for the teacher to finalize the grade
-                    status = Status.PENDING;
-                }
-            }
-        } else {
-            status = Status.OPEN;
-
-            if (group.getGroupGrade() != null) {
-                status = Status.PENDING;
-
-                if (group.getGrades()
-                        .stream()
-                        .filter(grade -> grade.getFromUser().hasAnyRole("TEACHER_ROLE"))
-                        .count()
-                        ==
-                        group.getUsers()
-                                .stream()
-                                .filter(groupUser -> groupUser.hasAnyRole("STUDENT_ROLE"))
-                                .count()
-                        ) {
-                    status = Status.CLOSED;
-                }
-            }
-        }
-
-        return new StatusResponse(status);
+        return new StatusResponse(group.getGradingStatusForUser(user));
     }
 
     @RequestMapping(value = "/grades/groups/{groupId}/users/{userId}", method = RequestMethod.GET)
@@ -155,11 +109,15 @@ public class GradeController {
             value = "Insert grades for all group members",
             notes = "Only if user is in group, teacher or admin"
     )
-    public List<GradeResponse> createGrade(@PathVariable Long groupId, @RequestBody Grade[] grades) {
-
+    public List<GradeResponse> createGrade(Authentication authentication, @PathVariable Long groupId, @RequestBody Grade[] grades) {
+        User user = ((UserDetails) authentication.getPrincipal()).getUser();
         List<GradeResponse> responses = new ArrayList<>();
 
         Group group = groupService.findById(groupId);
+
+        if (user.hasAnyRole("STUDENT_ROLE") && group.getGradingStatusForUser(user) != Status.OPEN) {
+            throw new ForbiddenException("This group is not open for grades at the moment");
+        }
 
         Arrays
                 .stream(grades)
