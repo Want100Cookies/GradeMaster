@@ -5,6 +5,9 @@ function GroupCardCtrl($state, StudentGroupsService, CourseService) {
     ctrl.groupMembers = [];
 
     ctrl.$onInit = () => {
+
+        ctrl.name = ctrl.group.groupName;
+
         StudentGroupsService.getFinalGroupGrade(ctrl.group.id, ctrl.user.id).then((response) => {
             if (response.data.grade) {
                 ctrl.finalGrade = response.data.grade;
