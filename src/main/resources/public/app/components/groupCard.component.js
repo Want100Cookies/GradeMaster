@@ -40,20 +40,24 @@ function GroupCardCtrl($state, StudentGroupsService, CourseService) {
         })
 
         ctrl.calculateGradeChange = function(groupGrade, finalGrade){
+            if (typeof finalGrade === "string") {
+                ctrl.percentage = "";
+                return "TBD";
+            }
             var diff = finalGrade - groupGrade;
-            var diffInPercentage = Math.round(diff / finalGrade * 100);
+            var diffInPercentage = Math.round(diff / finalGrade * 100) + "%";
 
             if(diffInPercentage > 0){
-                ctrl.percentage = "positive";
+                ctrl.percentage = "negative";
                 return "+" + diffInPercentage;
             }
             else if(diffInPercentage == 0){
                 ctrl.percentage = "equal";
-                return "+" + diffInPercentage;
+                return diffInPercentage;
             }
             else{
-                ctrl.percentage = "negative";
-                return diffInPercentage;
+                ctrl.percentage = "positive";
+                return "+" + diffInPercentage;
             }
         }
     };
