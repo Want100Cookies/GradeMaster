@@ -1,67 +1,56 @@
-function GroupCardCtrl($scope, StudentGroupsService){
-    var ctrl = this;
+function GroupCardCtrl($state, StudentGroupsService) {
+    let ctrl = this;
 
-    $scope.init = function(){
-        ctrl.name =  $scope.$ctrl.group.groupName;
-        $scope.groupGrades = [];
-        $scope.finalGrades = [];
+    ctrl.groupMembers = [];
 
-        StudentGroupsService.getGroupMembers($scope.$ctrl.group.id).then(function(response){
-            $scope.groupMembers = response.data;
-        });
-
-        StudentGroupsService.getFinalGroupGrade($scope.$ctrl.group.id, $scope.$ctrl.user.id).then(function(response){
-                $scope.finalGroupGrades = response.data;
-                if($scope.finalGroupGrades.grade)
-                {
-                    $scope.finalGrades.push($scope.finalGroupGrades.grade);
-                    $scope.finalGradeStatus = CheckGrade($scope.finalGrades);
-                }
+    ctrl.$onInit = () => {
+        StudentGroupsService.getFinalGroupGrade(ctrl.group.id, ctrl.user.id).then((response) => {
+            if (response.data.grade) {
+                ctrl.finalGrade = response.data.grade;
+            }
         }).catch((error) => {
             if (error.status === 404) {
-                $scope.finalGrades.push("T.B.D");
+                ctrl.finalGrade = "TBD";
             } else {
-                $scope.finalGrades.push("ERROR");
+                ctrl.finalGrade = "ERROR";
             }
         });
 
-        StudentGroupsService.getGradingStatus($scope.$ctrl.group.id).then(function(response){
-            $scope.groupsStatuses = response.data;
-            $scope.groupStatus = CheckStatus($scope.groupsStatuses.status);
+        StudentGroupsService.getGradingStatus(ctrl.group.id).then((response) => {
+            ctrl.groupStatus = response.data.status;
+            switch (ctrl.groupStatus) {
+                case "INACTIVE":
+                    ctrl.groupStatusClass = "grey-text";
+                    break;
+                case "OPEN":
+                    ctrl.groupStatusClass = "blue-text";
+                    break;
+                case "PENDING":
+                    ctrl.groupStatusClass = "yellow-text";
+                    break;
+                case "CLOSED":
+                    ctrl.groupStatusClass = "red-text";
+                    break;
+            }
         });
 
-        if(!$scope.$ctrl.group.groupGrade){
-            $scope.groupGrades.push("T.B.D");
-        }
-        else if($scope.$ctrl.group.groupGrade.grade){
-            $scope.groupGrades.push($scope.$ctrl.group.groupGrade.grade);
-            $scope.groupGradeStatus = CheckGrade($scope.$ctrl.group.groupGrade.grade);
-        }
 
-    }
+    };
 
-    function CheckGrade(grade){
-        if(grade <= 5.4){
-            return "failMark";
+    ctrl.getGradeClass = (grade) => {
+        if (typeof grade === "string") {
+            return "";
+        } else if (grade < 5.5) {
+            return "red-text";
+        } else if (grade === 5.5) {
+            return "yellow-text";
+        } else {
+            return "blue-text";
         }
-        else if(grade == 5.5){
-            return "closeMark";
-        }
-        else if(grade > 5.5){
-            return "passMark";
-        }
-    }
+    };
 
-    function CheckStatus(status){
-        if(status == "OPEN"){
-            return "open";
-        }
-        else if(status == "PENDING"){
-            return "pending";
-        }
-        else if(status == "CLOSED"){
-            return "closed";
-        }
+    ctrl.gradeGroupMembers = () => {
+        $state.transitionTo("app.grading", {groupId: ctrl.group.id});
     }
 }
 
