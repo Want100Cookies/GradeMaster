@@ -1,7 +1,6 @@
 body html {
     margin: 0 auto;
     height: 100%;
-    overflow:hidden;
 }
 
 h1 {
@@ -19,7 +18,6 @@ a {
 .mainContent {
     width: 100%;
     background: #EEF4F9;
-    overflow: hidden;
 }
 
 .sideContent {
