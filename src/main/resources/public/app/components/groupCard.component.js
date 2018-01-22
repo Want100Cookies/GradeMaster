@@ -1,4 +1,4 @@
-function GroupCardCtrl($scope, StudentGroupsService){
+function GroupCardCtrl($scope, StudentGroupsService, CourseService){
     var ctrl = this;
 
     $scope.init = function(){
@@ -37,6 +37,27 @@ function GroupCardCtrl($scope, StudentGroupsService){
             $scope.groupGradeStatus = CheckGrade($scope.$ctrl.group.groupGrade.grade);
         }
 
+        CourseService.getCourse($scope.$ctrl.group.course.id).then(function(response){
+            ctrl.course = response.data;
+        })
+
+        $scope.calculateGradeChange = function(groupGrade, finalGrade){
+            var diff = finalGrade - groupGrade;
+            var diffInPercentage = Math.round(diff / finalGrade * 100);
+
+            if(diffInPercentage > 0){
+                $scope.percentage = "positive";
+                return "+" + diffInPercentage;
+            }
+            else if(diffInPercentage == 0){
+                $scope.percentage = "equal";
+                return "+" + diffInPercentage;
+            }
+            else{
+                $scope.percentage = "negative";
+                return diffInPercentage;
+            }
+        }
     }
 
     function CheckGrade(grade){

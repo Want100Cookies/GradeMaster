@@ -1,9 +1,11 @@
-<div ng-cloak>
-    <div layout="row" layout-xs="column">
+<div ng-cloak ng-controller="GroupsCtrl">
+    <div layout="row" layout-xs="column" ng-controller="StudentGroupsCtrl">
         <div flex="50" flex-xs="100">
             <md-card>
                 <md-card-content>
-                    <dashboard-course-overview></dashboard-course-overview>
+                    <div ng-repeat="group in groupsDetails | orderBy:'id'">
+                        <dashboard-course-overview group="group" user="userDetails"></dashboard-course-overview>
+                    </div>
                 </md-card-content>
             </md-card>
         </div>
@@ -12,16 +14,18 @@
                 <div flex>
                     <md-card>
                         <md-card-content>
-                            <span class="md-headline">Projects Overview</span>
-                            <dashboard-projects-overview></dashboard-projects-overview>
+                            <span class="md-subhead dashboard-card-title">Projects Overview</span>
+                            <dashboard-projects-overview user="userDetails"></dashboard-projects-overview>
                         </md-card-content>
                     </md-card>
                 </div>
                 <div flex>
                     <md-card>
                         <md-card-content>
-                            <span class="md-headline">Grade Overview</span>
-                            <dashboard-grade-overview></dashboard-grade-overview>
+                            <span class="md-subhead dashboard-card-title">Grade Overview</span>
+                            <div ng-repeat="group in groupsDetails | orderBy:'id'">
+                                <dashboard-grade-overview group="group" user="userDetails"></dashboard-grade-overview>
+                            </div>
                         </md-card-content>
                     </md-card>
                 </div>
