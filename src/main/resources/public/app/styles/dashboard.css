@@ -1,0 +1,37 @@
+md-grid-list{
+    padding-top: 12px;
+}
+md-grid-list md-card{
+    width: 100%;
+    min-height: 100%;
+    height: auto;
+    position: absolute;
+    top: 0;
+}
+md-grid-list md-card table button{
+    float: right;
+}
+.align-tile-right{
+    left: unset !important;
+    right: 0;
+}
+.positive{
+    color: #2DD1AC;
+}
+.negative{
+    color: #DB2828;
+}
+.equal{
+    color: #F5A623;
+}
+.dashboard-card-title{
+    font-weight: bold;
+    font-size: 22px;
+}
+.dashboard-course-name{
+    font-weight: bold;
+    color: black;
+}
+.grade{
+    font-size: 26px;
+}
