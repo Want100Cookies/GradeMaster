@@ -22,3 +22,10 @@ To run the backend the following environment variables should exist:
 - EMAIL_PORT
 - EMAIL_USERNAME
 - EMAIL_PASSWORD
+
+### Requirements
+- Java SDK          >= 8.x
+- NPM               >= 5.x
+- Node              >= 9.x
+- Docker            >= 17.x
+- Docker-compose    >= 1.18.x
