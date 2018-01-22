@@ -98,11 +98,24 @@ app.config(function ($stateProvider) {
         })
         .state('app.dashboard', {
             url: '/dashboard',
-            templateUrl: '/app/pages/dashboard.html',
-            resolve: {
-                'auth': (AuthService) => {
-                    return AuthService.authenticate();
-                },
+            templateProvider: function(AuthService){
+                return AuthService.hasRoles('STUDENT_ROLE').then((hasRole) => {
+                    if(hasRole){
+                        return '<div ng-include="\'/app/pages/dashboard.html\'"></div>';
+                    }else{
+                        return AuthService.hasRoles('TEACHER_ROLE').then((hasRole) => {
+                            if(hasRole){
+                                return '<div ng-include="\'/app/pages/dashboard-teacher.html\'"></div>';
+                            }else{
+                                return AuthService.hasRoles('ADMIN_ROLE').then((hasRole) => {
+                                    if(hasRole){
+                                        return '<div ng-include="\'/app/pages/dashboard-admin.html\'"></div>';
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
             }
         })
         .state('app.groups', {

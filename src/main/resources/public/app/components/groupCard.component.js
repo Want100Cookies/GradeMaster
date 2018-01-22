@@ -1,4 +1,5 @@
-function GroupCardCtrl($state, StudentGroupsService) {
+
+function GroupCardCtrl($state, StudentGroupsService, CourseService) {
     let ctrl = this;
 
     ctrl.groupMembers = [];
@@ -34,7 +35,27 @@ function GroupCardCtrl($state, StudentGroupsService) {
             }
         });
 
+        CourseService.getCourse(ctrl.group.course.id).then(function(response){
+            ctrl.course = response.data;
+        })
 
+        ctrl.calculateGradeChange = function(groupGrade, finalGrade){
+            var diff = finalGrade - groupGrade;
+            var diffInPercentage = Math.round(diff / finalGrade * 100);
+
+            if(diffInPercentage > 0){
+                ctrl.percentage = "positive";
+                return "+" + diffInPercentage;
+            }
+            else if(diffInPercentage == 0){
+                ctrl.percentage = "equal";
+                return "+" + diffInPercentage;
+            }
+            else{
+                ctrl.percentage = "negative";
+                return diffInPercentage;
+            }
+        }
     };
 
     ctrl.getGradeClass = (grade) => {
