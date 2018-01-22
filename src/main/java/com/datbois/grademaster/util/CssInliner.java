@@ -1,4 +1,4 @@
-package com.datbois.grademaster.utils;
+package com.datbois.grademaster.util;
 
 import java.io.File;
 import java.io.FileNotFoundException;

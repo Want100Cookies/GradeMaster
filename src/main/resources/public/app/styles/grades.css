@@ -8,15 +8,15 @@
     color: #8CA0B3;
 }
 
-.active{
+.active, .Active{
     color: #2DD1AC;
 }
 
-.pending{
+.pending, .Pending{
     color: #F5A623;
 }
 
-.closed{
+.closed, .Closed{
     color: #DB2828;
 }
 

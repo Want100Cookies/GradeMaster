@@ -7,6 +7,10 @@ h1 {
     text-align: center;
 }
 
+a {
+    text-decoration: none;
+}
+
 .container {
     height: 100%;
 }
@@ -61,4 +65,54 @@ h1 {
 .wrapWords {
     word-break: keep-all;
     word-wrap: normal;
+}
+
+md-menu-content {
+    padding: 0;
+}
+
+.notification-header {
+    text-align: center;
+    font-weight: lighter;
+    padding: 8px;
+    margin-top: 16px;
+}
+
+.notification-header>.title {
+    font-weight: lighter;
+    font-size: 16pt;
+}
+
+.notification-header>.empty {
+    font-weight: lighter;
+    font-style: italic;
+    font-size: 12pt;
+    padding-top: 16px;
+    border-top: 1px dotted #AFAFAF;
+}
+
+.notifcation-content {
+    text-align: left;
+    font-size: 10pt;
+    padding: 12px;
+    border-top: 1px dotted #AFAFAF;
+}
+
+.unseen {
+    background-color: #F3F3F3;
+}
+
+.notifcation-content>.title {
+    font-size: 11pt;
+}
+
+.notifcation-content>.message {
+    padding: 0;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.notifcation-content>.link {
+    font-style: italic;
+    color: #555C78;
 }

@@ -4,13 +4,16 @@ import com.datbois.grademaster.configuration.DomainProperties;
 import com.datbois.grademaster.exception.ForbiddenException;
 import com.datbois.grademaster.model.Email;
 import com.datbois.grademaster.model.User;
+import com.datbois.grademaster.request.EmailVerifyRequest;
+import com.datbois.grademaster.request.PasswordChangeRequest;
+import com.datbois.grademaster.request.PasswordChangeTokenRequest;
 import com.datbois.grademaster.service.EmailService;
 import com.datbois.grademaster.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -28,8 +31,9 @@ public class AuthController {
 
     @RequestMapping(value = "/auth/retard", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void requestPasswordChange(@RequestBody Map<String, String> request) {
-        User user = userService.findByEmail(request.get("email"));
+    @ApiOperation(value = "Request a password change")
+    public void requestPasswordChange(@RequestBody PasswordChangeTokenRequest request) {
+        User user = userService.findByEmail(request.getEmail());
 
         if (user.getRetardToken() == null) {
             user.setRetardToken(UUID.randomUUID().toString());
@@ -49,35 +53,35 @@ public class AuthController {
 
     @RequestMapping(value = "/auth/retard", method = RequestMethod.PATCH)
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void changePassword(@RequestBody Map<String, String> request) {
-        User user = userService.findByEmail(request.get("email"));
+    @ApiOperation(value = "Change password using token")
+    public void changePassword(@RequestBody PasswordChangeRequest request) {
+        User user = userService.findByEmail(request.getEmail());
 
         if (user.getRetardToken() == null) {
             throw new ForbiddenException();
         }
 
-        if (!user.getRetardToken().equals(request.get("token"))) {
+        if (!user.getRetardToken().equals(request.getToken())) {
             throw new ForbiddenException("Token is not correct");
         }
 
-        user.setPassword(request.get("password"));
+        user.setPassword(request.getPassword());
         user.setRetardToken(null);
 
         userService.save(user);
-
-        // Send notification of changed password
     }
 
     @RequestMapping(value = "/auth/verify", method = RequestMethod.PATCH)
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void verifyEmail(@RequestBody Map<String, String> request) {
-        User user = userService.findByEmail(request.get("email"));
+    @ApiOperation(value = "Verify email using token")
+    public void verifyEmail(@RequestBody EmailVerifyRequest request) {
+        User user = userService.findByEmail(request.getEmail());
 
         if (user.getEmailVerifyToken() == null && !user.isVerified()) {
             throw new ForbiddenException("Email is already verified");
         }
 
-        if (!user.getEmailVerifyToken().equals(request.get("token"))) {
+        if (!user.getEmailVerifyToken().equals(request.getToken())) {
             throw new ForbiddenException("Invalid token");
         }
 

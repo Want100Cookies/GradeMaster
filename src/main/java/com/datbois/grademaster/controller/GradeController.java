@@ -1,6 +1,11 @@
 package com.datbois.grademaster.controller;
 
+import com.datbois.grademaster.exception.NotFoundException;
 import com.datbois.grademaster.model.*;
+import com.datbois.grademaster.response.AllGradesInGroupResponse;
+import com.datbois.grademaster.response.FinalGradeResponse;
+import com.datbois.grademaster.response.GradeResponse;
+import com.datbois.grademaster.response.StatusResponse;
 import com.datbois.grademaster.service.GradeService;
 import com.datbois.grademaster.service.GroupGradeService;
 import com.datbois.grademaster.service.GroupService;
@@ -8,19 +13,16 @@ import com.datbois.grademaster.service.UserService;
 import com.datbois.grademaster.util.CsvGeneratorUtil;
 import com.datbois.grademaster.util.PdfGeneratorUtil;
 import com.lowagie.text.DocumentException;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -44,120 +46,147 @@ public class GradeController {
     @Autowired
     private UserService userService;
 
-    /**
-     * Get grading status.
-     * Only available if in group.
-     *
-     * OPEN: Group exists but no group grade has been set.
-     * PENDING: Group exists and group grade is set, students can start grading.
-     * CLOSED: All students have received a grade from teacher, grading closed.
-     *
-     * @endpoint (GET) /grades/status/groups/{groupId}
-     * @return grading status
-     */
     @RequestMapping(value = "/grades/status/groups/{groupId}", method = RequestMethod.GET)
     @PreAuthorize("isInGroup(#groupId)")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity getGradingStatus(@PathVariable Long groupId){
-        Map<String, Status> status = new HashMap<>();
-
-        Status current;
-
+    @ApiOperation(
+            value = "Get grading status",
+            notes = " Only available if in group.\n" +
+                    "     <p>\n" +
+                    "     OPEN: Group exists but no group grade has been set.\n" +
+                    "     PENDING: Group exists and group grade is set, students can start grading.\n" +
+                    "     CLOSED: All students have received a grade from teacher, grading closed."
+    )
+    public StatusResponse getGradingStatus(Authentication authentication, @PathVariable Long groupId) {
         Group group = groupService.findById(groupId);
+        User user = ((UserDetails) authentication.getPrincipal()).getUser();
 
-        if(group != null){
-            current = Status.OPEN;
-            if(group.getGroupGrade() != null){
-                current = Status.PENDING;
-
-                if(groupService.getStudents(groupId).size() == groupService.getGradesFromTeacherToStudent(groupId).size()){
-                    current = Status.CLOSED;
-                }
-            }
-            status.put("status", current);
+        if (group == null) {
+            throw new NotFoundException();
         }
 
-        return new ResponseEntity<>(status, HttpStatus.OK);
+        Status status;
+
+        if (user.hasAnyRole("STUDENT_ROLE")) {
+            // No group grade has been given
+            status = Status.INACTIVE;
+
+            if (group.getGroupGrade() != null) {
+                if (group.getGrades()
+                        .stream()
+                        .filter(grade -> grade.getToUser().getId().equals(user.getId()) && grade.getFromUser().hasAnyRole("TEACHER_ROLE"))
+                        .findFirst()
+                        .orElse(null) != null
+                        ) {
+                    // The student has received the final grade from the teacher
+                    status = Status.CLOSED;
+                } else if (group.getGrades()
+                        .stream()
+                        .noneMatch(grade -> grade.getFromUser().getId().equals(user.getId()))) {
+                    // Group grade has been given
+                    // And the student hasn't graded anyone
+                    status = Status.OPEN;
+                } else {
+                    // Waiting for the teacher to finalize the grade
+                    status = Status.PENDING;
+                }
+            }
+        } else {
+            status = Status.OPEN;
+
+            if (group.getGroupGrade() != null) {
+                status = Status.PENDING;
+
+                if (group.getGrades()
+                        .stream()
+                        .filter(grade -> grade.getFromUser().hasAnyRole("TEACHER_ROLE"))
+                        .count()
+                        ==
+                        group.getUsers()
+                                .stream()
+                                .filter(groupUser -> groupUser.hasAnyRole("STUDENT_ROLE"))
+                                .count()
+                        ) {
+                    status = Status.CLOSED;
+                }
+            }
+        }
+
+        return new StatusResponse(status);
     }
 
-    /**
-     * Get final grade for a student in a particular group.
-     * Only if logged in as student or teacher.
-     *
-     * @return final grade
-     * @endpoint (GET) /grades/groups/{groupId}/users/{userId}
-     */
     @RequestMapping(value = "/grades/groups/{groupId}/users/{userId}", method = RequestMethod.GET)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE','ADMIN_ROLE') or isCurrentUser(#userId)")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity getFinalGrade(@PathVariable Long groupId, @PathVariable Long userId) {
-        Map<String, Object> finalGrade = new HashMap<>();
+    @ApiOperation(
+            value = "Get final grade for a student in a particular group",
+            notes = "Only if logged in as student or teacher."
+    )
+    public FinalGradeResponse getFinalGrade(@PathVariable Long groupId, @PathVariable Long userId) {
+        Group group = groupService.findById(groupId);
+        User user = group
+                .getUsers()
+                .stream()
+                .filter(u -> u.getId().equals(userId))
+                .findFirst()
+                .orElse(null);
 
-        Group exists = groupService.findById(groupId);
-        for (User user : exists.getUsers()) {
-            if (user.getId() == userId) {
-                for (Grade grade : exists.getGrades()) {
-                    for (Role role : grade.getFromUser().getRoles()) {
-                        if (role.getCode().contains("TEACHER_ROLE")) {
-                            finalGrade.put("grade", grade.getGrade());
-                        }
-                    }
-                }
-            }
+        if (user == null) {
+            throw new NotFoundException("Given user is not in group");
         }
-        return new ResponseEntity<>(finalGrade, HttpStatus.OK);
+
+        Grade grade = group
+                .getGrades()
+                .stream()
+                .filter(g -> g.getToUser().getId().equals(userId))
+                .filter(g -> g.getFromUser().hasAnyRole("TEACHER_ROLE"))
+                .findFirst()
+                .orElse(null);
+
+        if (grade == null) {
+            throw new NotFoundException("This user has no final grade yet");
+        }
+
+        return new FinalGradeResponse(grade);
     }
 
-    /**
-     * Insert grades for all group members.
-     * Only if user is in group, teacher or admin.
-     * @endpoint (POST) /api/v1/grade/users/{userId}
-     * @return Inserted grades
-     * @endpoint (POST) /api/v1/grade/users/{userId}
-     */
     @RequestMapping(value = "/grades/groups/{groupId}", method = RequestMethod.POST)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE','ADMIN_ROLE') or isInGroup(#groupId)")
-    public ResponseEntity createGrade(@PathVariable Long groupId, @RequestBody Grade[] grades) {
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(
+            value = "Insert grades for all group members",
+            notes = "Only if user is in group, teacher or admin"
+    )
+    public List<GradeResponse> createGrade(@PathVariable Long groupId, @RequestBody Grade[] grades) {
 
-        List<Map<String, Object>> response = new ArrayList<>();
+        List<GradeResponse> responses = new ArrayList<>();
 
         Group group = groupService.findById(groupId);
 
-        for (Grade grade : grades) {
-            if(groupService.userIsInGroup(grade.getFromUser().getId(), groupId) && groupService.userIsInGroup(grade.getToUser().getId(), groupId)){
-                if (grade.getMotivation() == "") {
-                    for (Role role : userService.findById(grade.getFromUser().getId()).getRoles()) {
-                        if (role.getCode().contains("STUDENT_ROLE")) {
-                            grade.setValid(false);
-                        }
-                    }
-                }
+        Arrays
+                .stream(grades)
+                .filter(grade -> groupService.userIsInGroup(grade.getFromUser().getId(), groupId)
+                        && groupService.userIsInGroup(grade.getToUser().getId(), groupId)
+                )
+                .forEach(grade -> {
 
-                grade.setGroup(group);
-                gradeService.save(grade);
-                Map<String, Object> data = new HashMap<>();
-                data.put("grade", grade.getGrade());
-                data.put("motivation", grade.getMotivation());
-                data.put("fromUser", grade.getFromUser().getId());
-                data.put("toUser", grade.getToUser().getId());
-                data.put("group", group.getId());
-                data.put("valid", grade.isValid());
-                response.add(data);
-            }
-        }
-        return new ResponseEntity<>(response, HttpStatus.OK);
+                    grade.setValid(!(grade.getMotivation().equals("")
+                            && userService.findById(grade.getFromUser().getId()).hasAnyRole("STUDENT_ROLE"))
+                    );
+
+                    grade.setGroup(group);
+
+                    responses.add(new GradeResponse(gradeService.save(grade)));
+                });
+
+        return responses;
     }
 
-    /**
-     * Insert group grade for a group.
-     * Only possible if logged in as teacher or admin.
-     *
-     * @return Inserted group grade
-     * @endpoint (PATCH) /api/v1/grade/group/{groupId}
-     * @responseStatus OK
-     */
     @RequestMapping(value = "/grades/groups/{groupId}", method = RequestMethod.PATCH)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE')")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(
+            value = "Insert group grade for a group",
+            notes = "Only possible if logged in as teacher or admin"
+    )
     public GroupGrade insertGroupGrade(Authentication authentication, @PathVariable Long groupId, @RequestBody GroupGrade groupGrade) {
         User user = ((UserDetails) authentication.getPrincipal()).getUser();
         Group group = groupService.findById(groupId);
@@ -173,65 +202,41 @@ public class GradeController {
         return groupGrade;
     }
 
-    /**
-     * Get group grade and all grades assigned and received by users of this particular group.
-     * Only possible if logged in as teacher and admin.
-     *
-     * @return Group grades and grades assigned and received by users
-     * @endpoint (GET) /api/v1/grade/group/{groupId}
-     * @responseStatus OK
-     */
     @RequestMapping(value = "/grades/groups/{groupId}", method = RequestMethod.GET)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE','ADMIN_ROLE')")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity getAllGradesForAGroup(@PathVariable Long groupId) {
-        Group exists = groupService.findById(groupId);
+    @ApiOperation(
+            value = "Get group grade and all grades assigned and received by users of this particular group",
+            notes = "Only possible if logged in as teacher and admin"
+    )
+    public AllGradesInGroupResponse getAllGradesForAGroup(@PathVariable Long groupId) {
+        Group group = groupService.findById(groupId);
 
-        Map<Object, Object> response = new HashMap<>();
-        response.put("groupId", exists.getId());
-        response.put("groupGrade", exists.getGroupGrade().getId());
-
-        Map<Object, Object> users = new HashMap<>();
-
-        for (User user : exists.getUsers()) {
-            List<Object[]> grades = new ArrayList<>();
-            for (Grade grade : user.getGradesReceived()) {
-                if (exists.getId().equals(grade.getGroup().getId())) {
-                    grades.add(new Object[]{grade.getGrade(), grade.getMotivation()});
-                }
-            }
-            users.put(user.getId(), grades);
-        }
-
-        response.put("user", users);
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new AllGradesInGroupResponse(group.getGroupGrade(), group.getGrades());
     }
 
-    /**
-     * Delete grades given by students only for this particular group.
-     * Only possible if logged in as teacher or admin.
-     *
-     * @endpoint (DELETE) /api/v1/grade/group/{groupId}
-     * @responseStatus ACCEPTED
-     */
     @RequestMapping(value = "/grades/groups/{groupId}", method = RequestMethod.DELETE)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE', 'ADMIN_ROLE')")
     @ResponseStatus(HttpStatus.ACCEPTED)
+    @ApiOperation(
+            value = "Delete grades given by students only for this particular group",
+            notes = "Only possible if logged in as teacher or admin"
+    )
     public void removeGrades(@PathVariable Long groupId) {
         Group exists = groupService.findById(groupId);
 
         for (Grade grade : exists.getGrades()) {
-            for (Role role : grade.getFromUser().getRoles()) {
-                if (role.getCode().contains("STUDENT_ROLE")) {
-                    gradeService.delete(grade.getId());
-                }
+            if (grade.getFromUser().hasAnyRole("STUDENT_ROLE")) {
+                gradeService.delete(grade.getId());
             }
         }
     }
 
     @RequestMapping(value = "/grades/groups/{groupId}/export.csv", method = RequestMethod.GET)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE') and isInGroup(#groupId)")
+    @ApiOperation(
+            value = "Export all grades for this group to CSV (tab separated)",
+            notes = "Users without a reference ID are not added to the export"
+    )
     public void exportGradesCsv(HttpServletResponse response, @PathVariable Long groupId) throws IOException {
         Group group = groupService.findById(groupId);
 
@@ -253,6 +258,7 @@ public class GradeController {
 
     @RequestMapping(value = "/grades/groups/{groupId}/export.pdf", method = RequestMethod.GET)
     @PreAuthorize("hasAnyAuthority('TEACHER_ROLE') and isInGroup(#groupId)")
+    @ApiOperation(value = "Export all grades for this group to PDF")
     public void exportGradesPdf(HttpServletResponse response, @PathVariable Long groupId) throws IOException, DocumentException {
         response.addHeader("Content-disposition", "inline;filename=grade.pdf");
         response.addHeader("Content-type", "application/pdf");

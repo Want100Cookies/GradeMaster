@@ -143,7 +143,7 @@ app.factory('API', function ($cookies, $http, $httpParamSerializer) {
                 return resp;
             }).catch((error) => {
                 console.error(`error`, error);
-                return error;
+                return(error);
             });
         }
         return $http(req);

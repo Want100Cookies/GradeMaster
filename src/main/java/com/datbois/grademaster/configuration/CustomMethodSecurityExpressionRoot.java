@@ -1,15 +1,15 @@
 package com.datbois.grademaster.configuration;
 
-import com.datbois.grademaster.model.Group;
 import com.datbois.grademaster.model.User;
 import com.datbois.grademaster.model.UserDetails;
+import com.datbois.grademaster.service.UserService;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionOperations;
 import org.springframework.security.core.Authentication;
 
-import java.util.Set;
-
 public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot implements MethodSecurityExpressionOperations {
+
+    private UserService userService;
 
     private Object filterObject;
     private Object returnObject;
@@ -23,15 +23,16 @@ public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot i
     }
 
     public boolean isInGroup(Long groupId) {
-        User user = getUser();
-        Set<Group> groups = user.getGroups();
-        return groups.stream()
-                .filter(group -> group.getId().equals(groupId))
-                .findFirst().orElse(null) != null;
+        return getUser().isInGroup(groupId);
     }
 
     private User getUser() {
-        return ((UserDetails) getPrincipal()).getUser();
+        return userService
+                .findById(
+                        ((UserDetails) getPrincipal())
+                                .getUser()
+                                .getId()
+                );
     }
 
     @Override
@@ -57,5 +58,9 @@ public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot i
     @Override
     public Object getThis() {
         return this;
+    }
+
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 }
