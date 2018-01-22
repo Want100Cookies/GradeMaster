@@ -44,6 +44,6 @@ app.factory('GradeService', function (API) {
         return API.get({
             path: `/grades/groups/`+groupId
         });
-    }
+    };
     return this;
 });

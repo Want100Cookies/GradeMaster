@@ -1,17 +1,52 @@
+<style>
+    .md-subhead {
+        font-size: 20px !important;
+        color: #555C78;
+        font-weight: 600;
+    }
+
+    .md-body-2 {
+        font-size: 20px !important;
+        font-weight: 200;
+    }
+</style>
 <md-card>
-        <md-card-header>
-            <div class="md-display-1">
-                Overview
-            </div>
-        </md-card-header>
-        <md-card-content>
-            <div ng-repeat="user in $ctrl.groupMembers">
-                <p>{{user.name}}</p>
-                <ul>
-                    <li ng-repeat="grade in $ctrl.getGradesForUser(user)">
-                        {{grade.toUser.name}}: {{grade.grade|number:1}}
-                    </li>
-                </ul>
-            </div>
-        </md-card-content>
-    </md-card>
+    <md-card-header>
+        <div class="md-display-1">
+            Final grade overview
+        </div>
+    </md-card-header>
+    <md-card-content>
+        <div ng-repeat="user in $ctrl.groupMembers">
+            <h1 style="text-align: left;">{{user.name}}</h1>
+            <ul>
+                <div layout="row">
+                    <div class="md-subhead" flex="">Name</div>
+                    <div class="md-subhead" flex="">Grade</div>
+                    <div class="md-subhead" flex="">Motivation</div>
+                </div>
+                <div ng-repeat="grade in $ctrl.getGradesForUser(user)">
+                    <div layout="row">
+                        <div flex="" class="md-body-2">{{grade.toUser.name}}</div>
+                        <div flex="" class="md-body-2">{{grade.grade|number:1}}</div>
+                        <div flex="" class="md-body-2">
+                            {{grade.motivation | limitTo: 10}}
+                            <md-button class="md-icon-button" ng-click="$ctrl.showMotivation(grade.toUser.name ,grade.motivation)">
+                                <md-icon aria-label="delete" md-svg-src="app/icons/chat_bubble.svg"></md-icon>
+                            </md-button>
+                        </div>
+                    </div>
+                </div>
+            </ul>
+        </div>
+        <div style="float: right;">
+                <md-button class="md-button" ng-click="$ctrl.export('csv')">
+                    Export to csv
+                </md-button>
+                <md-button class="md-button" ng-click="$ctrl.export('pdf')">
+                    Export to PDF
+                </md-button>
+            </a>
+        </div>
+    </md-card-content>
+</md-card>
