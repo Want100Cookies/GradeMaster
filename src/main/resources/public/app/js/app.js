@@ -198,5 +198,14 @@ app.config(function ($stateProvider) {
                     return AuthService.authenticate();
                 },
             },
+        })
+        .state('app.finalGroupOverview', {
+            url: '/groups/:groupId/final-overview',
+            component: 'finalGroupOverview',
+            resolve: {
+                'auth': (AuthService) => {
+                    return AuthService.authenticate();
+                },
+            },
         });
 });

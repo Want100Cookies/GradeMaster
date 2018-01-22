@@ -28,13 +28,12 @@ teacherCardCtrl = ($scope, GroupService, $state, $mdDialog, API) => {
     }
 
     $scope.gradeGroup = () => {
-        // TODO test the redirect in develop
-        // Redirect to group
         window.location.href = window.location.href + '/' + $scope.groupId + '/group-grade';
-        // $state.transitionTo('groupGrade', {param: $scope.groupId});
     }
-
-    $scope.editGroup = (ev) => {
+    $scope.finalGroupView = () => {
+        window.location.href = window.location.href + '/' + $scope.groupId + '/final-overview';
+    }
+     $scope.editGroup = (ev) => {
         $mdDialog.show({
             bindToController: true,
             controller: EditGroupDialogController,
