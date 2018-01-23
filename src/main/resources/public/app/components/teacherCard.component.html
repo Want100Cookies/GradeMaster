@@ -3,7 +3,13 @@
         <md-card-title>
             <md-card-title-text>
                 <div layout="row" layout-align="left">
-                    <span class="md-headline" flex="90">{{$ctrl.group.groupName}}</span>
+                    <span class="md-headline" flex="90">
+                        <small class="inactive-text">
+                            {{$ctrl.group.course.education.name}} &gt;
+                            {{$ctrl.group.course.name}} &gt;
+                        </small>
+                        {{$ctrl.group.groupName}}
+                    </span>
                     <md-button ng-if="$ctrl.groupStatus === 'PENDING'" class="md-icon-button" ng-click="finalGroupView()">
                         <md-icon aria-label="delete" md-svg-src="app/icons/finalView.svg"></md-icon>
                     </md-button>
