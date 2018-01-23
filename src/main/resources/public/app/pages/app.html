@@ -33,7 +33,7 @@
                     <span flex></span>
                     <md-menu>
                         <md-button class="md-icon-button" ng-click="ctrl.showNotifications($mdOpenMenu, $event)" aria-label="Notifications">
-                            <md-icon md-menu-origin md-svg-icon="/app/icons/notification.svg"></md-icon>
+                            <md-icon md-menu-origin md-svg-icon="/app/icons/notification{{!ctrl.hasNewNotifications() ? '' : '_active'}}.svg"></md-icon>
                         </md-button>
                         <md-menu-content width="6">
                             <div class="notification-header">

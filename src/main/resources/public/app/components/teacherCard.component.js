@@ -1,4 +1,4 @@
-teacherCardCtrl = ($scope, GroupService, $state, $mdDialog, API) => {
+teacherCardCtrl = ($scope, GroupService, $state, $mdDialog) => {
     var ctrl = this;
 
     $scope.init = () => {
@@ -8,12 +8,13 @@ teacherCardCtrl = ($scope, GroupService, $state, $mdDialog, API) => {
         $scope.groupMembers = [];
         $scope.groupId = $scope.$ctrl.group.id;
 
+        GroupService.getGradingStatus($scope.$ctrl.group.id).then((response) => {
+            $scope.groupStatus = response.data.status;
+        });
+
         // Check the group grade
         if ($scope.$ctrl.group.groupGrade !== null) {
-            $scope.groupStatus = "Graded"
             $scope.groupGrade = $scope.$ctrl.group.groupGrade.grade;
-        } else {
-            $scope.groupStatus = "Pending"
         }
         // Check the group name
         if ($scope.$ctrl.group !== null) {
@@ -28,10 +29,10 @@ teacherCardCtrl = ($scope, GroupService, $state, $mdDialog, API) => {
     }
 
     $scope.gradeGroup = () => {
-        window.location.href = window.location.href + '/' + $scope.groupId + '/group-grade';
+        $state.transitionTo("app.groupGrade", {groupId: $scope.groupId});
     }
     $scope.finalGroupView = () => {
-        window.location.href = window.location.href + '/' + $scope.groupId + '/final-overview';
+        $state.transitionTo("app.finalGroupOverview", {groupId: $scope.groupId});
     }
      $scope.editGroup = (ev) => {
         $mdDialog.show({

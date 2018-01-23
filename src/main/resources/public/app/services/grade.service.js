@@ -37,6 +37,19 @@ app.factory('GradeService', function (API) {
         });
     };
 
+    this.createFinalGrades = (data, groupId) => {
+        return API.post({
+            path: `grades/groups/${groupId}`,
+            data
+        });
+    };
+
+    this.removeUserGrades = (groupId) => {
+        return API.delete({
+            path: `grades/groups/${groupId}`
+        });
+    };
+
     this.getGradesByGroup = (groupId) => {
         return API.get({
             path: `/grades/groups/`+groupId

@@ -22,7 +22,7 @@ app.controller('VerifyCtrl', function ($scope, $state, $stateParams, $resource, 
             $scope.isFinished = true;
             $timeout(function() {
                 $state.transitionTo('login')
-                }, 8000);
+                }, 3000);
         }).catch(function (data) {
             $scope.error = "verification failed."
             $scope.isLoading = false;

@@ -4,7 +4,7 @@
             <md-card-title-text>
                 <div layout="row" layout-align="left">
                     <span class="md-headline" flex="90">{{groupName}}</span>
-                    <md-button class="md-icon-button" ng-click="finalGroupView()">
+                    <md-button ng-if="groupStatus === 'PENDING'" class="md-icon-button" ng-click="finalGroupView()">
                         <md-icon aria-label="delete" md-svg-src="app/icons/finalView.svg"></md-icon>
                     </md-button>
                     <md-button class="md-icon-button" ng-click="editGroup()">
@@ -38,7 +38,7 @@
                         {{member.name}}
                     </div>
                 </div>
-                <md-button ng-disabled="groupStatus != 'Pending'" ng-click="gradeGroup()" class="groupGradeBtn">GRADE</md-button>
+                <md-button ng-disabled="groupStatus !== 'OPEN'" ng-click="gradeGroup()" class="groupGradeBtn">GRADE</md-button>
             </div>
             <br>
             <md-divider></md-divider>

@@ -126,9 +126,11 @@ public class GradeController {
                 )
                 .forEach(grade -> {
 
-                    grade.setValid(!(grade.getMotivation().equals("")
-                            && userService.findById(grade.getFromUser().getId()).hasAnyRole("STUDENT_ROLE"))
-                    );
+                    if (!userService.findById(grade.getFromUser().getId()).hasAnyRole("TEACHER_ROLE")) {
+                        grade.setValid(!(grade.getMotivation().equals("")
+                                && userService.findById(grade.getFromUser().getId()).hasAnyRole("STUDENT_ROLE"))
+                        );
+                    }
 
                     grade.setGroup(group);
 

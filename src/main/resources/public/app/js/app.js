@@ -14,7 +14,7 @@ app.controller('LayoutController', function ($scope, $mdSidenav, $window, $cooki
     this.oldNotifications = [];
     this.patchNotifications = [];
 
-    this.getNotifications = () => {
+    (this.getNotifications = () => {
         return NotificationService.getNotifications().then((resp) => {
             this.newNotifications = [];
             this.oldNotifications = [];
@@ -24,6 +24,11 @@ app.controller('LayoutController', function ($scope, $mdSidenav, $window, $cooki
                 else this.oldNotifications.push(n);
             });
         });
+    })();
+
+    this.hasNewNotifications = () => {
+        if (this.newNotifications.length > 0) return true;
+        return false;
     }
 
     AuthService.hasRoles("ADMIN_ROLE").then((hasRole) => {
@@ -53,10 +58,15 @@ app.controller('LayoutController', function ($scope, $mdSidenav, $window, $cooki
         }
     }
     this.readAllNotifications = () => {
-        NotificationService.readNotification();
+        NotificationService.readNotification().then(() => {
+            this.getNotifications();
+        });
     }
     $scope.$on("$mdMenuClose", () => {
-        this.patchNotifications.forEach(n => NotificationService.readNotification(n.id));
+        const promises = this.patchNotifications.map(n => NotificationService.readNotification(n.id));
+        Promise.all(promises).then((results) => {
+            this.getNotifications();
+        });
     });
     this.logout = () => {
         angular.forEach($cookies.getAll(), (v, k) => {
@@ -98,17 +108,17 @@ app.config(function ($stateProvider) {
         })
         .state('app.dashboard', {
             url: '/dashboard',
-            templateProvider: function(AuthService){
+            templateProvider: function (AuthService) {
                 return AuthService.hasRoles('STUDENT_ROLE').then((hasRole) => {
-                    if(hasRole){
+                    if (hasRole) {
                         return '<div ng-include="\'/app/pages/dashboard.html\'"></div>';
-                    }else{
+                    } else {
                         return AuthService.hasRoles('TEACHER_ROLE').then((hasRole) => {
-                            if(hasRole){
+                            if (hasRole) {
                                 return '<div ng-include="\'/app/pages/dashboard-teacher.html\'"></div>';
-                            }else{
+                            } else {
                                 return AuthService.hasRoles('ADMIN_ROLE').then((hasRole) => {
-                                    if(hasRole){
+                                    if (hasRole) {
                                         return '<div ng-include="\'/app/pages/dashboard-admin.html\'"></div>';
                                     }
                                 })
