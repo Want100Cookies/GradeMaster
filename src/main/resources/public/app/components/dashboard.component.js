@@ -1,5 +1,5 @@
-function DashboardCtrl($scope, StudentGroupsService, UserService){
-    var ctrl = this;
+function DashboardCtrl($scope, $state, StudentGroupsService, UserService, GroupService){
+    let ctrl = this;
 
     $scope.init = function(){
         ctrl.closed = 0;
@@ -9,8 +9,12 @@ function DashboardCtrl($scope, StudentGroupsService, UserService){
         UserService.getSelf().then(user => {
             ctrl.self = user;
 
-            StudentGroupsService.getStudentGroups(ctrl.self.data.id).then(function(response){
+            GroupService.getGroupsByUserId(ctrl.self.data.id).then(function(response){
                 ctrl.groupsDetails = response.data;
+
+                if(ctrl.groupsDetails.length == 0){
+                    $state.transitionTo('app.empty');
+                }
 
                 angular.forEach(ctrl.groupsDetails, function(value, key) {
                     StudentGroupsService.getGradingStatus(value.id).then(function(response){
@@ -19,7 +23,7 @@ function DashboardCtrl($scope, StudentGroupsService, UserService){
                         }else if(response.data.status == "OPEN"){
                             ctrl.open += 1;
                         }else if(response.data.status == "PENDING"){
-                            $ctrl.pending += 1;
+                            ctrl.pending += 1;
                         }
                     })
                 });
@@ -28,7 +32,11 @@ function DashboardCtrl($scope, StudentGroupsService, UserService){
     }
 }
 
-app.component('dashboardCourseOverview', {
+app.component('dashboardProjectsOverview', {
+    templateUrl: '/app/components/dashboardProjectsOverview.component.html',
+    controller: DashboardCtrl
+})
+.component('dashboardCourseOverview', {
     templateUrl: '/app/components/dashboardCourseOverview.component.html',
     controller: GroupCardCtrl,
     bindings: {
@@ -36,15 +44,18 @@ app.component('dashboardCourseOverview', {
         group: '<',
     }
 })
-.component('dashboardProjectsOverview', {
-    templateUrl: '/app/components/dashboardProjectsOverview.component.html',
-    controller: DashboardCtrl
-})
 .component('dashboardGradeOverview', {
     templateUrl: '/app/components/dashboardGradeOverview.component.html',
     controller: GroupCardCtrl,
     bindings: {
         user: '<',
         group: '<',
+    }
+})
+.component('dashboardGroupOverview', {
+    templateUrl: '/app/components/dashboardGroupOverview.component.html',
+    controller: DashboardCtrl,
+    bindings: {
+        group: '<'
     }
 });

@@ -1,1 +1,38 @@
-<h1>Teacher Dashboard</h1>
+<div ng-cloak ng-controller="TeacherGroupsCtrl" ng-init="onInit()">
+    <div layout="row">
+        <div flex>
+            <md-card>
+                <md-card-content>
+                    <span class="md-subhead dashboard-card-title">Projects Overview</span>
+                    <dashboard-projects-overview></dashboard-projects-overview>
+                </md-card-content>
+            </md-card>
+        </div>
+    </div>
+    <div layout="row">
+        <div flex>
+            <md-card>
+                <md-card-content>
+                    <md-headline>Groups with finalized grade</md-headline>
+                    <div ng-repeat="group in teacherGroupList | orderBy:'-id'">
+                        <dashboard-group-overview group="group"></dashboard-group-overview>
+                    </div>
+                </md-card-content>
+            </md-card>
+        </div>
+        <div flex>
+            <md-card>
+                <md-card-content>
+                    <md-headline>Groups without grade</md-headline>
+                </md-card-content>
+            </md-card>
+        </div>
+        <div flex>
+            <md-card>
+                <md-card-content>
+                    <md-headline>Groups that are grading</md-headline>
+                </md-card-content>
+            </md-card>
+        </div>
+    </div>
+</div>
