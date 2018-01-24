@@ -52,8 +52,9 @@ app.factory('GradeService', function (API) {
 
     this.getGradesByGroup = (groupId) => {
         return API.get({
-            path: `/grades/groups/`+groupId
+            path: `/grades/groups/${groupId}`
         });
     };
+    
     return this;
 });
