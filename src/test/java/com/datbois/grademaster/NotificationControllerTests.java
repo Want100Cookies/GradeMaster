@@ -6,21 +6,17 @@ import com.datbois.grademaster.service.NotificationService;
 import com.datbois.grademaster.service.UserService;
 import io.restassured.http.ContentType;
 import org.hamcrest.Matchers;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
 
-import javax.naming.AuthenticationNotSupportedException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static io.restassured.RestAssured.authentication;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 public class NotificationControllerTests extends OAuthTests {
@@ -32,7 +28,7 @@ public class NotificationControllerTests extends OAuthTests {
     private UserService userService;
 
     @Test
-    public void retrieveAllNotifications(){
+    public void retrieveAllNotifications() {
         String token = this.obtainAccessToken("john.doe@student.stenden.com", "password");
 
         given()
@@ -45,7 +41,7 @@ public class NotificationControllerTests extends OAuthTests {
     }
 
     @Test
-    public void updateAllNotifications(){
+    public void updateAllNotifications() {
         String token = this.obtainAccessToken("john.doe@student.stenden.com", "password");
 
         User user = userService.findByEmail("john.doe@student.stenden.com");
@@ -60,13 +56,13 @@ public class NotificationControllerTests extends OAuthTests {
                 .then()
                 .statusCode(HttpStatus.ACCEPTED.value());
 
-        for(Notification n : notifications){
+        for (Notification n : notifications) {
             assertThat(n.isSeen(), equalTo(true));
         }
     }
 
     @Test
-    public void updateNotification(){
+    public void updateNotification() {
         String token = this.obtainAccessToken("john.doe@student.stenden.com", "password");
 
         Notification notification = notificationService.findById(1L);

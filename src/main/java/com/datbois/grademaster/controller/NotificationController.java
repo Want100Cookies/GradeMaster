@@ -53,7 +53,7 @@ public class NotificationController {
         User user = ((UserDetails) authentication.getPrincipal()).getUser();
 
         Notification notification = notificationService.findById(notificationId);
-        if(notification.getUser().getId().equals(user.getId())) {
+        if (notification.getUser().getId().equals(user.getId())) {
             notification.setSeen(true);
         }
 

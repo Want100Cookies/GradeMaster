@@ -1,6 +1,5 @@
 package com.datbois.grademaster.repository;
 
-
 import com.datbois.grademaster.model.Grade;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
