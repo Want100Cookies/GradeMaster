@@ -3,7 +3,7 @@
         <md-card-title>
             <md-card-title-text>
                 <span class="md-headline">{{$ctrl.name}}</span>
-                <div layout="row" layout-align="left"> 
+                <div layout="row" layout-align="left">
                     <span class="md-subhead" flex="">Status</span>
                     <span class="md-subhead" flex="">Group grade</span>
                     <span class="md-subhead" flex="">Your grade</span>
@@ -14,11 +14,11 @@
                     </div>
                     <div ng-class="$ctrl.getGradeClass($ctrl.group.groupGrade.grade)" class="md-title" flex>
                         {{$ctrl.group.groupGrade.grade}}
-                    </div>                   
+                    </div>
                     <div ng-class="$ctrl.getGradeClass($ctrl.finalGrade)" class="md-title" flex >
                         {{$ctrl.finalGrade}}
-                    </div>                 
-                </div> 
+                    </div>
+                </div>
             </md-card-title-text>
         </md-card-title>
         <md-card-content>
@@ -29,11 +29,11 @@
                     </div>
                     <div ng-if="$last">
                         {{member.name}}
-                    </div>        
-                </div> 
+                    </div>
+                </div>
                 <md-button ng-disabled="$ctrl.groupStatus !== 'OPEN'" ng-click="$ctrl.gradeGroupMembers()" class="groupGradeBtn">GRADE</md-button>
-            </div><br>
-            <md-divider></md-divider>
+            </div>
         </md-card-content>
-    </md-card>
+        <md-progress-linear md-mode="determinate" value="{{$ctrl.group.gradingProgress}}"></md-progress-linear>
+</md-card>
 </div>

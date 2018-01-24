@@ -1,40 +1,24 @@
-teacherCardCtrl = ($scope, GroupService, $state, $mdDialog) => {
+function teacherCardCtrl($scope, GroupService, $state, $mdDialog) {
     var ctrl = this;
 
-    $scope.init = () => {
-        $scope.groupGrade = "TBD";
-        $scope.groupStatus = "TBD";
-        $scope.groupName;
-        $scope.groupMembers = [];
-        $scope.groupId = $scope.$ctrl.group.id;
+    ctrl.$onInit = () => {
+        ctrl.groupGrade = "TBD";
+        ctrl.groupStatus = "TBD";
 
-        GroupService.getGradingStatus($scope.$ctrl.group.id).then((response) => {
-            $scope.groupStatus = response.data.status;
+        GroupService.getGradingStatus(ctrl.group.id).then((response) => {
+            ctrl.groupStatus = response.data.status;
         });
+    };
 
-        // Check the group grade
-        if ($scope.$ctrl.group.groupGrade !== null) {
-            $scope.groupGrade = $scope.$ctrl.group.groupGrade.grade;
-        }
-        // Check the group name
-        if ($scope.$ctrl.group !== null) {
-            $scope.groupName = $scope.$ctrl.group.groupName;
-        } else {
-            $scope.groupName = "Couldn't resolve group name";
-        }
-        // Check the group members
-        if ($scope.$ctrl.group.users !== null) {
-            $scope.groupMembers = $scope.$ctrl.group.users;
-        }
-    }
-
-    $scope.gradeGroup = () => {
+    ctrl.gradeGroup = () => {
         $state.transitionTo("app.groupGrade", {groupId: $scope.groupId});
-    }
-    $scope.finalGroupView = () => {
+    };
+
+    ctrl.finalGroupView = () => {
         $state.transitionTo("app.finalGroupOverview", {groupId: $scope.groupId});
-    }
-     $scope.editGroup = (ev) => {
+    };
+
+    ctrl.editGroup = (ev) => {
         $mdDialog.show({
             bindToController: true,
             controller: EditGroupDialogController,
@@ -48,9 +32,9 @@ teacherCardCtrl = ($scope, GroupService, $state, $mdDialog) => {
         }, function () {
             console.log("close dialog");
         });
-    }
+    };
 
-    $scope.deleteGroup = () => {
+    ctrl.deleteGroup = () => {
         let confirm = $mdDialog.confirm()
             .title("Are you sure?")
             .textContent("Are your sure you want to delete this group? You cannot recover this group after deleting it!")
@@ -72,14 +56,15 @@ teacherCardCtrl = ($scope, GroupService, $state, $mdDialog) => {
     }
 }
 
-function EditGroupDialogController($scope, $mdDialog, GroupService) {
+function EditGroupDialogController($scope, $mdDialog) {
     $scope.hide = () => {
         $mdDialog.hide();
-    }
+    };
     $scope.close = () => {
         $mdDialog.close();
-    }
+    };
 }
+
 app.component('teacherCard', {
     templateUrl: '/app/components/teacherCard.component.html',
     controller: teacherCardCtrl,
