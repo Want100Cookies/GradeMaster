@@ -11,7 +11,8 @@ public class Email {
     private String link;
     private String linkText;
 
-    public Email(){}
+    public Email() {
+    }
 
     public Email(String to, String subject, String body) {
         this.to = to;

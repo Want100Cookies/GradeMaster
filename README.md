@@ -12,6 +12,7 @@ A small application to ease the grading of project groups for teachers.
 To view the documentation run the Spring boot app and visit [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
 
 ### Setup
+##### Backend
 Docker is being used to run all the needed backend services:
 ```
 $ docker-compose up -d
@@ -22,6 +23,13 @@ To run the backend the following environment variables should exist:
 - EMAIL_PORT
 - EMAIL_USERNAME
 - EMAIL_PASSWORD
+**For intellij; Edit configurations... > *Select configuration* > Environment variables**
+
+##### Frontend
+```
+$ cd ./src/main/resources/public
+$ npm install
+```
 
 ### Requirements
 - Java SDK          >= 8.x
