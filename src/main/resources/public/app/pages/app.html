@@ -75,8 +75,8 @@
                         <md-menu-content width="4">
                             <div class="account-header">
                                 <md-icon md-svg-icon="/app/icons/account.svg" md-menu-align-target></md-icon>
-                                <p class="username">Cas van Dinter</p>
-                                <span class="role" ng-repeat="r in ctrl.roles">
+                                <p class="username">{{ctrl.user.name}}</p>
+                                <span class="role" ng-repeat="r in ctrl.user.roles">
                                     {{r.label}}
                                     <span ng-if="!$last"> || </span>
                                 </span>

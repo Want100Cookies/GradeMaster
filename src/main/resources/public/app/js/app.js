@@ -13,7 +13,7 @@ app.controller('LayoutController', function ($scope, $mdSidenav, $window, $cooki
     this.newNotifications = [];
     this.oldNotifications = [];
     this.patchNotifications = [];
-    this.roles = [];
+    this.user = {};
 
     (this.getNotifications = () => {
         return NotificationService.getNotifications().then((resp) => {
@@ -55,10 +55,10 @@ app.controller('LayoutController', function ($scope, $mdSidenav, $window, $cooki
     this.showAccount = ($mdOpenMenu, ev) => {
         $mdOpenMenu(ev);
     }
-    (this.getRoles = () => {
+    (this.getUser = () => {
         return UserService.getSelf().then((resp) => {
-            this.roles = resp.data.roles;
-            return resp.data.roles;
+            this.user = resp.data;
+            return resp.data;
         });
     })();
     this.readNotification = (notification) => {
