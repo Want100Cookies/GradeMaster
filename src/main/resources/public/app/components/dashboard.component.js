@@ -19,7 +19,7 @@ function DashboardCtrl($scope, StudentGroupsService, UserService){
                         }else if(response.data.status == "OPEN"){
                             ctrl.open += 1;
                         }else if(response.data.status == "PENDING"){
-                            $ctrl.pending += 1;
+                            ctrl.pending += 1;
                         }
                     })
                 });

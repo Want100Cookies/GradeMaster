@@ -68,9 +68,25 @@
                             </div>
                         </md-menu-content>
                     </md-menu>
-                    <md-button class="md-icon-button" ng-click="ctrl.logout()" aria-label="Profile">
-                        <md-icon md-svg-icon="/app/icons/account.svg"></md-icon>
-                    </md-button>
+                    <md-menu>
+                        <md-button class="md-icon-button" ng-click="ctrl.showAccount($mdOpenMenu, $event)" aria-label="Account">
+                            <md-icon md-menu-origin md-svg-icon="/app/icons/account.svg"></md-icon>
+                        </md-button>
+                        <md-menu-content width="4">
+                            <div class="account-header">
+                                <md-icon md-svg-icon="/app/icons/account.svg" md-menu-align-target></md-icon>
+                                <p class="username">Cas van Dinter</p>
+                                <span class="role" ng-repeat="r in ctrl.roles">
+                                    {{r.label}}
+                                    <span ng-if="!$last"> || </span>
+                                </span>
+                            </div>
+                            <div class="account-content">
+                                <md-icon md-menu-origin md-svg-icon="/app/icons/exit.svg"></md-icon>
+                                <span class="logout">Logout</span>
+                            </div>
+                        </md-menu-content>
+                    </md-menu>
                 </div>
             </md-toolbar>
             <ui-view/>
