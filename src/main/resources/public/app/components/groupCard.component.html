@@ -2,8 +2,14 @@
 <md-card>
         <md-card-title>
             <md-card-title-text>
-                <span class="md-headline">{{$ctrl.name}}</span>
-                <div layout="row" layout-align="left">
+                <span class="md-headline">
+                    <small class="inactive-text">
+                        {{$ctrl.group.course.education.name}} &gt;
+                        {{$ctrl.group.course.name}} &gt;
+                    </small>
+                    {{$ctrl.group.groupName}}
+                </span>
+                <div layout="row" layout-align="left"> 
                     <span class="md-subhead" flex="">Status</span>
                     <span class="md-subhead" flex="">Group grade</span>
                     <span class="md-subhead" flex="">Your grade</span>
