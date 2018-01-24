@@ -23,7 +23,8 @@ To run the backend the following environment variables should exist:
 - EMAIL_PORT
 - EMAIL_USERNAME
 - EMAIL_PASSWORD
-**For intellij; Edit configurations... > *Select configuration* > Environment variables**
+
+*For intellij; Edit configurations... > **Select configuration** > Environment variables*
 
 ##### Frontend
 ```
