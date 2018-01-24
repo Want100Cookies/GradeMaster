@@ -1,4 +1,4 @@
-function teacherCardCtrl($scope, GroupService, $state, $mdDialog) {
+function teacherCardCtrl($scope, GroupService, $state, $mdDialog, API) {
     var ctrl = this;
 
     ctrl.$onInit = () => {
@@ -11,11 +11,11 @@ function teacherCardCtrl($scope, GroupService, $state, $mdDialog) {
     };
 
     ctrl.gradeGroup = () => {
-        $state.transitionTo("app.groupGrade", {groupId: $scope.groupId});
+        $state.transitionTo("app.groupGrade", {groupId: ctrl.group.id});
     };
 
     ctrl.finalGroupView = () => {
-        $state.transitionTo("app.finalGroupOverview", {groupId: $scope.groupId});
+        $state.transitionTo("app.finalGroupOverview", {groupId: ctrl.group.id});
     };
 
     ctrl.editGroup = (ev) => {
@@ -43,7 +43,7 @@ function teacherCardCtrl($scope, GroupService, $state, $mdDialog) {
 
         $mdDialog.show(confirm)
             .then(() => {
-                GroupService.deleteGroup($scope.groupId).then(() => {
+                GroupService.deleteGroup(ctrl.group.id).then(() => {
                     //Refresh groups
                     $scope.$parent.$parent.getGroups();
                 }, () => {
@@ -53,7 +53,41 @@ function teacherCardCtrl($scope, GroupService, $state, $mdDialog) {
                         .ok("Okay"));
                 });
             });
-    }
+    };
+
+    ctrl.export = (format, contentType) => {
+        API.get({
+            path: `grades/groups/${ctrl.group.id}/export.${format}`,
+            req: Object.assign({
+                headers: {
+                    'Content-type': contentType,
+                },
+                responseType: 'arraybuffer'
+            }, API.getRequest())
+        }).then((response) => {
+            const file = new Blob([response.data], {
+                type: contentType
+            });
+
+            const fileURL = URL.createObjectURL(file);
+            const a = document.createElement('a');
+            a.href = fileURL;
+            a.target = '_blank';
+            a.download = `${ctrl.group.groupName}.${format}`;
+            document.body.appendChild(a);
+            a.click();
+        }).catch((error) => {
+            console.error("Error downloading export");
+        });
+    };
+
+    ctrl.downloadPDF = () => {
+        ctrl.export("pdf", "application/pdf");
+    };
+
+    ctrl.downloadCSV = () => {
+        ctrl.export("csv", "text/csv");
+    };
 }
 
 function EditGroupDialogController($scope, $mdDialog) {
