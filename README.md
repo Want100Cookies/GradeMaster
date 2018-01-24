@@ -9,6 +9,7 @@ A small application to ease the grading of project groups for teachers.
 - Teachers can finalize the given grades and export it to CSV/PDF
 
 ### Documentation
+Swagger is used to document the API.
 To view the documentation run the Spring boot app and visit [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
 
 ### Setup
