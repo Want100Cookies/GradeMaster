@@ -1,27 +1,28 @@
-app.factory('StudentGroupsService', function($http, $cookies, API){
-    return {
-        getStudentGroups : function(userId){
-            return API.get({
-                path: 'users/'+ userId +'/groups'
-            });
-        },
+app.factory('StudentGroupsService', function(API){
 
-        getGroupMembers : function(groupId){
-            return API.get({
-                path: 'groups/'+ groupId +'/users'
-            });
-        },
+    this.getStudentGroups = (userId) => {
+        return API.get({
+            path: `users/${userId}/groups`
+        });
+    };
 
-        getFinalGroupGrade : function(groupId, userId){
-            return API.get({
-                path: 'grades/groups/'+ groupId +'/users/'+ userId
-            });
-        },
+    this.getGroupMembers = (groupId) => {
+        return API.get({
+            path: `groups/${groupId}/users`
+        });
+    };
 
-        getGradingStatus : function(groupId){
-            return API.get({
-                path: 'grades/status/groups/' + groupId
-            });
-        }
-    }
+    this.getFinalGroupGrade = (groupId, userId) => {
+        return API.get({
+            path: `grades/groups/${groupId}/users/${userId}`
+        });
+    };
+
+    this.getGradingStatus = (groupId) => {
+        return API.get({
+            path: `grades/status/groups/${groupId}`
+        });
+    };
+
+    return this;
 });

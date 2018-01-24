@@ -44,15 +44,15 @@ app.factory('API', function ($cookies, $http, $httpParamSerializer) {
         user
     } = {}) => {
         user = { ...user,
-            grant_type: 'password',
-            scope: 'read write'
+            grant_type: `password`,
+            scope: `read write`
         }
         let req = Object.assign({}, this.getAuthRequest());
         return this.post({
             data: $httpParamSerializer(user),
             req
         }).then((resp) => {
-            $cookies.put("access_token", resp.data.access_token);
+            $cookies.put(`access_token`, resp.data.access_token);
             return resp;
         });
     };
@@ -143,7 +143,7 @@ app.factory('API', function ($cookies, $http, $httpParamSerializer) {
                 return resp;
             }).catch((error) => {
                 console.error(`error`, error);
-                return(error);
+                reject(error);
             });
         }
         return $http(req);
