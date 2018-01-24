@@ -8,11 +8,12 @@ var app = angular.module('gmApp', [
     'ui.router'
 ]);
 
-app.controller('LayoutController', function ($scope, $mdSidenav, $window, $cookies, $mdDialog, AuthService, NotificationService) {
+app.controller('LayoutController', function ($scope, $mdSidenav, $window, $cookies, $mdDialog, AuthService, NotificationService, UserService) {
 
     this.newNotifications = [];
     this.oldNotifications = [];
     this.patchNotifications = [];
+    this.user = {};
 
     (this.getNotifications = () => {
         return NotificationService.getNotifications().then((resp) => {
@@ -51,6 +52,15 @@ app.controller('LayoutController', function ($scope, $mdSidenav, $window, $cooki
             $mdOpenMenu(ev);
         });
     }
+    this.showAccount = ($mdOpenMenu, ev) => {
+        $mdOpenMenu(ev);
+    }
+    (this.getUser = () => {
+        return UserService.getSelf().then((resp) => {
+            this.user = resp.data;
+            return resp.data;
+        });
+    })();
     this.readNotification = (notification) => {
         if (!notification.seen) {
             notification.seen = true;
