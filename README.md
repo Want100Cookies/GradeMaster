@@ -10,7 +10,7 @@ A small application to ease the grading of project groups for teachers.
 
 ### Documentation
 Swagger is used to document the API.
-To view the documentation run the Spring boot app and visit [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+To view the documentation, run the Spring boot app and visit [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
 
 ### Setup
 ##### Backend
@@ -32,6 +32,8 @@ To run the backend the following environment variables should exist:
 $ cd ./src/main/resources/public
 $ npm install
 ```
+
+##### Now you're ready to run the Spring boot app :)
 
 ### Requirements
 - Java SDK          >= 8.x
