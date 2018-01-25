@@ -102,6 +102,11 @@ app.config(function ($stateProvider) {
             url: '/registered',
             templateUrl: '/app/pages/registered.html',
         })
+        .state('retard', {
+            url: '/retard',
+            templateUrl: '/app/pages/retard.html',
+            controller: 'RetardCtrl'
+        })
         .state('verify', {
             url: '/verify?email&token',
             templateUrl: '/app/pages/verify.html',
