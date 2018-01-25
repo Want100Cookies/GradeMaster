@@ -10,6 +10,8 @@ import java.util.Set;
 public interface GroupService {
     Group save(Group group);
 
+    Group save(Group group, Set<User> users);
+
     List<Group> findAll();
 
     Group findById(Long id);

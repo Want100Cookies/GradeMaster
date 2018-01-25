@@ -33,6 +33,11 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    public Group save(Group group, Set<User> users) {
+        return groupRepository.save(setUsers(groupRepository.save(group), users));
+    }
+
+    @Override
     public List<Group> findAll() {
         return groupRepository.findAll();
     }
@@ -67,6 +72,16 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public Group setUsers(Group group, Set<User> users) {
         if (users == null) return group;
+        Group existingGroup = groupRepository.findById(group.getId());
+
+        for (User u : existingGroup.getUsers()) { // Delete group from the users
+            User user = userService.findById(u.getId());
+            Set<Group> groups = user.getGroups();
+            groups.remove(group);
+            user.setGroups(groups);
+            userService.save(user);
+        }
+
         group.setUsers(users);
         for (User u : users) {
             User user = userService.findById(u.getId());
