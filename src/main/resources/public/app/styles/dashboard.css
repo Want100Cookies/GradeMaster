@@ -35,3 +35,28 @@ md-grid-list md-card table button{
 .grade{
     font-size: 26px;
 }
+.empty-page-wrap{
+    display: table;
+    width: 100%;
+    height: 90%;
+    text-align: center;
+}
+.empty-page-txt{
+    color: rgba(0, 0, 0, 0.3);
+    display: table-cell;
+    vertical-align: middle;
+    font-size: 2.5em;
+}
+.caption-compact{
+    margin: 5px 0 !important;
+}
+.dashboard-select{
+    max-width: 15%;
+}
+.teacher-dashboard-groups{
+    max-height: 1000px;
+    overflow-x: auto;
+}
+.align-status{
+    width: 33%;
+}

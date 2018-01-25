@@ -3,8 +3,13 @@ function GroupCardCtrl($state, StudentGroupsService, CourseService) {
     let ctrl = this;
 
     ctrl.groupMembers = [];
+    ctrl.groupGrade = '';
 
     ctrl.$onInit = () => {
+        ctrl.name = ctrl.group.groupName;
+
+        ctrl.groupGrade = (ctrl.group.groupGrade == null) ? 'TBD' : ctrl.group.groupGrade.grade;
+
         StudentGroupsService.getFinalGroupGrade(ctrl.group.id, ctrl.user.id).then((response) => {
             if (response.data.grade) {
                 ctrl.finalGrade = response.data.grade;
