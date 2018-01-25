@@ -13,7 +13,8 @@ app.controller('StudentGroupsCtrl', function ($scope, UserService, StudentGroups
 });
 
 app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService, GroupService) {
-    $scope.status = '  ';
+    $scope.limit = 10;
+    $scope.limitOptions = [5, 10, 15, 20, 50, 100];
     $scope.teacherGroupList = [];
     $scope.onInit = () => {
         $scope.getGroups();
@@ -22,6 +23,26 @@ app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService, Gr
         UserService.getSelf().then((response) => {
             return GroupService.getGroupsByUserId(response.data.id).then((response) => {
                 $scope.teacherGroupList = response.data;
+
+                $scope.closed = [];
+                $scope.pending = [];
+                $scope.open = [];
+                
+                angular.forEach($scope.teacherGroupList, function(value, key) {
+                    GroupService.getGradingStatus(value.id).then(function(response){
+                        switch(response.data.status){
+                            case "CLOSED":
+                                $scope.closed.push(value);
+                                break;
+                            case "PENDING":
+                                $scope.pending.push(value);
+                                break;
+                            case "OPEN":
+                                $scope.open.push(value);
+                                break;
+                        }
+                    })
+                });
             });
         });
 

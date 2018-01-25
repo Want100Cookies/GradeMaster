@@ -1,21 +1,22 @@
-<div ng-cloak ng-controller="GroupsCtrl">
-    <div layout="row" layout-xs="column" ng-controller="StudentGroupsCtrl">
-        <div flex="50" flex-xs="100">
+<div ng-cloak>
+    <div layout="row" layout-xs="column" layout-sm="column" ng-controller="StudentGroupsCtrl">
+        <div flex="50" flex-xs="100" flex-sm="100">
             <md-card>
                 <md-card-content>
                     <div ng-repeat="group in groupsDetails | orderBy:'id'">
                         <dashboard-course-overview group="group" user="userDetails"></dashboard-course-overview>
+                        <md-divider ng-if="!$last"></md-divider>
                     </div>
                 </md-card-content>
             </md-card>
         </div>
-        <div flex="50" flex-xs="100">
+        <div flex="50" flex-xs="100" flex-sm="100">
             <div layout="column">
                 <div flex>
                     <md-card>
                         <md-card-content>
                             <span class="md-subhead dashboard-card-title">Projects Overview</span>
-                            <dashboard-projects-overview user="userDetails"></dashboard-projects-overview>
+                            <dashboard-projects-overview></dashboard-projects-overview>
                         </md-card-content>
                     </md-card>
                 </div>
@@ -25,6 +26,7 @@
                             <span class="md-subhead dashboard-card-title">Grade Overview</span>
                             <div ng-repeat="group in groupsDetails | orderBy:'id'">
                                 <dashboard-grade-overview group="group" user="userDetails"></dashboard-grade-overview>
+                                <md-divider ng-if="!$last"></md-divider>
                             </div>
                         </md-card-content>
                     </md-card>

@@ -237,5 +237,8 @@ app.config(function ($stateProvider) {
                     return AuthService.authenticate();
                 },
             },
+        })
+        .state('app.empty', {
+            component: 'empty'
         });
 });

@@ -1,1 +1,61 @@
-<h1>Teacher Dashboard</h1>
+<div ng-cloak ng-controller="TeacherGroupsCtrl" ng-init="onInit()">
+    <div layout="row">
+        <div flex>
+            <md-card>
+                <md-card-content>
+                    <span class="md-subhead dashboard-card-title">Projects Overview</span>
+                    <dashboard-projects-overview></dashboard-projects-overview>
+                </md-card-content>
+            </md-card>
+        </div>
+    </div>
+    <div layout="row">
+        <div flex>
+            <md-card>
+                <md-card-content>
+                    <label>Amount to show</label>
+                    <md-select aria-label="Select amount of groups to show" class="dashboard-select" ng-model="limit" md-selected-text="limit">
+                        <md-optgroup label="options">
+                            <md-option ng-value="option" ng-repeat="option in limitOptions">{{option}}</md-option>
+                        </md-optgroup>
+                    </md-select>
+                </md-card-content>
+            </md-card>
+        </div>
+    </div>
+    <div layout="row" layout-xs="column" layout-sm="column">
+        <div flex>
+            <md-card class="teacher-dashboard-groups">
+                <md-card-content>
+                    <span class="md-subhead dashboard-card-title">Recent closed</span>
+                    <span ng-repeat="group in closed | orderBy:'-id' | limitTo: limit">
+                        <dashboard-group-overview group="group"></dashboard-group-overview>
+                        <md-divider ng-if="!$last"></md-divider>
+                    </span>
+                </md-card-content>
+            </md-card>
+        </div>
+        <div flex>
+            <md-card class="teacher-dashboard-groups">
+                <md-card-content>
+                    <span class="md-subhead dashboard-card-title">Recent open</span>
+                    <span ng-repeat="group in open | orderBy:'-id' | limitTo: limit">
+                        <dashboard-group-overview group="group"></dashboard-group-overview>
+                        <md-divider ng-if="!$last"></md-divider>
+                    </span>
+                </md-card-content>
+            </md-card>
+        </div>
+        <div flex>
+            <md-card class="teacher-dashboard-groups">
+                <md-card-content>
+                    <span class="md-subhead dashboard-card-title">Recent pending</span>
+                    <span ng-repeat="group in pending | orderBy:'-id' | limitTo: limit">
+                        <dashboard-group-overview group="group"></dashboard-group-overview>
+                        <md-divider ng-if="!$last"></md-divider>
+                    </span>
+                </md-card-content>
+            </md-card>
+        </div>
+    </div>
+</div>
