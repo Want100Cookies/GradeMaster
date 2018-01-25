@@ -9,10 +9,10 @@ app.controller('LoginCtrl', function (API, $scope, $state) {
             $scope.login($scope.vm.formData.email, $scope.vm.formData.password);
         }
     }
-    $scope.changeLogin = function() {
+    $scope.changeLogin = () => {
         $state.transitionTo('register')
     }
-    $scope.login = function (username, password) {
+    $scope.login = (username, password) => {
         API.auth({user: {username, password}}).then((resp) => {
             $state.transitionTo('app.dashboard');
         }).catch((resp) => {

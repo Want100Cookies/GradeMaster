@@ -6,7 +6,6 @@ function GroupCardCtrl($state, StudentGroupsService, CourseService) {
     ctrl.groupGrade = '';
 
     ctrl.$onInit = () => {
-
         ctrl.name = ctrl.group.groupName;
 
         ctrl.groupGrade = (ctrl.group.groupGrade == null) ? 'TBD' : ctrl.group.groupGrade.grade;
@@ -41,23 +40,19 @@ function GroupCardCtrl($state, StudentGroupsService, CourseService) {
             }
         });
 
-        CourseService.getCourse(ctrl.group.course.id).then(function(response){
-            ctrl.course = response.data;
-        })
-
         ctrl.calculateGradeChange = function(groupGrade, finalGrade){
             if (typeof finalGrade === "string") {
                 ctrl.percentage = "";
                 return "TBD";
             }
-            var diff = finalGrade - groupGrade;
-            var diffInPercentage = Math.round(diff / finalGrade * 100) + "%";
+            const diff = finalGrade - groupGrade;
+            const diffInPercentage = Math.round(diff / finalGrade * 100) + "%";
 
             if(diffInPercentage > 0){
                 ctrl.percentage = "negative";
                 return "+" + diffInPercentage;
             }
-            else if(diffInPercentage == 0){
+            else if(diffInPercentage === 0){
                 ctrl.percentage = "equal";
                 return diffInPercentage;
             }

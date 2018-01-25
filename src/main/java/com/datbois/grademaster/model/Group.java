@@ -121,6 +121,41 @@ public class Group extends BaseModel {
         this.grades = grades;
     }
 
+    public Integer getGradingProgress() {
+        if (getGroupGrade() == null) {
+            return 0;
+        }
+
+        Integer gradesFromTeachers = (int) getGrades()
+                .stream()
+                .filter(grade -> grade.getFromUser().hasAnyRole("TEACHER_ROLE"))
+                .count();
+
+        if (gradesFromTeachers > 0) {
+            return 100;
+        }
+
+        if (getGrades().size() == 0) {
+            return 10;
+        }
+
+        Integer gradesFromStudents = getGrades()
+                .stream()
+                .filter(grade -> grade.getFromUser().hasAnyRole("STUDENT_ROLE"))
+                .toArray()
+                .length;
+
+        Double noStudents = (double) getUsers()
+                .stream()
+                .filter(user -> user.hasAnyRole("STUDENT_ROLE"))
+                .toArray()
+                .length;
+
+        Double studentsThatGraded = gradesFromStudents / noStudents;
+
+        return (int) (studentsThatGraded / noStudents * 100);
+    }
+
     @JsonIgnore
     public Status getGradingStatusForUser(User user) {
         Status status;

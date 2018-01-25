@@ -3,14 +3,17 @@
         <md-card-title>
             <md-card-title-text>
                 <div layout="row" layout-align="left">
-                    <span class="md-headline" flex="90">{{groupName}}</span>
-                    <md-button ng-if="groupStatus === 'PENDING'" class="md-icon-button" ng-click="finalGroupView()">
-                        <md-icon aria-label="delete" md-svg-src="app/icons/finalView.svg"></md-icon>
-                    </md-button>
-                    <md-button class="md-icon-button" ng-click="editGroup()">
+                    <span class="md-headline" flex="90">
+                        <small class="inactive-text">
+                            {{$ctrl.group.course.education.name}} &gt;
+                            {{$ctrl.group.course.name}} &gt;
+                        </small>
+                        {{$ctrl.group.groupName}}
+                    </span>
+                    <md-button class="md-icon-button" ng-click="$ctrl.editGroup()">
                         <md-icon aria-label="delete" md-svg-src="app/icons/edit.svg"></md-icon>
                     </md-button>
-                    <md-button class="md-icon-button" ng-click="deleteGroup()">
+                    <md-button class="md-icon-button" ng-click="$ctrl.deleteGroup()">
                         <md-icon aria-label="delete" md-svg-src="app/icons/delete.svg"></md-icon>
                     </md-button>
                 </div>
@@ -20,17 +23,17 @@
                 </div>
                 <div layout="row" layout-align="left">
                     <div ng-class="groupStatus" class="md-title" flex>
-                        {{groupStatus}}
+                        {{$ctrl.groupStatus}}
                     </div>
                     <div ng-class="groupGradeStatus" class="md-title" flex>
-                        <span>{{groupGrade}}</span>
+                        <span>{{$ctrl.group.groupGrade.grade || 'TBD'}}</span>
                     </div>
                 </div>
             </md-card-title-text>
         </md-card-title>
         <md-card-content>
             <div layout="row" class="relativeDiv">
-                <div class="md-caption" ng-repeat="member in groupMembers">
+                <div class="md-caption" ng-repeat="member in $ctrl.group.users">
                     <div ng-if="!$last">
                         {{member.name}}, &nbsp;
                     </div>
@@ -38,10 +41,20 @@
                         {{member.name}}
                     </div>
                 </div>
-                <md-button ng-disabled="groupStatus !== 'OPEN'" ng-click="gradeGroup()" class="groupGradeBtn">GRADE</md-button>
+                <div class="groupGradeBtn">
+                    <md-button ng-if="$ctrl.groupStatus === 'OPEN'" ng-click="$ctrl.gradeGroup()">GRADE</md-button>
+                    <md-button ng-if="$ctrl.groupStatus === 'PENDING'" ng-click="$ctrl.finalGroupView()">FINALIZE</md-button>
+                    <md-button ng-if="$ctrl.groupStatus === 'CLOSED'" ng-click="$ctrl.downloadPDF()">
+                        <md-icon aria-label="delete" md-svg-src="app/icons/download.svg"></md-icon>
+                        PDF
+                    </md-button>
+                    <md-button ng-if="$ctrl.groupStatus === 'CLOSED'" ng-click="$ctrl.downloadCSV()">
+                        <md-icon aria-label="delete" md-svg-src="app/icons/download.svg"></md-icon>
+                        CSV
+                    </md-button>
+                </div>
             </div>
-            <br>
-            <md-divider></md-divider>
         </md-card-content>
+        <md-progress-linear md-mode="determinate" value="{{$ctrl.group.gradingProgress}}"></md-progress-linear>
     </md-card>
 </div>
