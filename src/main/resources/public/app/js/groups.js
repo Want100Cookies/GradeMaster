@@ -27,10 +27,10 @@ app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService, Gr
                 $scope.closed = [];
                 $scope.pending = [];
                 $scope.open = [];
-                
-                angular.forEach($scope.teacherGroupList, function(value, key) {
-                    GroupService.getGradingStatus(value.id).then(function(response){
-                        switch(response.data.status){
+
+                angular.forEach($scope.teacherGroupList, function (value, key) {
+                    GroupService.getGradingStatus(value.id).then(function (response) {
+                        switch (response.data.status) {
                             case "CLOSED":
                                 $scope.closed.push(value);
                                 break;
@@ -109,6 +109,7 @@ app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService, Gr
             if (Object.keys($scope.vm.formData.period).length !== 0 && $scope.vm.formData.users.length !== 0 &&
                 $scope.vm.formData.groupName != null && $scope.vm.formData.startYear != null && $scope.vm.formData.endYear != null &&
                 $scope.vm.formData.course != null) {
+                $scope.vm.formData.period = Object.keys($scope.vm.formData.period);
                 GroupService.createGroup($scope.vm.formData);
                 $scope.showSimpleToast();
                 $scope.hide();

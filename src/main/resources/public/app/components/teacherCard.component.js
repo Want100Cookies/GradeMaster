@@ -115,6 +115,11 @@ function EditGroupDialogController($scope, $mdDialog, EducationService, group, G
         }
     });
 
+    const groupPeriods = [];
+    for(const p of group.period){
+        groupPeriods[p] = true;
+    }
+
     $scope.vm = {
         formData: {
             groupName: group.groupName,
@@ -127,9 +132,10 @@ function EditGroupDialogController($scope, $mdDialog, EducationService, group, G
                     id: group.course.education.id
                 }
             },
-            period: group.period,
+            period: groupPeriods,
         },
     };
+
     $scope.usersChange = (val) => {
         $scope.vm.formData.users = val;
     };
@@ -151,6 +157,12 @@ function EditGroupDialogController($scope, $mdDialog, EducationService, group, G
         if (Object.keys($scope.vm.formData.period).length !== 0 && $scope.vm.formData.users.length !== 0 &&
             $scope.vm.formData.groupName != null && $scope.vm.formData.startYear != null && $scope.vm.formData.endYear != null &&
             $scope.vm.formData.course != null) {
+
+            const periods = [];
+            for(const p in $scope.vm.formData.period) {
+                if($scope.vm.formData.period[p] === true) periods.push(p);
+            }
+            $scope.vm.formData.period = periods;
             GroupService.editGroup($scope.vm.formData, $scope.group.id);
             $scope.showSimpleToast();
             $scope.hide();
