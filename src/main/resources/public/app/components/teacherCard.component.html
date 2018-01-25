@@ -10,9 +10,6 @@
                         </small>
                         {{$ctrl.group.groupName}}
                     </span>
-                    <md-button ng-if="$ctrl.groupStatus === 'PENDING'" class="md-icon-button" ng-click="finalGroupView()">
-                        <md-icon aria-label="delete" md-svg-src="app/icons/finalView.svg"></md-icon>
-                    </md-button>
                     <md-button class="md-icon-button" ng-click="$ctrl.editGroup()">
                         <md-icon aria-label="delete" md-svg-src="app/icons/edit.svg"></md-icon>
                     </md-button>
@@ -44,7 +41,18 @@
                         {{member.name}}
                     </div>
                 </div>
-                <md-button ng-disabled="$ctrl.groupStatus !== 'OPEN'" ng-click="gradeGroup()" class="groupGradeBtn">GRADE</md-button>
+                <div class="groupGradeBtn">
+                    <md-button ng-if="$ctrl.groupStatus === 'OPEN'" ng-click="$ctrl.gradeGroup()">GRADE</md-button>
+                    <md-button ng-if="$ctrl.groupStatus === 'PENDING'" ng-click="$ctrl.finalGroupView()">FINALIZE</md-button>
+                    <md-button ng-if="$ctrl.groupStatus === 'CLOSED'" ng-click="$ctrl.downloadPDF()">
+                        <md-icon aria-label="delete" md-svg-src="app/icons/download.svg"></md-icon>
+                        PDF
+                    </md-button>
+                    <md-button ng-if="$ctrl.groupStatus === 'CLOSED'" ng-click="$ctrl.downloadCSV()">
+                        <md-icon aria-label="delete" md-svg-src="app/icons/download.svg"></md-icon>
+                        CSV
+                    </md-button>
+                </div>
             </div>
         </md-card-content>
         <md-progress-linear md-mode="determinate" value="{{$ctrl.group.gradingProgress}}"></md-progress-linear>
