@@ -15,6 +15,6 @@ app.factory('RetardService', function (API) {
             req: Object.assign({}, API.getUnAuthRequest())
         });
     };
-    
+
     return this;
 });

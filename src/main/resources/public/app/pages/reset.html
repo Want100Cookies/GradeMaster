@@ -1,0 +1,47 @@
+<div flex-xs="" flex-gt-xs="50" style="margin: 0 auto;" ng-controller="ResetCtrl as ctrl">
+    <h1 class="md-display-2" style="text-align: center;">Grade Master</h1>
+    <md-card>
+        <md-toolbar id="override-login-toolbar">
+            <div class="md-toolbar-tools">
+                <h2>
+                    <span>Reset password</span>
+                </h2>
+            </div>
+        </md-toolbar>
+        <md-card-content>
+            <p ng-if="ctrl.showLoading()">One moment please...</p>
+            <p ng-if="ctrl.showSuccess()">Your password has been changed. You will be redirected shortly...</p>
+            <p ng-if="ctrl.showError()">Seems like something went wrong. Check your details or try again later.</p>
+            <form name="Form" ng-if="ctrl.showForm()">
+                <md-input-container class="md-block">
+                    <label> Email</label>
+                    <input type="email" name="email" ng-model="ctrl.email" required />
+                    <div ng-messages="Form.email.$error" role="alert" multiple="">
+                        <div class="my-message" ng-message="required">You must supply an email.</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block">
+                    <label>Password</label>
+                    <input type="password" name="password" ng-model="ctrl.password" required password-verify="{{ctrl.confirmPassword}}" />
+                    <div ng-messages="Form.password.$error" role="alert" multiple="">
+                        <div class="my-message" ng-message="required">You must supply a password.</div>
+                        <div class="my-message" ng-message="passwordVerify">No match</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block">
+                    <label>Confirm Password</label>
+                    <input type="password" name="confirmPassword" ng-model="ctrl.confirmPassword" required password-verify="{{ctrl.password}}" />
+                    <div ng-messages="Form.confirmPassword.$error" role="alert" multiple="">
+                        <div class="my-message" ng-message="required">You must supply a password.</div>
+                        <div class="my-message" ng-message="passwordVerify">No match</div>
+                        <div class="error">{{error}}</div>
+                    </div>
+                </md-input-container>
+                <div layout="layout">
+                    <md-button type="submit" class="md-raised md-primary pull-right formPage" ng-disabled="!Form.$valid" ng-click="ctrl.submit()"
+                        id="override-login-button">&nbsp Reset password &nbsp</md-button>
+                </div>
+            </form>
+        </md-card-content>
+    </md-card>
+</div>

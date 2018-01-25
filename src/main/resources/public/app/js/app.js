@@ -107,6 +107,11 @@ app.config(function ($stateProvider) {
             templateUrl: '/app/pages/retard.html',
             controller: 'RetardCtrl'
         })
+        .state('reset', {
+            url: '/reset?token',
+            templateUrl: '/app/pages/reset.html',
+            controller: 'ResetCtrl'
+        })
         .state('verify', {
             url: '/verify?email&token',
             templateUrl: '/app/pages/verify.html',
