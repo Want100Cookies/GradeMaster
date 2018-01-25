@@ -25,6 +25,19 @@ app.factory('GroupService', function (API) {
         });
     };
 
+    this.editGroup = (data, groupId) => {
+        return API.patch({
+            path: `groups/${groupId}`,
+            data
+        })
+    }
+    this.editGroupUsers = (users, groupId) => {
+        return API.patch({
+            path: `groups/${groupId}/users`,
+            data: users
+        })
+    }
+
     this.getGradingStatus = (groupId) => {
         return API.get({
             path: `grades/status/groups/${groupId}`

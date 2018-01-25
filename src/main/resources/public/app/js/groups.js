@@ -81,6 +81,9 @@ app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService, Gr
         $scope.hide = () => {
             $mdDialog.hide();
         }
+        $scope.cancel = () => {
+            $mdDialog.cancel();
+        }
         $scope.create = () => {
             if (Object.keys($scope.vm.formData.period).length !== 0 && $scope.vm.formData.users.length !== 0 &&
                 $scope.vm.formData.groupName != null && $scope.vm.formData.startYear != null && $scope.vm.formData.endYear != null &&

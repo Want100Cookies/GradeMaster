@@ -10,6 +10,70 @@
             </div>
         </md-toolbar>
         <md-content style="padding: 10px;">
-            <span>Work in progress</span>
+            <form name="GroupForm">
+                </br>
+                <md-input-container class="md-block" style="margin: 0;">
+                    <label>Group name</label>
+                    <input type="text" name="groupName" ng-model="vm.formData.groupName" required />
+                    <div ng-messages="GroupForm.groupName.$error" role="alert" multiple="">
+                        <div class="my-message" ng-message="required">You must supply a group name.</div>
+                    </div>
+                </md-input-container>
+                <div layout="row" style="width: 100%;">
+                    <md-input-container class="md-block" style="width: 50%; margin: 0;">
+                        <label>Start year</label>
+                        <input type="number" name="startYear" ng-model="vm.formData.startYear" required />
+                        <div ng-messages="GroupForm.startYear.$error" role="alert" multiple="">
+                            <div class="my-message" ng-message="required">You must supply a starting year.</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container class="md-block" style="width: 50%; margin: 0;">
+                        <label>End year</label>
+                        <input type="number" name="endYear" ng-model="vm.formData.endYear" required />
+                        <div ng-messages="GroupForm.EndYear.$error" role="alert" multiple="">
+                            <div class="my-message" ng-message="required">You must supply a ending year.</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <div layout="row" style="width: 100%;">
+                    <md-input-container class="md-block" style="width: 50%; margin: 0;">
+                        <md-select md-container-class="mySelect" ng-model="chosenEducation" aria-label="Select education">
+                            <md-option ng-repeat="education in educationOptions" value="{{education.id}}" placeholder="Education">
+                                {{education.name}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container class="md-block" style="width: 50%; margin: 0;">
+                        <md-select md-container-class="mySelect" ng-disabled="(!chosenEducation)" ng-model="vm.formData.course.id" aria-label="Select course">
+                            <md-option ng-repeat="course in courseOptions" value="{{course.id}}" placeholder="Course">
+                                {{course.name}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+                <h1 class="md-subhead" style="text-align: left; margin-top: 20px;">Periods</h1>
+                <div layout="row" style="width: 100%; height: 60px; margin: 0;">
+                    <md-input-container class="md-block" style="width: 100%;">
+                        <md-checkbox class="override-checkbox" name="firstPeriod" ng-model="vm.formData.period.Q1" required>
+                            Q1
+                        </md-checkbox>
+                        <md-checkbox class="override-checkbox" name="secondPeriod" ng-model="vm.formData.period.Q2" required>
+                            Q2
+                        </md-checkbox>
+                        <md-checkbox class="override-checkbox" name="thirdPeriod" ng-model="vm.formData.period.Q3" required>
+                            Q3
+                        </md-checkbox>
+                        <md-checkbox class="override-checkbox" name="fourthPeriod" ng-model="vm.formData.period.Q4" required>
+                            Q4
+                        </md-checkbox>
+                    </md-input-container>
+                </div>
+                <user-chips-input selected-users="group.users" style="margin-top: 0;"></user-chips-input>
         </md-content>
+        <md-dialog-actions layout="row">
+            <md-button class="md-raised md-primary pull-right formPage" md-autofocus ng-click="edit()">
+                Edit group
+            </md-button>
+        </md-dialog-actions>
+        </form>
 </md-dialog>
