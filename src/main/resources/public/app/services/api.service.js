@@ -17,6 +17,13 @@ app.factory('API', function ($cookies, $http, $httpParamSerializer) {
     /**
      * DEFAULT REQUESTS
      */
+    // Request for unauthorized requests
+    this.getUnAuthRequest = () => {
+        return {
+            url: `${BASE_URL}/${API}/`
+        }
+    };
+    // Request with autorization
     this.getRequest = () => {
         return {
             url: `${BASE_URL}/${API}/`,
@@ -25,6 +32,7 @@ app.factory('API', function ($cookies, $http, $httpParamSerializer) {
             }
         }
     };
+    // OAuth request
     this.getAuthRequest = () => {
         return {
             url: `${BASE_URL}/oauth/token`,

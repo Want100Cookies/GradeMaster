@@ -14,8 +14,8 @@ app.controller('VerifyCtrl', function (VerifyService, $scope, $state, $statePara
             $scope.isLoading = false;
             $scope.isFinished = true;
             $timeout(() => {
-                $state.transitionTo('login')
-                }, 3000);
+                $state.transitionTo('login');
+            }, 3000);
         }).catch((error) => {
             $scope.error = "verification failed."
             $scope.isLoading = false;

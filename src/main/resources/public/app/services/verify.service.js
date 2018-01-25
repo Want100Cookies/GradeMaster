@@ -3,7 +3,8 @@ app.factory('VerifyService', function (API) {
     this.verify = (data) => {
         return API.patch({
             path: `auth/verify`,
-            data
+            data,
+            req: Object.assign({}, API.getUnAuthRequest())
         });
     };
 

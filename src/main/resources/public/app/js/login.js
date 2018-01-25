@@ -10,7 +10,10 @@ app.controller('LoginCtrl', function (API, $scope, $state) {
         }
     }
     $scope.changeLogin = () => {
-        $state.transitionTo('register')
+        $state.transitionTo('register');
+    }
+    $scope.changeForgotPassword = () => {
+        $state.transitionTo('retard');
     }
     $scope.login = (username, password) => {
         API.auth({user: {username, password}}).then((resp) => {
