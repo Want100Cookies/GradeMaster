@@ -11,15 +11,22 @@ function teacherCardCtrl($scope, GroupService, $state, $mdDialog, API) {
     };
 
     ctrl.gradeGroup = () => {
-        $state.transitionTo("app.groupGrade", {groupId: ctrl.group.id});
+        $state.transitionTo("app.groupGrade", {
+            groupId: ctrl.group.id
+        });
     };
 
     ctrl.finalGroupView = () => {
-        $state.transitionTo("app.finalGroupOverview", {groupId: ctrl.group.id});
+        $state.transitionTo("app.finalGroupOverview", {
+            groupId: ctrl.group.id
+        });
     };
 
     ctrl.editGroup = (ev) => {
         $mdDialog.show({
+            locals: {
+                group: ctrl.group
+            },
             bindToController: true,
             controller: EditGroupDialogController,
             templateUrl: '/app/dialogs/editGroupDialog.tmpl.html',
@@ -90,13 +97,65 @@ function teacherCardCtrl($scope, GroupService, $state, $mdDialog, API) {
     };
 }
 
-function EditGroupDialogController($scope, $mdDialog) {
+function EditGroupDialogController($scope, $mdDialog, EducationService, group, GroupService, $mdToast) {
+    $scope.group = group;
+    $scope.chosenEducation = group.course.education.id;
+    $scope.courseOptions = [];
+    $scope.educationOptions = [];
+
+    EducationService.getEducations().then((response) => {
+        $scope.educationOptions = response.data;
+    })
+    $scope.$watch('chosenEducation', () => {
+        $scope.courseOptions = null;
+        if ($scope.chosenEducation !== null) {
+            EducationService.getCoursesByEducation($scope.chosenEducation).then((response) => {
+                $scope.courseOptions = response.data;
+            })
+        }
+    });
+
+    $scope.vm = {
+        formData: {
+            groupName: group.groupName,
+            startYear: group.startYear,
+            endYear: group.endYear,
+            users: group.users,
+            course: {
+                id: group.course.id,
+                education: {
+                    id: group.course.education.id
+                }
+            },
+            period: group.period,
+        },
+    };
+    $scope.usersChange = (val) => {
+        $scope.vm.formData.users = val;
+    };
+
     $scope.hide = () => {
         $mdDialog.hide();
     };
-    $scope.close = () => {
-        $mdDialog.close();
+    $scope.cancel = () => {
+        $mdDialog.cancel();
     };
+    $scope.showSimpleToast = () => {
+        $mdToast.show(
+            $mdToast.simple()
+            .textContent('Edited Group!')
+            .hideDelay(3000)
+        );
+    };
+    $scope.edit = () => {
+        if (Object.keys($scope.vm.formData.period).length !== 0 && $scope.vm.formData.users.length !== 0 &&
+            $scope.vm.formData.groupName != null && $scope.vm.formData.startYear != null && $scope.vm.formData.endYear != null &&
+            $scope.vm.formData.course != null) {
+            GroupService.editGroup($scope.vm.formData, $scope.group.id);
+            $scope.showSimpleToast();
+            $scope.hide();
+        }
+    }
 }
 
 app.component('teacherCard', {
