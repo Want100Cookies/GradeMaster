@@ -1,26 +1,24 @@
-<div ng-init="$ctrl.onInit()">
-    <table layout-fill>
-        <tr>
-            <td colspan="3"><span class="md-headline">{{$ctrl.name}}</span></td>
-        </tr>
-        <tr>
-            <td><span class="md-subhead">Status</span></td>
-            <td><span class="md-subhead">Group grade</span></td>
-            <td><span class="md-subhead">Your grade</span></td>
-        </tr>
-        <tr>
-            <td class="align-status"><span ng-class="$ctrl.groupStatusClass" class="md-title">{{$ctrl.groupStatus}}</span></td>
-            <td><span class="md-title grade">{{$ctrl.groupGrade}}</span></td>
-            <td><span class="md-title grade">{{$ctrl.finalGrade}}</span></td>
-        </tr>
-    </table>
-    <div class="md-caption caption-compact" ng-repeat="member in $ctrl.group.users">
-        <div ng-if="!$last">
-            {{member.name}}, &nbsp;
-        </div>
-        <div ng-if="$last">
-            {{member.name}}
-        </div>        
+<table layout-fill>
+    <tr>
+        <td colspan="3"><span class="md-headline">{{$ctrl.name}}</span></td>
+    </tr>
+    <tr>
+        <td><span class="md-subhead">Status</span></td>
+        <td><span class="md-subhead">Group grade</span></td>
+        <td><span class="md-subhead">Your grade</span></td>
+    </tr>
+    <tr>
+        <td class="align-status"><span ng-class="$ctrl.groupStatusClass" class="md-title">{{$ctrl.groupStatus}}</span></td>
+        <td><span class="md-title grade">{{$ctrl.groupGrade}}</span></td>
+        <td><span class="md-title grade">{{$ctrl.finalGrade}}</span></td>
+    </tr>
+</table>
+<div class="md-caption caption-compact" ng-repeat="member in $ctrl.group.users">
+    <div ng-if="!$last">
+        {{member.name}}, &nbsp;
     </div>
+    <div ng-if="$last">
+        {{member.name}}
+    </div>        
 </div>
 
