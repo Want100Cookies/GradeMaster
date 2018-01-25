@@ -151,6 +151,7 @@ function EditGroupDialogController($scope, $mdDialog, EducationService, group, G
         if (Object.keys($scope.vm.formData.period).length !== 0 && $scope.vm.formData.users.length !== 0 &&
             $scope.vm.formData.groupName != null && $scope.vm.formData.startYear != null && $scope.vm.formData.endYear != null &&
             $scope.vm.formData.course != null) {
+            $scope.vm.formData.period = Object.keys($scope.vm.formData.period);
             GroupService.editGroup($scope.vm.formData, $scope.group.id);
             $scope.showSimpleToast();
             $scope.hide();
