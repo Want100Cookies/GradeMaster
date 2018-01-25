@@ -13,26 +13,78 @@
         <div flex>
             <md-card>
                 <md-card-content>
-                    <md-headline>Groups with finalized grade</md-headline>
-                    <div ng-repeat="group in teacherGroupList | orderBy:'-id'">
+                    <label>Amount to show</label>
+                    <md-select aria-label="Select amount of groups to show" class="dashboard-select" ng-model="limit" md-selected-text="limit">
+                        <md-optgroup label="options">
+                            <md-option ng-value="option" ng-repeat="option in limitOptions">{{option}}</md-option>
+                        </md-optgroup>
+                    </md-select>
+                </md-card-content>
+            </md-card>
+        </div>
+    </div>
+    <div layout="row" layout-xs="column" layout-sm="column">
+        <div flex>
+            <md-card class="teacher-dashboard-groups">
+                <md-card-content>
+                    <span class="md-subhead dashboard-card-title">Recent closed</span>
+                    <span ng-repeat="group in closed | orderBy:'-id' | limitTo: limit">
                         <dashboard-group-overview group="group"></dashboard-group-overview>
-                    </div>
+                        <md-divider ng-if="!$last"></md-divider>
+                    </span>
                 </md-card-content>
             </md-card>
         </div>
         <div flex>
-            <md-card>
+            <md-card class="teacher-dashboard-groups">
                 <md-card-content>
-                    <md-headline>Groups without grade</md-headline>
+                    <span class="md-subhead dashboard-card-title">Recent open</span>
+                    <span ng-repeat="group in open | orderBy:'-id' | limitTo: limit">
+                        <dashboard-group-overview group="group"></dashboard-group-overview>
+                        <md-divider ng-if="!$last"></md-divider>
+                    </span>
                 </md-card-content>
             </md-card>
         </div>
         <div flex>
-            <md-card>
+            <md-card class="teacher-dashboard-groups">
                 <md-card-content>
-                    <md-headline>Groups that are grading</md-headline>
+                    <span class="md-subhead dashboard-card-title">Recent pending</span>
+                    <span ng-repeat="group in pending | orderBy:'-id' | limitTo: limit">
+                        <dashboard-group-overview group="group"></dashboard-group-overview>
+                        <md-divider ng-if="!$last"></md-divider>
+                    </span>
                 </md-card-content>
             </md-card>
         </div>
     </div>
 </div>
+
+<!-- $scope.items = [1, 2, 3, 4, 5, 6, 7];
+      $scope.selectedItem;
+      $scope.getSelectedText = function() {
+        if ($scope.selectedItem !== undefined) {
+          return "You have selected: Item " + $scope.selectedItem;
+        } else {
+          return "Please select an item";
+        }
+      };
+    }); -->
+
+<!-- JS
+HTMLJS
+<div ng-controller="SelectedTextController" class="md-padding" ng-cloak>
+  <div>
+    <h1 class="md-title">Pick an item below</h1>
+    <div layout="row">
+      <md-input-container>
+        <label>Items</label>
+        <md-select ng-model="selectedItem" md-selected-text="getSelectedText()">
+          <md-optgroup label="items">
+            <md-option ng-value="item" ng-repeat="item in items">Item {{item}}</md-option>
+          </md-optgroup>
+        </md-select>
+      </md-input-container>
+    </div>
+  </div>
+</div> -->

@@ -1,4 +1,28 @@
-<div ng-init="init()">
-    <h1>Group</h1>
-    {{$ctrl.group}}
+<div ng-init="$ctrl.init()">
+    <table>
+        <tr>
+            <td>Course</td>
+            <td class="md-subhead dashboard-course-name">{{$ctrl.group.course.name}}</td>
+        </tr>
+        <tr>
+            <td>Education</td>
+            <td class="md-subhead dashboard-course-name">{{$ctrl.group.course.education.name}}</td>
+        </tr>
+        <tr>
+            <td>Group name</td>
+            <td class="md-subhead dashboard-course-name">{{$ctrl.group.groupName}}</td>
+        </tr>
+        <tr>
+            <td ng-if="$ctrl.group.groupGrade.grade">Group grade</td>
+            <td ng-if="$ctrl.group.groupGrade.grade" class="md-subhead dashboard-course-name">{{$ctrl.group.groupGrade.grade}}</td>
+        </tr>
+    </table>
+    <div class="md-caption caption-compact" ng-repeat="member in $ctrl.group.users">
+        <div ng-if="!$last">
+            {{member.name}}, &nbsp;
+        </div>
+        <div ng-if="$last">
+            {{member.name}}
+        </div>        
+    </div>
 </div>

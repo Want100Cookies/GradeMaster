@@ -1,7 +1,7 @@
-function DashboardCtrl($scope, $state, StudentGroupsService, UserService, GroupService){
+function DashboardCtrl($scope, $state, StudentGroupsService, UserService, GroupService, CourseService){
     let ctrl = this;
 
-    $scope.init = function(){
+    ctrl.init = function(){       
         ctrl.closed = 0;
         ctrl.open = 0;
         ctrl.pending = 0;
@@ -17,13 +17,17 @@ function DashboardCtrl($scope, $state, StudentGroupsService, UserService, GroupS
                 }
 
                 angular.forEach(ctrl.groupsDetails, function(value, key) {
-                    StudentGroupsService.getGradingStatus(value.id).then(function(response){
-                        if(response.data.status == "CLOSED"){
-                            ctrl.closed += 1;
-                        }else if(response.data.status == "OPEN"){
-                            ctrl.open += 1;
-                        }else if(response.data.status == "PENDING"){
-                            ctrl.pending += 1;
+                    GroupService.getGradingStatus(value.id).then(function(response){
+                        switch(response.data.status){
+                            case 'CLOSED':
+                                ctrl.closed += 1;
+                                break;
+                            case 'OPEN':
+                                ctrl.open += 1;
+                                break;
+                            case 'PENDING':
+                                ctrl.pending += 1;
+                                break;
                         }
                     })
                 });
