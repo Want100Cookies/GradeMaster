@@ -11,7 +11,7 @@ function userChipsInputCtrl(UserService, $scope) {
     this.users = [];
     
     $scope.$watchCollection('$ctrl.selectedUsers', (users) => {
-        this.users = users;
+        if(users) this.users = users;
     });
 
     $scope.$watchCollection('$ctrl.users', (users) => {
