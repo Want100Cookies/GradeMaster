@@ -13,7 +13,8 @@ app.controller('StudentGroupsCtrl', function ($scope, UserService, StudentGroups
 });
 
 app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService, GroupService) {
-    $scope.status = '  ';
+    $scope.limit = 10;
+    $scope.limitOptions = [5, 10, 15, 20, 50, 100];
     $scope.teacherGroupList = [];
     $scope.onInit = () => {
         $scope.getGroups();
@@ -22,6 +23,26 @@ app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService, Gr
         UserService.getSelf().then((response) => {
             return GroupService.getGroupsByUserId(response.data.id).then((response) => {
                 $scope.teacherGroupList = response.data;
+
+                $scope.closed = [];
+                $scope.pending = [];
+                $scope.open = [];
+
+                angular.forEach($scope.teacherGroupList, function (value, key) {
+                    GroupService.getGradingStatus(value.id).then(function (response) {
+                        switch (response.data.status) {
+                            case "CLOSED":
+                                $scope.closed.push(value);
+                                break;
+                            case "PENDING":
+                                $scope.pending.push(value);
+                                break;
+                            case "OPEN":
+                                $scope.open.push(value);
+                                break;
+                        }
+                    })
+                });
             });
         });
 
@@ -81,10 +102,14 @@ app.controller('TeacherGroupsCtrl', function ($scope, $mdDialog, UserService, Gr
         $scope.hide = () => {
             $mdDialog.hide();
         }
+        $scope.cancel = () => {
+            $mdDialog.cancel();
+        }
         $scope.create = () => {
             if (Object.keys($scope.vm.formData.period).length !== 0 && $scope.vm.formData.users.length !== 0 &&
                 $scope.vm.formData.groupName != null && $scope.vm.formData.startYear != null && $scope.vm.formData.endYear != null &&
                 $scope.vm.formData.course != null) {
+                $scope.vm.formData.period = Object.keys($scope.vm.formData.period);
                 GroupService.createGroup($scope.vm.formData);
                 $scope.showSimpleToast();
                 $scope.hide();

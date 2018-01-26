@@ -1,7 +1,6 @@
 app.factory('EducationService', function (API) {
 
-    this.getCoursesByEducation = (education) => {
-        const educationId = education; // TODO use education's id. 
+    this.getCoursesByEducation = (educationId) => {
         return API.get({
             path: `educations/${educationId}/courses`
         });

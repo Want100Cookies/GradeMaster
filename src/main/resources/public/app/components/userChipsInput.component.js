@@ -1,12 +1,18 @@
 app.component('userChipsInput', {
     templateUrl: '/app/components/userChipsInput.component.html',
     controller: userChipsInputCtrl,
+    bindings: {
+        selectedUsers: '<',
+    }
 });
 
 function userChipsInputCtrl(UserService, $scope) {
-
     this.userArray = [];
     this.users = [];
+    
+    $scope.$watchCollection('$ctrl.selectedUsers', (users) => {
+        if(users) this.users = users;
+    });
 
     $scope.$watchCollection('$ctrl.users', (users) => {
         $scope.$parent.usersChange(users);

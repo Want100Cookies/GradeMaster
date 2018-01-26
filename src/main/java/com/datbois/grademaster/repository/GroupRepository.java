@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface GroupRepository extends JpaRepository<Group, Long> {
-    Group findByGroupNameContainingIgnoreCase(String groupName);
+    Group findById(Long id);
 }

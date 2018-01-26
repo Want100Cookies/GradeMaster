@@ -8,11 +8,12 @@ var app = angular.module('gmApp', [
     'ui.router'
 ]);
 
-app.controller('LayoutController', function ($scope, $mdSidenav, $window, $cookies, $mdDialog, AuthService, NotificationService) {
+app.controller('LayoutController', function ($scope, $mdSidenav, $window, $cookies, $mdDialog, AuthService, NotificationService, UserService) {
 
     this.newNotifications = [];
     this.oldNotifications = [];
     this.patchNotifications = [];
+    this.user = {};
 
     (this.getNotifications = () => {
         return NotificationService.getNotifications().then((resp) => {
@@ -51,6 +52,15 @@ app.controller('LayoutController', function ($scope, $mdSidenav, $window, $cooki
             $mdOpenMenu(ev);
         });
     }
+    this.showAccount = ($mdOpenMenu, ev) => {
+        $mdOpenMenu(ev);
+    }
+    (this.getUser = () => {
+        return UserService.getSelf().then((resp) => {
+            this.user = resp.data;
+            return resp.data;
+        });
+    })();
     this.readNotification = (notification) => {
         if (!notification.seen) {
             notification.seen = true;
@@ -91,6 +101,16 @@ app.config(function ($stateProvider) {
         .state('registered', {
             url: '/registered',
             templateUrl: '/app/pages/registered.html',
+        })
+        .state('retard', {
+            url: '/retard',
+            templateUrl: '/app/pages/retard.html',
+            controller: 'RetardCtrl'
+        })
+        .state('reset', {
+            url: '/reset?token',
+            templateUrl: '/app/pages/reset.html',
+            controller: 'ResetCtrl'
         })
         .state('verify', {
             url: '/verify?email&token',
@@ -217,5 +237,8 @@ app.config(function ($stateProvider) {
                     return AuthService.authenticate();
                 },
             },
+        })
+        .state('app.empty', {
+            component: 'empty'
         });
 });

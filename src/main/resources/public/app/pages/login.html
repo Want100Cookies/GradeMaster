@@ -15,7 +15,7 @@
                         <label> Email</label>
                         <input type="email" name="email" ng-model="vm.formData.email" required />
                         <div ng-messages="Form.email.$error" role="alert" multiple="">
-                            <div class="my-message" ng-message="required">You must supply a email.</div>
+                            <div class="my-message" ng-message="required">You must supply an email.</div>
                         </div>
                     </md-input-container>
                     <md-input-container class="md-block">
@@ -25,6 +25,7 @@
                             <div class="my-message" ng-message="required">You must supply a password.</div>
                             <div class="error">{{valid}}</div>
                         </div>
+                        <span class="forgot-password" ng-click="changeForgotPassword()">Forgot password?</span>
                     </md-input-container>
                     <div layout="layout">
                         <md-button type="submit" class="md-raised md-primary pull-right formPage" ng-disabled="!Form.$valid" ng-click="vm.submit()"
@@ -35,5 +36,4 @@
             </md-card-content>
         </md-card>
     </div>
-
 </body>

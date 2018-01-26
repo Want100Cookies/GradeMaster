@@ -45,6 +45,12 @@ a {
     margin-top: 15px;
 }
 
+.forgot-password {
+    cursor: pointer;
+    color: #3F3F3F;
+    font-size: 10pt;
+}
+
 .spinnerContainer {
     width: 100%;
     height: 100%;
@@ -69,6 +75,44 @@ a {
 
 md-menu-content {
     padding: 0;
+}
+
+.account-header {
+    text-align: center;
+    font-weight: lighter;
+    padding: 8px;
+    margin-top: 16px;
+}
+
+.account-header>.username {
+    font-weight: lighter;
+    font-size: 16pt;
+    margin-bottom: 4px;
+}
+
+.account-header>.role {
+    font-weight: lighter;
+    font-style: italic;
+    font-size: 9pt;
+    padding-top: 4px;
+}
+
+.account-content {
+    text-align: center;
+    font-weight: lighter;
+    padding: 16px;
+    margin-top: 16px;
+    border-top: 1px dotted #AFAFAF;
+    cursor: pointer;
+}
+
+.account-content:hover {
+    background-color: #F3F3F3;
+}
+
+.account-content>.logout {
+    margin-left: 8px;
+    vertical-align: middle;
 }
 
 .notification-header {
@@ -96,6 +140,8 @@ md-menu-content {
     font-size: 10pt;
     padding: 12px;
     border-top: 1px dotted #AFAFAF;
+    max-width: 400px;
+    align-self: center;
 }
 
 .unseen {

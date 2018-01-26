@@ -17,6 +17,13 @@ app.factory('API', function ($cookies, $http, $httpParamSerializer) {
     /**
      * DEFAULT REQUESTS
      */
+    // Request for unauthorized requests
+    this.getUnAuthRequest = () => {
+        return {
+            url: `${BASE_URL}/${API}/`
+        }
+    };
+    // Request with autorization
     this.getRequest = () => {
         return {
             url: `${BASE_URL}/${API}/`,
@@ -25,6 +32,7 @@ app.factory('API', function ($cookies, $http, $httpParamSerializer) {
             }
         }
     };
+    // OAuth request
     this.getAuthRequest = () => {
         return {
             url: `${BASE_URL}/oauth/token`,
@@ -44,15 +52,15 @@ app.factory('API', function ($cookies, $http, $httpParamSerializer) {
         user
     } = {}) => {
         user = { ...user,
-            grant_type: 'password',
-            scope: 'read write'
+            grant_type: `password`,
+            scope: `read write`
         }
         let req = Object.assign({}, this.getAuthRequest());
         return this.post({
             data: $httpParamSerializer(user),
             req
         }).then((resp) => {
-            $cookies.put("access_token", resp.data.access_token);
+            $cookies.put(`access_token`, resp.data.access_token);
             return resp;
         });
     };
@@ -143,7 +151,7 @@ app.factory('API', function ($cookies, $http, $httpParamSerializer) {
                 return resp;
             }).catch((error) => {
                 console.error(`error`, error);
-                return(error);
+                reject(error);
             });
         }
         return $http(req);

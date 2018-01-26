@@ -14,7 +14,7 @@ app.factory('GroupService', function (API) {
     
     this.getGroupsByUserId = (userId) => {
         return API.get({
-            path: 'users/' + userId + '/groups'
+            path: `users/${userId}/groups`
         });
     };
 
@@ -25,22 +25,30 @@ app.factory('GroupService', function (API) {
         });
     };
 
+    this.editGroup = (data, groupId) => {
+        return API.patch({
+            path: `groups/${groupId}`,
+            data
+        })
+    }
+
     this.getGradingStatus = (groupId) => {
         return API.get({
-            path: 'grades/status/groups/' + groupId
+            path: `grades/status/groups/${groupId}`
         });
     };
 
     this.getGroupMembers = (groupId) => {
         return API.get({
-            path: 'groups/' + groupId + '/users'
+            path: `groups/${groupId}/users`
         });
     };
 
     this.deleteGroup = (groupId) => {
         return API.delete({
-            path: 'groups/' + groupId
+            path: `groups/${groupId}`
         });
     };
+    
     return this;
 });

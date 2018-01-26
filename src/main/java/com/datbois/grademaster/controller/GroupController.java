@@ -69,8 +69,10 @@ public class GroupController {
     public Group changeGroup(@PathVariable Long groupId, @RequestBody Group group) throws Exception {
         Group existing = groupService.findById(groupId);
         if (existing == null) throw new InvalidParameterException("Group id not found");
+        Set<User> users = group.getUsers();
+        group.setUsers(null); // hacks
         group.copyNonNullProperties(existing);
-        return groupService.save(existing);
+        return groupService.save(existing, users);
     }
 
     @RequestMapping(value = "/groups/{groupId}", method = RequestMethod.DELETE)
@@ -105,8 +107,7 @@ public class GroupController {
     public Group setGroupUsers(@PathVariable Long groupId, @RequestBody Set<User> users) {
         Group group = groupService.findById(groupId);
         if (group == null) throw new InvalidParameterException("Group id not found");
-        group.setUsers(users);
-        return groupService.save(group);
+        return groupService.save(group, users);
     }
 
 }

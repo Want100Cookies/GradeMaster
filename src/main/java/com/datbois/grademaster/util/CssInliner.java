@@ -1,26 +1,19 @@
 package com.datbois.grademaster.util;
 
+import com.steadystate.css.parser.CSSOMParser;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.w3c.css.sac.InputSource;
+import org.w3c.dom.css.*;
+
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-import org.springframework.stereotype.Service;
-import org.w3c.css.sac.InputSource;
-import org.w3c.dom.css.CSSRule;
-import org.w3c.dom.css.CSSRuleList;
-import org.w3c.dom.css.CSSStyleDeclaration;
-import org.w3c.dom.css.CSSStyleRule;
-import org.w3c.dom.css.CSSStyleSheet;
-
-import com.steadystate.css.parser.CSSOMParser;
 
 public class CssInliner {
 
@@ -28,7 +21,7 @@ public class CssInliner {
 
     }
 
-    public static String inlineCss(File css, String html) throws FileNotFoundException, IOException {
+    public static String inlineCss(File css, String html) throws IOException {
         CSSOMParser parser = new CSSOMParser();
         CSSStyleSheet styleSheet = parser.parseStyleSheet(new InputSource(new FileReader(css)));
         final Document document = Jsoup.parse(html);
@@ -58,7 +51,7 @@ public class CssInliner {
                     final Elements selectedElements = document.select(selector);
                     for (final Element selected : selectedElements) {
                         if (!elementStyles.containsKey(selected)) {
-                            elementStyles.put(selected, new LinkedHashMap<String, String>());
+                            elementStyles.put(selected, new LinkedHashMap<>());
                         }
 
                         final CSSStyleDeclaration styleDeclaration = styleRule.getStyle();
@@ -91,5 +84,4 @@ public class CssInliner {
         }
         return document.html();
     }
-
 }

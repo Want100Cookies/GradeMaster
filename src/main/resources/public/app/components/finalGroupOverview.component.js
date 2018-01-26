@@ -4,6 +4,11 @@ function finalGroupOverviewController($stateParams, $state, GradeService, GroupS
     ctrl.groupMembers = [];
     ctrl.grades = [];
     ctrl.self = {};
+    ctrl.group = {};
+
+    GroupService.getGroup(ctrl.groupId).then((response) => {
+        ctrl.group = response.data;
+    });
 
     UserService.getSelf().then((response) => {
         ctrl.self = response.data;
@@ -77,7 +82,13 @@ function finalGroupOverviewController($stateParams, $state, GradeService, GroupS
             total += grades[i].grade;
         }
 
-        return total / grades.length;
+        const avg = total / grades.length;
+
+        if (isNaN(avg) && ctrl.group.groupGrade) {
+            return ctrl.group.groupGrade.grade;
+        }
+
+        return avg;
     };
 
     ctrl.save = () => {
@@ -104,34 +115,6 @@ function finalGroupOverviewController($stateParams, $state, GradeService, GroupS
                 console.error(error);
             })
     };
-
-    ctrl.export = (format) => {
-        $http({
-            url: 'http://localhost:8080/api/v1/grades/groups/' + ctrl.groupId + '/export.' + format,
-            method: 'GET',
-            params: {},
-            headers: {
-                'Content-type': 'application/pdf',
-                'Authorization': 'Bearer ' + $cookies.get("access_token")
-            },
-            responseType: 'arraybuffer'
-        }).then((data, status, headers, config) => {
-            console.log(data);
-            var file = new Blob([data.data], {
-                type: 'application/csv'
-            });
-            var fileURL = URL.createObjectURL(file);
-            var a = document.createElement('a');
-            a.href = fileURL;
-            a.target = '_blank';
-            a.download = 'gradesheet.' + format;
-            document.body.appendChild(a);
-            a.click();
-        }).catch((data, status, headers, config) => {
-            console.log(data);
-        });
-    }
-
 }
 
 app.component('finalGroupOverview', {

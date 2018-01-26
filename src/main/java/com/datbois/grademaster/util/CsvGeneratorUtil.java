@@ -56,7 +56,6 @@ public class CsvGeneratorUtil {
         sb.append("\n");
         w.append(sb.toString());
 
-
     }
 
 }
