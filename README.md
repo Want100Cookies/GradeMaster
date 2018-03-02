@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/Want100Cookies/GradeMaster.svg?token=sKpyGyXRMBtmPh6qJBuM&branch=develop)](https://travis-ci.com/Want100Cookies/GradeMaster)
+[![Build Status](https://travis-ci.org/Want100Cookies/GradeMaster.svg?branch=master)](https://travis-ci.org/Want100Cookies/GradeMaster)
 
 # GradeMaster
 A small application to ease the grading of project groups for teachers.
