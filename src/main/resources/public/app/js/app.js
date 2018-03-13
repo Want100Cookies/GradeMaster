@@ -152,11 +152,7 @@ app.config(function ($stateProvider) {
             url: '/groups',
             templateProvider: function (AuthService) {
                 return AuthService.hasRoles('ADMIN_ROLE', 'TEACHER_ROLE').then((hasRole) => {
-                    if (hasRole) {
-                        return '<div ng-include="\'/app/pages/teacher-groups.html\'"></div>';
-                    } else {
-                        return '<div ng-include="\'/app/pages/groups.html\'"></div>';
-                    }
+                    return '<div ng-include="\'/app/pages/groups.html\'"></div>';
                 })
             },
             resolve: {
