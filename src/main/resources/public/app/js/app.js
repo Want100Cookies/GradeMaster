@@ -175,20 +175,6 @@ app.config(function ($stateProvider) {
                 },
             },
         })
-        .state('app.grades', {
-            url: '/grades',
-            templateProvider: function (AuthService) {
-                return AuthService.hasRoles('ADMIN_ROLE', 'TEACHER_ROLE').then((hasRole) => {
-                    return '<div ng-include="\'/app/pages/grades.html\'"></div>';
-                })
-            },
-            resolve: {
-                'auth': (AuthService) => {
-                    return AuthService.authenticate();
-                },
-            },
-            controller: 'GradesCtrl'
-        })
         .state('app.educations', {
             url: '/educations',
             component: 'educations',
