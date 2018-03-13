@@ -152,7 +152,11 @@ app.config(function ($stateProvider) {
             url: '/groups',
             templateProvider: function (AuthService) {
                 return AuthService.hasRoles('ADMIN_ROLE', 'TEACHER_ROLE').then((hasRole) => {
-                    return '<div ng-include="\'/app/pages/groups.html\'"></div>';
+                    if (hasRole) {
+                        return '<div ng-include="\'/app/pages/teacher-groups.html\'"></div>';
+                    } else {
+                        return '<div ng-include="\'/app/pages/groups.html\'"></div>';
+                    }
                 })
             },
             resolve: {
@@ -175,11 +179,7 @@ app.config(function ($stateProvider) {
             url: '/grades',
             templateProvider: function (AuthService) {
                 return AuthService.hasRoles('ADMIN_ROLE', 'TEACHER_ROLE').then((hasRole) => {
-                    if (hasRole) {
-                        return '<div ng-include="\'/app/pages/teacher-grades.html\'"></div>';
-                    } else {
-                        return '<div ng-include="\'/app/pages/grades.html\'"></div>';
-                    }
+                    return '<div ng-include="\'/app/pages/grades.html\'"></div>';
                 })
             },
             resolve: {
